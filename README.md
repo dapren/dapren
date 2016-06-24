@@ -1,6 +1,6 @@
-This application/package provides utilities to process data. 
+# This application/package provides utilities to process data. 
 
-Following are how the directories are used (or are intented to use)
+## Following are how the directories are used (or are intented to use)
 - bin:  All executables are in this directory.
 - docs: Documentation of all python modules/files in 'lib' folder are in this directory.
 - lib: All python code written for data processing. 
