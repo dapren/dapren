@@ -1,6 +1,7 @@
 from __future__ import print_function
 import constants
 import inspect
+from constants import logger
 
 def stringify_number(number, **args_map):
     """
@@ -91,20 +92,20 @@ def commafy_number(number, **args_map):
 # -----------------------------------------------------------------------------
 
 def test_commafy_number():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
-    logging.debug('12345634' + ' -> ' + commafy_number(12345634))
-    logging.debug('547856789.23' + ' -> ' + commafy_number(547856789.23))
-    logging.debug('547856789.23' + ' -> ' + commafy_number(547856789.23,
+    logger.debug('12345634' + ' -> ' + commafy_number(12345634))
+    logger.debug('547856789.23' + ' -> ' + commafy_number(547856789.23))
+    logger.debug('547856789.23' + ' -> ' + commafy_number(547856789.23,
                                                    ignore_decimal=True))
-    logging.debug('498785643789' + ' -> ' + commafy_number(498785643789))
-    logging.debug('4007856437895' + ' -> ' + commafy_number(4007856437895,
+    logger.debug('498785643789' + ' -> ' + commafy_number(498785643789))
+    logger.debug('4007856437895' + ' -> ' + commafy_number(4007856437895,
                                                     ignore_decimal=True))
-    logging.debug('498785643789.123' + ' -> ' + commafy_number(498785643789.123))
-    logging.debug('4567856437895.90' + ' -> ' + commafy_number(4567856437895.90,
+    logger.debug('498785643789.123' + ' -> ' + commafy_number(498785643789.123))
+    logger.debug('4567856437895.90' + ' -> ' + commafy_number(4567856437895.90,
                                                        ignore_decimal=True))
-    logging.debug('-852656789.23' + ' -> ' + commafy_number(-852656789.23))
-    logging.debug('-852656789.23' + ' -> ' + commafy_number(-852656789.23,
+    logger.debug('-852656789.23' + ' -> ' + commafy_number(-852656789.23))
+    logger.debug('-852656789.23' + ' -> ' + commafy_number(-852656789.23,
                                                     ignore_decimal=True))
 
     assert commafy_number(12345634) == '12,345,634'
@@ -121,21 +122,21 @@ def test_commafy_number():
 
 
 def test_stringify_number():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
-    logging.debug('123445678439' + ' -> ' + stringify_number(123445678439,
+    logger.debug('123445678439' + ' -> ' + stringify_number(123445678439,
                                                      ignore_decimal="no"))
-    logging.debug('0' + ' -> ' + stringify_number(0))
-    logging.debug('51211237' + ' -> ' + stringify_number(51211237))
-    logging.debug(
+    logger.debug('0' + ' -> ' + stringify_number(0))
+    logger.debug('51211237' + ' -> ' + stringify_number(51211237))
+    logger.debug(
         '51211237' + ' -> ' + stringify_number(51211237, ignore_decimal=False))
-    logging.debug('512' + ' -> ' + stringify_number(512))
-    logging.debug('547856789.234' + ' -> ' + stringify_number(547856789.234))
-    logging.debug('49078564378899.234' + ' -> ' + stringify_number(49078564378899.234))
-    logging.debug('40078564378899.234' + ' -> ' + stringify_number(40078564378899.234,
+    logger.debug('512' + ' -> ' + stringify_number(512))
+    logger.debug('547856789.234' + ' -> ' + stringify_number(547856789.234))
+    logger.debug('49078564378899.234' + ' -> ' + stringify_number(49078564378899.234))
+    logger.debug('40078564378899.234' + ' -> ' + stringify_number(40078564378899.234,
                                                            ignore_decimal=False))
-    logging.debug('-852656789.23' + ' -> ' + stringify_number(-852656789.23))
-    logging.debug('-852656789.23' + ' -> ' + stringify_number(-852656789.23,
+    logger.debug('-852656789.23' + ' -> ' + stringify_number(-852656789.23))
+    logger.debug('-852656789.23' + ' -> ' + stringify_number(-852656789.23,
                                                       ignore_decimal=False))
 
     assert stringify_number(123445678439, ignore_decimal="no") == '123.45B'
@@ -156,11 +157,6 @@ def test_stringify_number():
 # -----------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    import logging
-    import sys
-
-    logging.basicConfig(stream=sys.stdout,
-                        level=constants.APPLICATION_LOG_LEVEL)
-
     test_commafy_number()
     test_stringify_number()
+    logger.info("All tests run fine")

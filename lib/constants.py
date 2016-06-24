@@ -1,10 +1,17 @@
+"""
+This module contains all the global application constants.
+
+To see full values of all variables defined in this module, run follwing command
+on command line
+    python constants.py
+"""
+
 from __future__ import print_function
 import logging
 import os
-APPLICATION_LOG_LEVEL = logging.INFO
 
 ###############################################################################
-# Directory Names
+# Initialize important directories
 ###############################################################################
 if "DAPREN_HOME" in os.environ:
     DAPREN_HOME = os.environ["DAPREN_HOME"]
@@ -18,6 +25,37 @@ DAPREN_INTERIM_DIR = "{}/var/interim".format(DAPREN_HOME)
 DAPREN_LOGS_DIR = "{}/var/logs".format(DAPREN_HOME)
 DAPREN_OUTPUT_DIR = "{}/var/output".format(DAPREN_HOME)
 DAPREN_TMP_DIR = "{}/var/tmp".format(DAPREN_HOME)
+
+################################################################################
+# Initialize logging
+################################################################################
+log_path = DAPREN_LOGS_DIR
+log_filename = "dapren.log"
+logFormatter = logging.Formatter(
+    "%(asctime)s"
+    "\t"
+    "%(filename)s"
+    "\t"
+    "%(lineno)s"
+    "\t"
+    "%(funcName)s"
+    "\t"
+    "%(threadName)s"
+    "\t"
+    "%(levelname)s"
+    "\t"
+    "%(""message)s"
+)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+fileHandler = logging.FileHandler("{0}/{1}".format(log_path, log_filename))
+fileHandler.setFormatter(logFormatter)
+logger.addHandler(fileHandler)
+
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(logFormatter)
+logger.addHandler(consoleHandler)
 
 
 ###############################################################################

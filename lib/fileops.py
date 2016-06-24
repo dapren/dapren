@@ -3,9 +3,8 @@ from __future__ import division
 import os
 import inspect
 import gzip
-
 import constants
-
+from constants import logger
 
 def file_exists(file_name, **args_map):
     return os.path.isfile(file_name)
@@ -253,19 +252,19 @@ def get_files_in_dir(path, **args_map):
 # ----------------------------------------------------------------- UNIT TESTS
 # -----------------------------------------------------------------------------
 def test_file_exists():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     assert file_exists(constants.FILENAME_TEST_FILE_OPS_1) == True
     assert file_exists('some_file_that_does_not_exists') == False
 
 
 def test_silent_remove():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
     silent_remove("{I_AM_SURE-THIS_FILE_DOES-NOT_EXISTS}")
 
 
 def test_is_file_zero_bytes():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     assert is_file_zero_bytes(
         constants.FILENAME_TEST_FILE_OPS_ZERO_BYTE_FILE) == True
@@ -273,10 +272,10 @@ def test_is_file_zero_bytes():
 
 
 def test_number_of_lines():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
-    logging.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1))
-    logging.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1,
+    logger.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1))
+    logger.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1,
                                   stop_after_n_lines=101))
 
     assert number_of_lines(constants.FILENAME_TEST_FILE_OPS_1) == 6264
@@ -285,11 +284,11 @@ def test_number_of_lines():
 
 
 def test_size_of_file():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
-    logging.debug(size_in_bytes(constants.FILENAME_TEST_FILE_OPS_1))
-    logging.debug(size_in_kb(constants.FILENAME_TEST_FILE_OPS_1))
-    logging.debug(size_in_mb(constants.FILENAME_TEST_FILE_OPS_1))
+    logger.debug(size_in_bytes(constants.FILENAME_TEST_FILE_OPS_1))
+    logger.debug(size_in_kb(constants.FILENAME_TEST_FILE_OPS_1))
+    logger.debug(size_in_mb(constants.FILENAME_TEST_FILE_OPS_1))
 
     assert size_in_bytes(
         constants.FILENAME_TEST_FILE_OPS_1) == 428432
@@ -298,7 +297,7 @@ def test_size_of_file():
 
 
 def test_file2list():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     actual_data = file2list(
         constants.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST)
@@ -326,11 +325,11 @@ def test_file2list():
 
 
 def test_list2file():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     # Test mode = w (default mode)
     data = ['1', '2', '3', '4']
-    file_name = constants.TMP_DIR + "/test_list2file.deleteme.txt"
+    file_name = constants.DAPREN_TMP_DIR + "/test_list2file.deleteme.txt"
     silent_remove(file_name)
 
     list2file(data, file_name)
@@ -345,7 +344,7 @@ def test_list2file():
     # Test mode = a
 
     data = ['1', '2', '3', '4']
-    file_name = constants.TMP_DIR + "/test_list2file.deleteme.txt"
+    file_name = constants.DAPREN_TMP_DIR + "/test_list2file.deleteme.txt"
     silent_remove(file_name)
 
     list2file(data, file_name, mode='a')
@@ -361,7 +360,7 @@ def test_list2file():
 
     # Test creation of gzip file without suffix ".gz"
     data = ['1', '2', '3', '4']
-    file_name = constants.TMP_DIR + "/test_list2file.gzipped.deleteme.txt"
+    file_name = constants.DAPREN_TMP_DIR + "/test_list2file.gzipped.deleteme.txt"
     silent_remove(file_name)
 
     list2file(data, file_name, file_type="gz")
@@ -374,7 +373,7 @@ def test_list2file():
 
     # Test creation of gzip file WITH suffix ".gz"
     data = ['1', '2', '3', '4']
-    file_name = constants.TMP_DIR + "/test_list2file.gzipped.deleteme.txt.gz"
+    file_name = constants.DAPREN_TMP_DIR + "/test_list2file.gzipped.deleteme.txt.gz"
     silent_remove(file_name)
 
     list2file(data, file_name)
@@ -386,11 +385,11 @@ def test_list2file():
     os.remove(file_name)
 
 def test_str2file():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     # Test for mode = 'w'
     data = '1234'
-    file_name = constants.TMP_DIR + "/test_str2file.deleteme.txt"
+    file_name = constants.DAPREN_TMP_DIR + "/test_str2file.deleteme.txt"
     silent_remove(file_name)
 
     str2file(data, file_name)
@@ -406,7 +405,7 @@ def test_str2file():
 
     # Test for mode = 'a'
     data = '1234'
-    file_name = constants.TMP_DIR + "/test_append_str2file.deleteme.txt"
+    file_name = constants.DAPREN_TMP_DIR + "/test_append_str2file.deleteme.txt"
     silent_remove(file_name)
 
     str2file(data, file_name, mode='a')
@@ -422,7 +421,7 @@ def test_str2file():
 
     # Test creation of gzip file without suffix ".gz"
     data = '1234'
-    file_name = constants.TMP_DIR + "/test_str2file.gzipped.deleteme.txt"
+    file_name = constants.DAPREN_TMP_DIR + "/test_str2file.gzipped.deleteme.txt"
     silent_remove(file_name)
 
     str2file(data, file_name, file_type="gz")
@@ -435,7 +434,7 @@ def test_str2file():
 
     # Test creation of gzip file WITH suffix ".gz"
     data = '1234'
-    file_name = constants.TMP_DIR + "/test_str2file.gzipped.deleteme.txt.gz"
+    file_name = constants.DAPREN_TMP_DIR + "/test_str2file.gzipped.deleteme.txt.gz"
     silent_remove(file_name)
 
     str2file(data, file_name)
@@ -451,12 +450,6 @@ def test_str2file():
 # ----------------------------------------------------------------------- MAIN
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
-    import logging
-    import sys
-
-    logging.basicConfig(stream=sys.stdout,
-                        level=constants.APPLICATION_LOG_LEVEL)
-
     test_file_exists()
     test_silent_remove()
 
@@ -467,3 +460,5 @@ if __name__ == '__main__':
 
     test_list2file()
     test_str2file()
+
+    logger.info("All tests run fine")

@@ -1,0 +1,111 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module bashops</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>bashops</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dapren/Dropbox (Personal)/private/dapren/lib/bashops.py">/Users/dapren/Dropbox (Personal)/private/dapren/lib/bashops.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;provides&nbsp;a&nbsp;standard&nbsp;way&nbsp;of&nbsp;executing&nbsp;bash&nbsp;commands&nbsp;from&nbsp;a&nbsp;python<br>
+script.&nbsp;This&nbsp;is&nbsp;the&nbsp;preferred&nbsp;way&nbsp;of&nbsp;executing&nbsp;bash&nbsp;command.<br>
+&nbsp;<br>
+Usage&nbsp;Example&nbsp;1<br>
+#&nbsp;STANDALONE&nbsp;SCRIPT&nbsp;-&nbsp;execute&nbsp;and&nbsp;see&nbsp;it&nbsp;for&nbsp;yourself&nbsp;##########################<br>
+#&nbsp;Run&nbsp;bash&nbsp;command&nbsp;that&nbsp;outputs&nbsp;to&nbsp;stdout&nbsp;and&nbsp;stderr.&nbsp;The&nbsp;stdout&nbsp;and&nbsp;stderr<br>
+#&nbsp;streams&nbsp;are&nbsp;returned&nbsp;as&nbsp;list.<br>
+from&nbsp;__future__&nbsp;import&nbsp;print_function<br>
+&nbsp;<br>
+import&nbsp;bashops<br>
+bash_res&nbsp;=&nbsp;bashops.<a href="#-runbash">runbash</a>("ls")&nbsp;&nbsp;#&nbsp;bash_res&nbsp;will&nbsp;be&nbsp;dict&nbsp;containing&nbsp;3&nbsp;keys<br>
+&nbsp;<br>
+#&nbsp;Get&nbsp;return&nbsp;code&nbsp;of&nbsp;the&nbsp;command,&nbsp;if&nbsp;not&nbsp;0&nbsp;then&nbsp;it&nbsp;means&nbsp;command&nbsp;failed<br>
+print&nbsp;("""<br>
+return_code={return_code}<br>
+type(return_code)={return_code_type}<br>
+&nbsp;<br>
+stdout={stdout}<br>
+type(stdout)={stdout_type}<br>
+&nbsp;<br>
+stderr={stderr}<br>
+type(stderr)={stderr_type}<br>
+""".format(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return_code=bash_res['return_code'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return_code_type=type(bash_res['return_code']),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stdout=bash_res['stdout'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stdout_type=type(bash_res['stdout']),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stderr=bash_res['stderr'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stderr_type=type(bash_res['stderr']))<br>
+)<br>
+###############################################################################<br>
+&nbsp;<br>
+Usage&nbsp;Example&nbsp;2<br>
+#&nbsp;STANDALONE&nbsp;SCRIPT&nbsp;-&nbsp;execute&nbsp;and&nbsp;see&nbsp;it&nbsp;for&nbsp;yourself&nbsp;##########################<br>
+#&nbsp;Run&nbsp;bash&nbsp;command&nbsp;that&nbsp;outputs&nbsp;stdout&nbsp;and&nbsp;stderr&nbsp;to&nbsp;files.<br>
+from&nbsp;__future__&nbsp;import&nbsp;print_function<br>
+&nbsp;<br>
+import&nbsp;bashops<br>
+bash_res&nbsp;=&nbsp;bashops.<a href="#-runbash">runbash</a>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"ls",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stdout="/tmp/output.txt",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stdin="/tmp/errror.txt",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stdout_file_mode="w",&nbsp;&nbsp;#&nbsp;you&nbsp;can&nbsp;also&nbsp;append&nbsp;to&nbsp;file&nbsp;using&nbsp;"a"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stderr_file_mode="a"<br>
+)&nbsp;&nbsp;#&nbsp;bash_res&nbsp;will&nbsp;be&nbsp;dict&nbsp;containing&nbsp;1&nbsp;keys<br>
+&nbsp;<br>
+#&nbsp;Get&nbsp;return&nbsp;code&nbsp;of&nbsp;the&nbsp;command,&nbsp;if&nbsp;not&nbsp;0&nbsp;then&nbsp;it&nbsp;means&nbsp;command&nbsp;failed<br>
+print&nbsp;("""<br>
+return_code={return_code}<br>
+type(return_code)={return_code_type}<br>
+&nbsp;<br>
+""".format(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return_code=bash_res['return_code'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return_code_type=type(bash_res['return_code']),)<br>
+)<br>
+&nbsp;<br>
+#&nbsp;See&nbsp;the&nbsp;stdout&nbsp;loaded&nbsp;to&nbsp;file&nbsp;/tmp/output.txt<br>
+print&nbsp;("Contents&nbsp;of&nbsp;file&nbsp;/tmp/output.txt")<br>
+fp&nbsp;=&nbsp;open("/tmp/output.txt","r")<br>
+for&nbsp;line&nbsp;in&nbsp;fp:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print(line.strip())<br>
+###############################################################################</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="subprocess.html">subprocess</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-runbash"><strong>runbash</strong></a>(cmd, **kwargs)</dt><dd><tt>Execute&nbsp;bash&nbsp;command<br>
+&nbsp;<br>
+:param&nbsp;cmd:&nbsp;Bash&nbsp;command&nbsp;to&nbsp;execute<br>
+&nbsp;<br>
+:param&nbsp;kwargs:&nbsp;Expected&nbsp;keys:<br>
+-&nbsp;'stdout':&nbsp;Provide&nbsp;absolute&nbsp;filename&nbsp;if&nbsp;you&nbsp;want&nbsp;output&nbsp;of&nbsp;'stdout'&nbsp;to&nbsp;a<br>
+file.&nbsp;If&nbsp;not&nbsp;provided&nbsp;then&nbsp;defaults&nbsp;to&nbsp;subprocess.PIPE<br>
+-&nbsp;'stderr':&nbsp;Provide&nbsp;absolute&nbsp;filename&nbsp;if&nbsp;you&nbsp;want&nbsp;output&nbsp;of&nbsp;'stderr'&nbsp;to&nbsp;a<br>
+file.If&nbsp;not&nbsp;provided&nbsp;then&nbsp;defaults&nbsp;to&nbsp;subprocess.PIPE<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;object&nbsp;of&nbsp;type&nbsp;'dict'&nbsp;with&nbsp;key&nbsp;'return_code'&nbsp;and&nbsp;optionally<br>
+keys&nbsp;'stdout'and&nbsp;'stderr'</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>logger</strong> = &lt;logging.RootLogger object&gt;<br>
+<strong>print_function</strong> = _Feature((2, 6, 0, 'alpha', 2), (3, 0, 0, 'alpha', 0), 65536)</td></tr></table>
+</body></html>

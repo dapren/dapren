@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import inspect
+from constants import logger
 
 import constants
 
@@ -66,7 +67,7 @@ def date_plus(date1, n_days):
 # -----------------------------------------------------------------------------
 
 def test_date_diff():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     date1 = str2date('2015-06-29', '%Y-%m-%d')
     date2 = str2date('2015-07-01', '%Y-%m-%d')
@@ -77,7 +78,7 @@ def test_date_diff():
 
 
 def test_date_minus():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = str2date('2015-06-29', '%Y-%m-%d')
     output_date = date_minus(input_date, 5)
@@ -85,7 +86,7 @@ def test_date_minus():
 
 
 def test_date_plus():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = str2date('2015-06-29', '%Y-%m-%d')
     output_date = date_plus(input_date, 5)
@@ -93,7 +94,7 @@ def test_date_plus():
 
 
 def test_str2date_date2str():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = '2015-06-13 05:05:06'
     converted_date = str2date(input_date, '%Y-%m-%d %H:%M:%S')
@@ -112,7 +113,7 @@ def test_str2date_date2str():
 
 
 def test_def_epoch2datetime():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     actual_date = epoch2datetime(1424900481)
     expected_date = str2date('2015-02-25 13:41:21', '%Y-%m-%d %H:%M:%S')
@@ -120,7 +121,7 @@ def test_def_epoch2datetime():
 
 
 def test_utc2pst():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     utc_date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     pst_date = utc2pst(utc_date)
@@ -131,7 +132,7 @@ def test_utc2pst():
 
 
 def test_pst2utc():
-    logging.info("Testing " + inspect.stack()[0][3])
+    logger.info("Testing " + inspect.stack()[0][3])
 
     pst_date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     utc_date = pst2utc(pst_date)
@@ -151,12 +152,6 @@ def test_get_weekday_name():
 # ----------------------------------------------------------------------- MAIN
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
-    import logging
-    import sys
-
-    logging.basicConfig(stream=sys.stdout,
-                        level=constants.APPLICATION_LOG_LEVEL)
-
     test_str2date_date2str()
     test_def_epoch2datetime()
     test_utc2pst()
@@ -165,3 +160,4 @@ if __name__ == '__main__':
     test_date_diff()
     test_date_minus()
     test_date_plus()
+    logger.info("All tests run fine")
