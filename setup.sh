@@ -2,9 +2,12 @@
 ###############################################################################
 # This script will create required shell variables and directores
 ###############################################################################
+
 # Get directory of setup.sh
 DAPREN_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+###############################################################################
+##################################################################### Functions 
 function setup_shell_variables(){
   # Setup DAPREN_HOME in .bashrc file
   echo "[INFO] Setting \${DAPREN_HOME} to '${DAPREN_HOME}' in ${HOME}/.bashrc"
@@ -14,6 +17,5 @@ function setup_shell_variables(){
 }
 
 ###############################################################################
-# Main
-###############################################################################
+########################################################################## Main
 setup_shell_variables
