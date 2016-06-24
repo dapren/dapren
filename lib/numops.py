@@ -157,6 +157,10 @@ def test_stringify_number():
 # -----------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    test_commafy_number()
-    test_stringify_number()
+    # Execute all test methods. All test methods should start with string
+    # "test_"
+    for name in dir():
+        if name.startswith("test_"):
+            eval(name)()
+
     logger.info("All tests run fine")

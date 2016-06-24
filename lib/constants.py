@@ -80,8 +80,16 @@ FILENAME_TEST_GZIPPED_FILE_OPS_LOAD_FILE_IN_LIST = __DIR + __FILE
 ###############################################################################
 # Strings
 ###############################################################################
-STR_YES = "yes"
-STR_NO = "no"
+str_yes = "yes"
+str_no = "no"
+
+str_abbreviated = "abbreviated"
+str_full = "full"
+str_padded='padded'
+str_unpadded='unpadded'
+
+str_Sunday = "Sunday"
+str_Monday = "Monday"
 
 ###############################################################################
 # Numbers
@@ -90,6 +98,12 @@ STR_NO = "no"
 ###############################################################################
 # List
 ###############################################################################
+def str_possible_values(argument_name, list_of_values):
+    output_str="Possible value of argument '{}' are".format(argument_name)
+    for value in list_of_values:
+        output_str += "\n\t- {} ({})".format(value, type(value))
+
+    return output_str
 
 ###############################################################################
 # Dict

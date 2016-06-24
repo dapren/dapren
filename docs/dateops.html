@@ -10,7 +10,7 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>dateops</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dapren/Dropbox (Personal)/private/dapren/lib/dateops.py">/Users/dapren/Dropbox (Personal)/private/dapren/lib/dateops.py</a></font></td></tr></table>
-    <p></p>
+    <p><tt>This&nbsp;module&nbsp;contains&nbsp;most&nbsp;commonly&nbsp;used&nbsp;date&nbsp;operations</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -27,27 +27,188 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-date2str"><strong>date2str</strong></a>(date, date_format)</dt></dl>
+<td width="100%"><dl><dt><a name="-date2str"><strong>date2str</strong></a>(date, date_format)</dt><dd><tt>This&nbsp;method&nbsp;takes&nbsp;a&nbsp;date&nbsp;and&nbsp;returns&nbsp;a&nbsp;string&nbsp;representing&nbsp;the&nbsp;date&nbsp;in&nbsp;the<br>
+date_format<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;date_format:&nbsp;Output&nbsp;format&nbsp;of&nbsp;the&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;date<br>
+&nbsp;<br>
+List&nbsp;of&nbsp;date_format&nbsp;directives<br>
+https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior<br>
+&nbsp;<br>
+:return:&nbsp;String&nbsp;in&nbsp;the&nbsp;format&nbsp;specifed&nbsp;by&nbsp;date_format&nbsp;argument</tt></dd></dl>
  <dl><dt><a name="-date_diff"><strong>date_diff</strong></a>(date1, date2)</dt></dl>
  <dl><dt><a name="-date_minus"><strong>date_minus</strong></a>(date1, n_days)</dt></dl>
  <dl><dt><a name="-date_plus"><strong>date_plus</strong></a>(date1, n_days)</dt></dl>
- <dl><dt><a name="-epoch2datetime"><strong>epoch2datetime</strong></a>(epoch)</dt></dl>
- <dl><dt><a name="-get_week_of_year"><strong>get_week_of_year</strong></a>(date)</dt></dl>
- <dl><dt><a name="-get_weekday_name"><strong>get_weekday_name</strong></a>(date)</dt></dl>
- <dl><dt><a name="-pst2utc"><strong>pst2utc</strong></a>(date)</dt></dl>
- <dl><dt><a name="-str2date"><strong>str2date</strong></a>(date_str, date_format)</dt></dl>
+ <dl><dt><a name="-epoch2datetime"><strong>epoch2datetime</strong></a>(epoch)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;epoch&nbsp;time&nbsp;(that&nbsp;you&nbsp;get&nbsp;by&nbsp;executing&nbsp;Linux&nbsp;command<br>
+'date&nbsp;+%s')&nbsp;to&nbsp;python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;epoch:&nbsp;Linux&nbsp;epoch&nbsp;time<br>
+&nbsp;<br>
+:return:&nbsp;Python&nbsp;datetime&nbsp;object</tt></dd></dl>
+ <dl><dt><a name="-get_day_of_month"><strong>get_day_of_month</strong></a>(date, padded_or_unpadded)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;the&nbsp;day&nbsp;of&nbsp;month&nbsp;as&nbsp;string.&nbsp;The&nbsp;result&nbsp;is&nbsp;padded&nbsp;or<br>
+unpadded&nbsp;based&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;day&nbsp;of&nbsp;month&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;day&nbsp;of&nbsp;month&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;padded&nbsp;or&nbsp;unpadded&nbsp;day&nbsp;of&nbsp;month,&nbsp;as&nbsp;string,&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;argument&nbsp;padded_or_unpadded</tt></dd></dl>
+ <dl><dt><a name="-get_day_of_year"><strong>get_day_of_year</strong></a>(date, padded_or_unpadded)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;the&nbsp;day&nbsp;of&nbsp;year&nbsp;as&nbsp;string.&nbsp;The&nbsp;result&nbsp;is<br>
+padded&nbsp;or&nbsp;unpadded&nbsp;based&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;padded&nbsp;day&nbsp;of&nbsp;year&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;unpadded&nbsp;day&nbsp;of&nbsp;year&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;padded&nbsp;or&nbsp;unpadded&nbsp;day&nbsp;of&nbsp;year,&nbsp;as&nbsp;string,&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;argument&nbsp;padded_or_unpadded</tt></dd></dl>
+ <dl><dt><a name="-get_hour"><strong>get_hour</strong></a>(date, padded_or_unpadded)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;the&nbsp;hour&nbsp;as&nbsp;string.&nbsp;The&nbsp;result&nbsp;is<br>
+padded&nbsp;or&nbsp;unpadded&nbsp;based&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;padded&nbsp;hour&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;unpadded&nbsp;hour&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;padded&nbsp;or&nbsp;unpadded&nbsp;hour,&nbsp;as&nbsp;string,&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;argument&nbsp;padded_or_unpadded</tt></dd></dl>
+ <dl><dt><a name="-get_microsecond"><strong>get_microsecond</strong></a>(date, padded_or_unpadded)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;the&nbsp;microsecond&nbsp;as&nbsp;string.&nbsp;The&nbsp;result&nbsp;is<br>
+padded&nbsp;or&nbsp;unpadded&nbsp;based&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;padded&nbsp;microsecond&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;unpadded&nbsp;microsecond&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;padded&nbsp;or&nbsp;unpadded&nbsp;microsecond,&nbsp;as&nbsp;string,&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;argument&nbsp;padded_or_unpadded</tt></dd></dl>
+ <dl><dt><a name="-get_minute"><strong>get_minute</strong></a>(date, padded_or_unpadded)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;the&nbsp;minute&nbsp;as&nbsp;string.&nbsp;The&nbsp;result&nbsp;is<br>
+padded&nbsp;or&nbsp;unpadded&nbsp;based&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;padded&nbsp;minute&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;unpadded&nbsp;minute&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;padded&nbsp;or&nbsp;unpadded&nbsp;minute,&nbsp;as&nbsp;string,&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;argument&nbsp;padded_or_unpadded</tt></dd></dl>
+ <dl><dt><a name="-get_month_name"><strong>get_month_name</strong></a>(date, abbreviated_or_full)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;month&nbsp;for&nbsp;a&nbsp;python&nbsp;datetime&nbsp;object.<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;abbreviated_or_full:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'abbreviated'<br>
+then&nbsp;return&nbsp;locale&nbsp;specific&nbsp;month&nbsp;name&nbsp;like&nbsp;'Jan',&nbsp;if&nbsp;value&nbsp;is&nbsp;'full'&nbsp;then<br>
+return&nbsp;full&nbsp;locale&nbsp;specific&nbsp;month&nbsp;name&nbsp;like&nbsp;'January'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;abbreviated&nbsp;or&nbsp;full&nbsp;month&nbsp;name&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;param&nbsp;abbreviated_or_full</tt></dd></dl>
+ <dl><dt><a name="-get_month_number"><strong>get_month_number</strong></a>(date, padded_or_unpadded)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;the&nbsp;month&nbsp;numberas&nbsp;string.&nbsp;The&nbsp;result&nbsp;is<br>
+padded&nbsp;or&nbsp;unpadded&nbsp;based&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;padded&nbsp;month&nbsp;number&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;unpadded&nbsp;month&nbsp;number&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;padded&nbsp;or&nbsp;unpadded&nbsp;month&nbsp;number,&nbsp;as&nbsp;string,&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;argument&nbsp;padded_or_unpadded</tt></dd></dl>
+ <dl><dt><a name="-get_second"><strong>get_second</strong></a>(date, padded_or_unpadded)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;the&nbsp;second&nbsp;as&nbsp;string.&nbsp;The&nbsp;result&nbsp;is<br>
+padded&nbsp;or&nbsp;unpadded&nbsp;based&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;padded&nbsp;second&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;unpadded&nbsp;second&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;padded&nbsp;or&nbsp;unpadded&nbsp;second,&nbsp;as&nbsp;string,&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;argument&nbsp;padded_or_unpadded</tt></dd></dl>
+ <dl><dt><a name="-get_week_of_year"><strong>get_week_of_year</strong></a>(date, padded_or_unpadded, start_Sunday_or_Monday)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;week&nbsp;of&nbsp;year&nbsp;as&nbsp;string.&nbsp;It&nbsp;returns&nbsp;the&nbsp;value&nbsp;padded&nbsp;or<br>
+unpadded&nbsp;depending&nbsp;on&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument.&nbsp;It&nbsp;start&nbsp;week&nbsp;from&nbsp;sunday<br>
+or&nbsp;monday&nbsp;depending&nbsp;on&nbsp;value&nbsp;of&nbsp;3rd&nbsp;argument<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;padded_or_unpadded:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'padded'<br>
+then&nbsp;return&nbsp;padded&nbsp;week&nbsp;of&nbsp;year&nbsp;like&nbsp;'01',&nbsp;if&nbsp;value&nbsp;is&nbsp;'unpadded'&nbsp;then<br>
+return&nbsp;unpadded&nbsp;week&nbsp;of&nbsp;year&nbsp;like&nbsp;'1'<br>
+&nbsp;<br>
+:param&nbsp;start_sunday_or_monday:&nbsp;Week&nbsp;can&nbsp;start&nbsp;from&nbsp;Sunday&nbsp;or&nbsp;Monday.<br>
+Specify&nbsp;it&nbsp;here<br>
+&nbsp;<br>
+:return:&nbsp;It&nbsp;returns&nbsp;the&nbsp;value&nbsp;padded&nbsp;or<br>
+unpadded&nbsp;depending&nbsp;on&nbsp;value&nbsp;of&nbsp;2nd&nbsp;argument.&nbsp;It&nbsp;start&nbsp;week&nbsp;from&nbsp;sunday<br>
+or&nbsp;monday&nbsp;depending&nbsp;on&nbsp;value&nbsp;of&nbsp;3rd&nbsp;argument</tt></dd></dl>
+ <dl><dt><a name="-get_weekday_name"><strong>get_weekday_name</strong></a>(date, abbreviated_or_full)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;weekday&nbsp;for&nbsp;a&nbsp;python&nbsp;datetime&nbsp;object.<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:param&nbsp;abbreviated_or_full:&nbsp;When&nbsp;value&nbsp;of&nbsp;this&nbsp;param&nbsp;is&nbsp;'abbreviated'<br>
+then&nbsp;return&nbsp;locale&nbsp;specific&nbsp;weekday&nbsp;like&nbsp;'Sun',&nbsp;if&nbsp;value&nbsp;is&nbsp;'full'&nbsp;then<br>
+return&nbsp;full&nbsp;locale&nbsp;specific&nbsp;weekday&nbsp;name&nbsp;like&nbsp;'Sunday'<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;abbreviated&nbsp;or&nbsp;full&nbsp;local&nbsp;specific&nbsp;locale&nbsp;name&nbsp;depending&nbsp;on<br>
+value&nbsp;of&nbsp;param&nbsp;abbreviated_or_full</tt></dd></dl>
+ <dl><dt><a name="-get_weekday_number"><strong>get_weekday_number</strong></a>(date)</dt><dd><tt>&nbsp;Return&nbsp;weekday&nbsp;number&nbsp;as&nbsp;string.&nbsp;0&nbsp;is&nbsp;Sunday&nbsp;and&nbsp;6&nbsp;is&nbsp;Saturday.<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:return:&nbsp;Returns&nbsp;weekday&nbsp;number&nbsp;as&nbsp;string</tt></dd></dl>
+ <dl><dt><a name="-get_year"><strong>get_year</strong></a>(date)</dt></dl>
+ <dl><dt><a name="-localtime2utc"><strong>localtime2utc</strong></a>(date)</dt><dd><tt>This&nbsp;method&nbsp;converts&nbsp;local&nbsp;python&nbsp;datetime&nbsp;to&nbsp;utc&nbsp;python&nbsp;datetime<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Input&nbsp;python&nbsp;datetime&nbsp;object<br>
+&nbsp;<br>
+:return:&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;in&nbsp;utc</tt></dd></dl>
+ <dl><dt><a name="-str2date"><strong>str2date</strong></a>(date_str, date_format)</dt><dd><tt>This&nbsp;method&nbsp;takes&nbsp;a&nbsp;date&nbsp;string&nbsp;and&nbsp;its&nbsp;format&nbsp;and&nbsp;returns&nbsp;python&nbsp;datetime<br>
+&nbsp;object<br>
+:param&nbsp;date_str:&nbsp;Date&nbsp;string,&nbsp;example&nbsp;'2016-06-21'<br>
+&nbsp;<br>
+:param&nbsp;date_format:&nbsp;The&nbsp;format&nbsp;in&nbsp;which&nbsp;date_str&nbsp;is&nbsp;provided,&nbsp;for&nbsp;example<br>
+'2015-06-13&nbsp;05:05:06'&nbsp;is&nbsp;provided&nbsp;in&nbsp;format&nbsp;'%Y-%m-%d&nbsp;%H:%M:%S'<br>
+&nbsp;<br>
+List&nbsp;of&nbsp;date_format&nbsp;directives<br>
+https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior<br>
+&nbsp;<br>
+:return:&nbsp;Python&nbsp;datetime&nbsp;object</tt></dd></dl>
  <dl><dt><a name="-test_date_diff"><strong>test_date_diff</strong></a>()</dt></dl>
  <dl><dt><a name="-test_date_minus"><strong>test_date_minus</strong></a>()</dt></dl>
  <dl><dt><a name="-test_date_plus"><strong>test_date_plus</strong></a>()</dt></dl>
  <dl><dt><a name="-test_def_epoch2datetime"><strong>test_def_epoch2datetime</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_day_of_month"><strong>test_get_day_of_month</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_day_of_year"><strong>test_get_day_of_year</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_hour"><strong>test_get_hour</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_microsecond"><strong>test_get_microsecond</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_minute"><strong>test_get_minute</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_month_name"><strong>test_get_month_name</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_month_number"><strong>test_get_month_number</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_second"><strong>test_get_second</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_week_of_year"><strong>test_get_week_of_year</strong></a>()</dt></dl>
  <dl><dt><a name="-test_get_weekday_name"><strong>test_get_weekday_name</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_weekday_number"><strong>test_get_weekday_number</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_year"><strong>test_get_year</strong></a>()</dt></dl>
  <dl><dt><a name="-test_pst2utc"><strong>test_pst2utc</strong></a>()</dt></dl>
  <dl><dt><a name="-test_str2date_date2str"><strong>test_str2date_date2str</strong></a>()</dt></dl>
  <dl><dt><a name="-test_utc2pst"><strong>test_utc2pst</strong></a>()</dt></dl>
  <dl><dt><a name="-today"><strong>today</strong></a>()</dt></dl>
  <dl><dt><a name="-today_minus"><strong>today_minus</strong></a>(n_days)</dt></dl>
  <dl><dt><a name="-today_plus"><strong>today_plus</strong></a>(n_days)</dt></dl>
- <dl><dt><a name="-utc2pst"><strong>utc2pst</strong></a>(date)</dt></dl>
+ <dl><dt><a name="-utc2localtime"><strong>utc2localtime</strong></a>(date)</dt><dd><tt>This&nbsp;method&nbsp;converts&nbsp;utc&nbsp;python&nbsp;datetime&nbsp;to&nbsp;local&nbsp;python&nbsp;datetime<br>
+&nbsp;<br>
+:param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;in&nbsp;utc<br>
+&nbsp;<br>
+:return:&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;in&nbsp;localtime</tt></dd></dl>
  <dl><dt><a name="-yesterday"><strong>yesterday</strong></a>()</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">

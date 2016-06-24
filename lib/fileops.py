@@ -450,15 +450,11 @@ def test_str2file():
 # ----------------------------------------------------------------------- MAIN
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
-    test_file_exists()
-    test_silent_remove()
 
-    test_is_file_zero_bytes()
-    test_number_of_lines()
-    test_size_of_file()
-    test_file2list()
-
-    test_list2file()
-    test_str2file()
+    # Execute all test methods. All test methods should start with string
+    # "test_"
+    for name in dir():
+        if name.startswith("test_"):
+            eval(name)()
 
     logger.info("All tests run fine")
