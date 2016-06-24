@@ -1,7 +1,7 @@
 __author__ = 'dapren'
 
 from __future__ import print_function
-import constants as quick13cons
+import constants
 import inspect
 
 def stringify_number(number, **args_map):
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     import sys
 
     logging.basicConfig(stream=sys.stdout,
-                        level=quick13cons.APPLICATION_LOG_LEVEL)
+                        level=constants.APPLICATION_LOG_LEVEL)
 
     test_commafy_number()
     test_stringify_number()

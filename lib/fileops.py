@@ -6,7 +6,7 @@ import os
 import inspect
 import gzip
 
-import constants as quick13cons
+import constants
 
 
 def file_exists(file_name, **args_map):
@@ -257,7 +257,7 @@ def get_files_in_dir(path, **args_map):
 def test_file_exists():
     logging.info("Testing " + inspect.stack()[0][3])
 
-    assert file_exists(quick13cons.FILENAME_TEST_FILE_OPS_1) == True
+    assert file_exists(constants.FILENAME_TEST_FILE_OPS_1) == True
     assert file_exists('some_file_that_does_not_exists') == False
 
 
@@ -270,60 +270,60 @@ def test_is_file_zero_bytes():
     logging.info("Testing " + inspect.stack()[0][3])
 
     assert is_file_zero_bytes(
-        quick13cons.FILENAME_TEST_FILE_OPS_ZERO_BYTE_FILE) == True
-    assert is_file_zero_bytes(quick13cons.FILENAME_TEST_FILE_OPS_1) == False
+        constants.FILENAME_TEST_FILE_OPS_ZERO_BYTE_FILE) == True
+    assert is_file_zero_bytes(constants.FILENAME_TEST_FILE_OPS_1) == False
 
 
 def test_number_of_lines():
     logging.info("Testing " + inspect.stack()[0][3])
 
-    logging.debug(number_of_lines(quick13cons.FILENAME_TEST_FILE_OPS_1))
-    logging.debug(number_of_lines(quick13cons.FILENAME_TEST_FILE_OPS_1,
+    logging.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1))
+    logging.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1,
                                   stop_after_n_lines=101))
 
-    assert number_of_lines(quick13cons.FILENAME_TEST_FILE_OPS_1) == 6264
-    assert number_of_lines(quick13cons.FILENAME_TEST_FILE_OPS_1,
+    assert number_of_lines(constants.FILENAME_TEST_FILE_OPS_1) == 6264
+    assert number_of_lines(constants.FILENAME_TEST_FILE_OPS_1,
                            stop_after_n_lines=101) == 101
 
 
 def test_size_of_file():
     logging.info("Testing " + inspect.stack()[0][3])
 
-    logging.debug(size_in_bytes(quick13cons.FILENAME_TEST_FILE_OPS_1))
-    logging.debug(size_in_kb(quick13cons.FILENAME_TEST_FILE_OPS_1))
-    logging.debug(size_in_mb(quick13cons.FILENAME_TEST_FILE_OPS_1))
+    logging.debug(size_in_bytes(constants.FILENAME_TEST_FILE_OPS_1))
+    logging.debug(size_in_kb(constants.FILENAME_TEST_FILE_OPS_1))
+    logging.debug(size_in_mb(constants.FILENAME_TEST_FILE_OPS_1))
 
     assert size_in_bytes(
-        quick13cons.FILENAME_TEST_FILE_OPS_1) == 428432
-    assert size_in_kb(quick13cons.FILENAME_TEST_FILE_OPS_1) == 418.39
-    assert size_in_mb(quick13cons.FILENAME_TEST_FILE_OPS_1) == 0.41
+        constants.FILENAME_TEST_FILE_OPS_1) == 428432
+    assert size_in_kb(constants.FILENAME_TEST_FILE_OPS_1) == 418.39
+    assert size_in_mb(constants.FILENAME_TEST_FILE_OPS_1) == 0.41
 
 
 def test_file2list():
     logging.info("Testing " + inspect.stack()[0][3])
 
     actual_data = file2list(
-        quick13cons.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST)
+        constants.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST)
     expected_data = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
     assert actual_data == expected_data
 
     actual_data = file2list(
-        quick13cons.FILENAME_TEST_GZIPPED_FILE_OPS_LOAD_FILE_IN_LIST,
+        constants.FILENAME_TEST_GZIPPED_FILE_OPS_LOAD_FILE_IN_LIST,
         from_line=3, to_line=9)
     expected_data = ['3', '4', '5', '6', '7', '8', '9']
     assert actual_data == expected_data
 
     data = file2list(
-        quick13cons.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST, from_line=5)
+        constants.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST, from_line=5)
     assert str(data) == "['5', '6', '7', '8', '9', '10']"
 
     data = file2list(
-        quick13cons.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST, from_line=5,
+        constants.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST, from_line=5,
         to_line=7)
     assert str(data) == "['5', '6', '7']"
 
     data = file2list(
-        quick13cons.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST, to_line=2)
+        constants.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST, to_line=2)
     assert str(data) == "['1', '2']"
 
 
@@ -332,7 +332,7 @@ def test_list2file():
 
     # Test mode = w (default mode)
     data = ['1', '2', '3', '4']
-    file_name = quick13cons.TMP_DIR + "/test_list2file.deleteme.txt"
+    file_name = constants.TMP_DIR + "/test_list2file.deleteme.txt"
     silent_remove(file_name)
 
     list2file(data, file_name)
@@ -347,7 +347,7 @@ def test_list2file():
     # Test mode = a
 
     data = ['1', '2', '3', '4']
-    file_name = quick13cons.TMP_DIR + "/test_list2file.deleteme.txt"
+    file_name = constants.TMP_DIR + "/test_list2file.deleteme.txt"
     silent_remove(file_name)
 
     list2file(data, file_name, mode='a')
@@ -363,7 +363,7 @@ def test_list2file():
 
     # Test creation of gzip file without suffix ".gz"
     data = ['1', '2', '3', '4']
-    file_name = quick13cons.TMP_DIR + "/test_list2file.gzipped.deleteme.txt"
+    file_name = constants.TMP_DIR + "/test_list2file.gzipped.deleteme.txt"
     silent_remove(file_name)
 
     list2file(data, file_name, file_type="gz")
@@ -376,7 +376,7 @@ def test_list2file():
 
     # Test creation of gzip file WITH suffix ".gz"
     data = ['1', '2', '3', '4']
-    file_name = quick13cons.TMP_DIR + "/test_list2file.gzipped.deleteme.txt.gz"
+    file_name = constants.TMP_DIR + "/test_list2file.gzipped.deleteme.txt.gz"
     silent_remove(file_name)
 
     list2file(data, file_name)
@@ -392,7 +392,7 @@ def test_str2file():
 
     # Test for mode = 'w'
     data = '1234'
-    file_name = quick13cons.TMP_DIR + "/test_str2file.deleteme.txt"
+    file_name = constants.TMP_DIR + "/test_str2file.deleteme.txt"
     silent_remove(file_name)
 
     str2file(data, file_name)
@@ -408,7 +408,7 @@ def test_str2file():
 
     # Test for mode = 'a'
     data = '1234'
-    file_name = quick13cons.TMP_DIR + "/test_append_str2file.deleteme.txt"
+    file_name = constants.TMP_DIR + "/test_append_str2file.deleteme.txt"
     silent_remove(file_name)
 
     str2file(data, file_name, mode='a')
@@ -424,7 +424,7 @@ def test_str2file():
 
     # Test creation of gzip file without suffix ".gz"
     data = '1234'
-    file_name = quick13cons.TMP_DIR + "/test_str2file.gzipped.deleteme.txt"
+    file_name = constants.TMP_DIR + "/test_str2file.gzipped.deleteme.txt"
     silent_remove(file_name)
 
     str2file(data, file_name, file_type="gz")
@@ -437,7 +437,7 @@ def test_str2file():
 
     # Test creation of gzip file WITH suffix ".gz"
     data = '1234'
-    file_name = quick13cons.TMP_DIR + "/test_str2file.gzipped.deleteme.txt.gz"
+    file_name = constants.TMP_DIR + "/test_str2file.gzipped.deleteme.txt.gz"
     silent_remove(file_name)
 
     str2file(data, file_name)
@@ -457,7 +457,7 @@ if __name__ == '__main__':
     import sys
 
     logging.basicConfig(stream=sys.stdout,
-                        level=quick13cons.APPLICATION_LOG_LEVEL)
+                        level=constants.APPLICATION_LOG_LEVEL)
 
     test_file_exists()
     test_silent_remove()

@@ -4,7 +4,9 @@ from __future__ import print_function
 """
 This python code kinda implements the toString() of data structures
 """
-def echo(object):
-    if type(object) is list:
-        for item in object:
+
+
+def echo(any_object):
+    if type(any_object) is list:
+        for item in any_object:
             print (item, sep="\n")

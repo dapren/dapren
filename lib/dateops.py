@@ -3,7 +3,7 @@ __author__ = 'dapren'
 from datetime import datetime, timedelta
 import inspect
 
-import constants as quick13cons
+import constants
 
 
 def str2date(date_str, date_format):
@@ -157,7 +157,7 @@ if __name__ == '__main__':
     import sys
 
     logging.basicConfig(stream=sys.stdout,
-                        level=quick13cons.APPLICATION_LOG_LEVEL)
+                        level=constants.APPLICATION_LOG_LEVEL)
 
     test_str2date_date2str()
     test_def_epoch2datetime()

@@ -6,23 +6,20 @@ APPLICATION_LOG_LEVEL = logging.INFO
 ###############################################################################
 # Directory Names
 ###############################################################################
+RESOURCE_DIR = "../resources"
+DATA_DIR = "../var/data"
+DB_DIR = "../var/db"
+INTERIM_DIR = "../var/interim"
+LOGS_DIR = "../var/logs"
+OUTPUT_DIR = "../var/output"
+TMP_DIR = "../var/tmp"
 
-RESOURCE_DIR = "../../resources"
-MODULE_NAME = "quick13"
-TMP_DIR = "/tmp/quick13"
-
-###############################################################################
-# Data Files
-###############################################################################
-
-DATA_DIR="../var/data"
-
-__FILE = "hive_tables.list"
-FILENAME_HIVE_TABLE_LIST = DATA_DIR + __FILE
 
 ###############################################################################
 # File Names
 ###############################################################################
+MODULE_NAME = "unit_tests"
+
 __DIR = RESOURCE_DIR + "/" + MODULE_NAME + "/"
 
 __FILE = "test_file_ops_1.txt"
