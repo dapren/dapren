@@ -1,4 +1,5 @@
 .idea
+lib/test.py
 *.pyc
 */*/*.pyc
 */*/*/*.pyc

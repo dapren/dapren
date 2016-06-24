@@ -4,7 +4,7 @@
 # manually and document changes will be pushed to version control
 ###############################################################################
 cd ${DAPREN_HOME}/lib
-pydoc -w `ls *.py | sed 's/.py$//'`
+pydoc -w `ls -1 *.py | egrep -v "^(__init__.py|test.py)$" | sed 's/.py$//'`
 for file in `ls *.html`
 do 
   html_file=`basename ${file}`
