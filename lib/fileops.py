@@ -1,5 +1,3 @@
-__author__ = 'dapren'
-
 from __future__ import print_function
 from __future__ import division
 import os

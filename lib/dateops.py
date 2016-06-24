@@ -1,5 +1,3 @@
-__author__ = 'dapren'
-
 from datetime import datetime, timedelta
 import inspect
 
@@ -74,7 +72,7 @@ def test_date_diff():
     date2 = str2date('2015-07-01', '%Y-%m-%d')
 
     input_diff = 2
-    output_diff = date_diff(date1, date2)
+    output_diff = date_diff(date2, date1)
     assert input_diff == output_diff
 
 

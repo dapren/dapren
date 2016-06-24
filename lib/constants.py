@@ -1,4 +1,3 @@
-__author__ = 'dapren'
 import logging
 
 APPLICATION_LOG_LEVEL = logging.INFO

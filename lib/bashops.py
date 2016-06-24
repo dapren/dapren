@@ -1,5 +1,3 @@
-__author__ = 'dapren'
-
 from __future__ import print_function
 import constants
 import subprocess
@@ -67,3 +65,5 @@ if __name__ == "__main__":
     if runbash(cmd="ls")['return_code'] != 0:
         raise RuntimeError("Bash cmds are not executing")
 
+
+    logging.info("All tests run fine")
