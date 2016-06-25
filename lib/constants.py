@@ -101,8 +101,11 @@ str_wb = "wb"
 str_a = "a"
 str_r = "r"
 
+str___main__ = "__main__"
 char_tab = '\t'
 char_newline = '\n'
+
+
 
 ###############################################################################
 # Numbers
@@ -123,7 +126,7 @@ def str_possible_values(argument_name, list_of_values):
 ###############################################################################
 
 
-if __name__ == '__main__':
+if __name__ == str___main__:
     for name in dir():
         evaluated_value = eval(name)
         print ('{name}="{evaluated_value}" ({type})'.format(

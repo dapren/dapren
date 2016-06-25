@@ -13,9 +13,7 @@ def stringify_number(number, **args_map):
     """
 
     # Process argument map of the method
-    __ignore_decimal = True
-    if args_map.has_key('ignore_decimal'):
-        __ignore_decimal = args_map.get('ignore_decimal')
+    __ignore_decimal = args_map.get('ignore_decimal', True)
 
     suffix = ""
     prefix = ""
@@ -62,9 +60,7 @@ def commafy_number(number, **args_map):
     """
 
     # Process argument map of the method
-    __ignore_decimal = False
-    if args_map.has_key('ignore_decimal'):
-        __ignore_decimal = args_map.get('ignore_decimal')
+    __ignore_decimal = args_map.get('ignore_decimal', False)
 
     # Implement method logic
     prefix = ""
@@ -90,23 +86,24 @@ def commafy_number(number, **args_map):
 # -----------------------------------------------------------------------------
 # ----------------------------------------------------------------- UNIT TESTS
 # -----------------------------------------------------------------------------
+def test_stringify_number():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    assert stringify_number(123445678439, ignore_decimal=False) == '123.45B'
+    assert stringify_number(0) == '0'
+    assert stringify_number(51211237) == '51M'
+    assert stringify_number(51211237, ignore_decimal=False) == '51.21M'
+    assert stringify_number(512) == '512'
+    assert stringify_number(547856789.234) == '547M'
+    assert stringify_number(49078564378899.234) == '49T'
+    assert stringify_number(40078564378899.234, ignore_decimal=False) == \
+        '40.08T'
+    assert stringify_number(-852656789.23) == '-852M'
+    assert stringify_number(-852656789.23, ignore_decimal=False) == '-852.66M'
+
 
 def test_commafy_number():
     logger.info("Testing " + inspect.stack()[0][3])
-
-    logger.debug('12345634' + ' -> ' + commafy_number(12345634))
-    logger.debug('547856789.23' + ' -> ' + commafy_number(547856789.23))
-    logger.debug('547856789.23' + ' -> ' + commafy_number(547856789.23,
-                                                   ignore_decimal=True))
-    logger.debug('498785643789' + ' -> ' + commafy_number(498785643789))
-    logger.debug('4007856437895' + ' -> ' + commafy_number(4007856437895,
-                                                    ignore_decimal=True))
-    logger.debug('498785643789.123' + ' -> ' + commafy_number(498785643789.123))
-    logger.debug('4567856437895.90' + ' -> ' + commafy_number(4567856437895.90,
-                                                       ignore_decimal=True))
-    logger.debug('-852656789.23' + ' -> ' + commafy_number(-852656789.23))
-    logger.debug('-852656789.23' + ' -> ' + commafy_number(-852656789.23,
-                                                    ignore_decimal=True))
 
     assert commafy_number(12345634) == '12,345,634'
     assert commafy_number(547856789.23) == '547,856,789.23'
@@ -121,42 +118,11 @@ def test_commafy_number():
     assert commafy_number(-852656789.23, ignore_decimal=True) == '-852,656,789'
 
 
-def test_stringify_number():
-    logger.info("Testing " + inspect.stack()[0][3])
-
-    logger.debug('123445678439' + ' -> ' + stringify_number(123445678439,
-                                                     ignore_decimal="no"))
-    logger.debug('0' + ' -> ' + stringify_number(0))
-    logger.debug('51211237' + ' -> ' + stringify_number(51211237))
-    logger.debug(
-        '51211237' + ' -> ' + stringify_number(51211237, ignore_decimal=False))
-    logger.debug('512' + ' -> ' + stringify_number(512))
-    logger.debug('547856789.234' + ' -> ' + stringify_number(547856789.234))
-    logger.debug('49078564378899.234' + ' -> ' + stringify_number(49078564378899.234))
-    logger.debug('40078564378899.234' + ' -> ' + stringify_number(40078564378899.234,
-                                                           ignore_decimal=False))
-    logger.debug('-852656789.23' + ' -> ' + stringify_number(-852656789.23))
-    logger.debug('-852656789.23' + ' -> ' + stringify_number(-852656789.23,
-                                                      ignore_decimal=False))
-
-    assert stringify_number(123445678439, ignore_decimal="no") == '123.45B'
-    assert stringify_number(0) == '0'
-    assert stringify_number(51211237) == '51M'
-    assert stringify_number(51211237, ignore_decimal=False) == '51.21M'
-    assert stringify_number(512) == '512'
-    assert stringify_number(547856789.234) == '547M'
-    assert stringify_number(49078564378899.234) == '49T'
-    assert stringify_number(40078564378899.234, ignore_decimal=False) == \
-           '40.08T'
-    assert stringify_number(-852656789.23) == '-852M'
-    assert stringify_number(-852656789.23, ignore_decimal=False) == '-852.66M'
-
-
 # -----------------------------------------------------------------------------
 # ----------------------------------------------------------------------- MAIN
 # -----------------------------------------------------------------------------
+if __name__ == constants.str___main__:
 
-if __name__ == "__main__":
     # Execute all test methods. All test methods should start with string
     # "test_"
     for name in dir():

@@ -66,6 +66,7 @@ for line in fp:
 from __future__ import print_function
 from constants import logger
 import subprocess
+import constants
 
 
 def runbash(cmd, **kwargs):
@@ -126,7 +127,7 @@ def runbash(cmd, **kwargs):
     return out_dict
 
 
-if __name__ == "__main__":
+if __name__ == constants.str___main__:
     if runbash(
         cmd="ls",
         stdout="/tmp/output.txt",
