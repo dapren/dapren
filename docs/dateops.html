@@ -27,7 +27,9 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-date2str"><strong>date2str</strong></a>(date, date_format)</dt><dd><tt>This&nbsp;method&nbsp;takes&nbsp;a&nbsp;date&nbsp;and&nbsp;returns&nbsp;a&nbsp;string&nbsp;representing&nbsp;the&nbsp;date&nbsp;in&nbsp;the<br>
+<td width="100%"><dl><dt><a name="-add_seconds"><strong>add_seconds</strong></a>(date1, n_seconds)</dt><dd><tt>Add&nbsp;n_seconds&nbsp;to&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;date1&nbsp;and&nbsp;return&nbsp;resultant&nbsp;date.<br>
+To&nbsp;add&nbsp;1&nbsp;day&nbsp;then&nbsp;n_seconds&nbsp;will&nbsp;be&nbsp;24*60*60</tt></dd></dl>
+ <dl><dt><a name="-date2str"><strong>date2str</strong></a>(date, date_format)</dt><dd><tt>This&nbsp;method&nbsp;takes&nbsp;a&nbsp;date&nbsp;and&nbsp;returns&nbsp;a&nbsp;string&nbsp;representing&nbsp;the&nbsp;date&nbsp;in&nbsp;the<br>
 date_format<br>
 &nbsp;<br>
 :param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object<br>
@@ -38,9 +40,6 @@ List&nbsp;of&nbsp;date_format&nbsp;directives<br>
 https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior<br>
 &nbsp;<br>
 :return:&nbsp;String&nbsp;in&nbsp;the&nbsp;format&nbsp;specifed&nbsp;by&nbsp;date_format&nbsp;argument</tt></dd></dl>
- <dl><dt><a name="-date_diff"><strong>date_diff</strong></a>(date1, date2)</dt></dl>
- <dl><dt><a name="-date_minus"><strong>date_minus</strong></a>(date1, n_days)</dt></dl>
- <dl><dt><a name="-date_plus"><strong>date_plus</strong></a>(date1, n_days)</dt></dl>
  <dl><dt><a name="-epoch2datetime"><strong>epoch2datetime</strong></a>(epoch)</dt><dd><tt>This&nbsp;method&nbsp;return&nbsp;epoch&nbsp;time&nbsp;(that&nbsp;you&nbsp;get&nbsp;by&nbsp;executing&nbsp;Linux&nbsp;command<br>
 'date&nbsp;+%s')&nbsp;to&nbsp;python&nbsp;datetime&nbsp;object<br>
 &nbsp;<br>
@@ -171,6 +170,7 @@ value&nbsp;of&nbsp;param&nbsp;abbreviated_or_full</tt></dd></dl>
 :param&nbsp;date:&nbsp;Input&nbsp;python&nbsp;datetime&nbsp;object<br>
 &nbsp;<br>
 :return:&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;in&nbsp;utc</tt></dd></dl>
+ <dl><dt><a name="-seconds_elapsed"><strong>seconds_elapsed</strong></a>(date1, date2)</dt><dd><tt>Returns&nbsp;number&nbsp;of&nbsp;seconds&nbsp;elapsed&nbsp;between&nbsp;date1&nbsp;and&nbsp;date2&nbsp;(date1&nbsp;-&nbsp;date2)</tt></dd></dl>
  <dl><dt><a name="-str2date"><strong>str2date</strong></a>(date_str, date_format)</dt><dd><tt>This&nbsp;method&nbsp;takes&nbsp;a&nbsp;date&nbsp;string&nbsp;and&nbsp;its&nbsp;format&nbsp;and&nbsp;returns&nbsp;python&nbsp;datetime<br>
 &nbsp;object<br>
 :param&nbsp;date_str:&nbsp;Date&nbsp;string,&nbsp;example&nbsp;'2016-06-21'<br>
@@ -182,9 +182,10 @@ List&nbsp;of&nbsp;date_format&nbsp;directives<br>
 https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior<br>
 &nbsp;<br>
 :return:&nbsp;Python&nbsp;datetime&nbsp;object</tt></dd></dl>
- <dl><dt><a name="-test_date_diff"><strong>test_date_diff</strong></a>()</dt></dl>
- <dl><dt><a name="-test_date_minus"><strong>test_date_minus</strong></a>()</dt></dl>
- <dl><dt><a name="-test_date_plus"><strong>test_date_plus</strong></a>()</dt></dl>
+ <dl><dt><a name="-subtract_seconds"><strong>subtract_seconds</strong></a>(date1, n_seconds)</dt><dd><tt>Subtract&nbsp;n_seconds&nbsp;to&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;date1&nbsp;and&nbsp;return&nbsp;resultant<br>
+date.<br>
+To&nbsp;subtract&nbsp;1&nbsp;day&nbsp;then&nbsp;n_seconds&nbsp;will&nbsp;be&nbsp;24*60*60</tt></dd></dl>
+ <dl><dt><a name="-test_add_seconds"><strong>test_add_seconds</strong></a>()</dt></dl>
  <dl><dt><a name="-test_def_epoch2datetime"><strong>test_def_epoch2datetime</strong></a>()</dt></dl>
  <dl><dt><a name="-test_get_day_of_month"><strong>test_get_day_of_month</strong></a>()</dt></dl>
  <dl><dt><a name="-test_get_day_of_year"><strong>test_get_day_of_year</strong></a>()</dt></dl>
@@ -199,17 +200,17 @@ https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior<b
  <dl><dt><a name="-test_get_weekday_number"><strong>test_get_weekday_number</strong></a>()</dt></dl>
  <dl><dt><a name="-test_get_year"><strong>test_get_year</strong></a>()</dt></dl>
  <dl><dt><a name="-test_pst2utc"><strong>test_pst2utc</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_seconds_elapsed"><strong>test_seconds_elapsed</strong></a>()</dt></dl>
  <dl><dt><a name="-test_str2date_date2str"><strong>test_str2date_date2str</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_subtract_seconds"><strong>test_subtract_seconds</strong></a>()</dt></dl>
  <dl><dt><a name="-test_utc2pst"><strong>test_utc2pst</strong></a>()</dt></dl>
- <dl><dt><a name="-today"><strong>today</strong></a>()</dt></dl>
- <dl><dt><a name="-today_minus"><strong>today_minus</strong></a>(n_days)</dt></dl>
- <dl><dt><a name="-today_plus"><strong>today_plus</strong></a>(n_days)</dt></dl>
+ <dl><dt><a name="-today"><strong>today</strong></a>()</dt><dd><tt>Returns&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;with&nbsp;today's&nbsp;date</tt></dd></dl>
  <dl><dt><a name="-utc2localtime"><strong>utc2localtime</strong></a>(date)</dt><dd><tt>This&nbsp;method&nbsp;converts&nbsp;utc&nbsp;python&nbsp;datetime&nbsp;to&nbsp;local&nbsp;python&nbsp;datetime<br>
 &nbsp;<br>
 :param&nbsp;date:&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;in&nbsp;utc<br>
 &nbsp;<br>
 :return:&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;in&nbsp;localtime</tt></dd></dl>
- <dl><dt><a name="-yesterday"><strong>yesterday</strong></a>()</dt></dl>
+ <dl><dt><a name="-yesterday"><strong>yesterday</strong></a>()</dt><dd><tt>Returns&nbsp;Python&nbsp;datetime&nbsp;object&nbsp;with&nbsp;yesterday's&nbsp;date</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">

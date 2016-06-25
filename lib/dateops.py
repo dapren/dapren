@@ -347,62 +347,72 @@ def get_week_of_year(date, padded_or_unpadded, start_Sunday_or_Monday):
 
 
 def today():
-    return datetime.today().strftime('%Y-%m-%d')
+    """
+    Returns Python datetime object with today's date
+    """
+    return datetime.today()
 
 
 def yesterday():
-    return (datetime.today() - timedelta(1)).strftime('%Y-%m-%d')
+    """
+    Returns Python datetime object with yesterday's date
+    """
+    return datetime.today() - timedelta(1)
 
 
-def today_minus(n_days):
-    return (datetime.today() - timedelta(n_days)).strftime('%Y-%m-%d')
+def seconds_elapsed(date1, date2):
+    """
+    Returns number of seconds elapsed between date1 and date2 (date1 - date2)
+    """
+    return (date1 - date2).total_seconds()
 
 
-def today_plus(n_days):
-    return (datetime.today() + timedelta(n_days)).strftime('%Y-%m-%d')
+def add_seconds(date1, n_seconds):
+    """
+    Add n_seconds to Python datetime object date1 and return resultant date.
+    To add 1 day then n_seconds will be 24*60*60
+    """
+    return date1 + timedelta(seconds=n_seconds)
 
 
-def date_diff(date1, date2):
-    return (date1 - date2).days
-
-
-def date_minus(date1, n_days):
-    return (date1 - timedelta(n_days)).strftime('%Y-%m-%d')
-
-
-def date_plus(date1, n_days):
-    return (date1 + timedelta(n_days)).strftime('%Y-%m-%d')
+def subtract_seconds(date1, n_seconds):
+    """
+    Subtract n_seconds to Python datetime object date1 and return resultant
+    date.
+    To subtract 1 day then n_seconds will be 24*60*60
+    """
+    return date1 - timedelta(seconds=n_seconds)
 
 
 # -----------------------------------------------------------------------------
 # ----------------------------------------------------------------- UNIT TESTS
 # -----------------------------------------------------------------------------
 
-def test_date_diff():
+def test_seconds_elapsed():
     logger.info("Testing " + inspect.stack()[0][3])
 
     date1 = str2date('2015-06-29', '%Y-%m-%d')
     date2 = str2date('2015-07-01', '%Y-%m-%d')
 
-    input_diff = 2
-    output_diff = date_diff(date2, date1)
+    input_diff = 2 * 24 * 60 * 60
+    output_diff = seconds_elapsed(date2, date1)
     assert input_diff == output_diff
 
 
-def test_date_minus():
+def test_subtract_seconds():
     logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = str2date('2015-06-29', '%Y-%m-%d')
-    output_date = date_minus(input_date, 5)
-    assert output_date == '2015-06-24'
+    output_date = subtract_seconds(input_date, 5*24*60*60)
+    assert output_date == str2date('2015-06-24', '%Y-%m-%d')
 
 
-def test_date_plus():
+def test_add_seconds():
     logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = str2date('2015-06-29', '%Y-%m-%d')
-    output_date = date_plus(input_date, 5)
-    assert output_date == '2015-07-04'
+    output_date = add_seconds(input_date, 5*24*60*60)
+    assert output_date == str2date('2015-07-04', '%Y-%m-%d')
 
 
 def test_str2date_date2str():
