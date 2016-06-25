@@ -10,7 +10,7 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>fileops</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dapren/Dropbox (Personal)/private/dapren/lib/fileops.py">/Users/dapren/Dropbox (Personal)/private/dapren/lib/fileops.py</a></font></td></tr></table>
-    <p></p>
+    <p><tt>This&nbsp;module&nbsp;contains&nbsp;most&nbsp;commonly&nbsp;used&nbsp;file&nbsp;operations</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -29,52 +29,93 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-file2list"><strong>file2list</strong></a>(file_name, **args_map)</dt><dd><tt>Read&nbsp;a&nbsp;file&nbsp;into&nbsp;list&nbsp;which&nbsp;each&nbsp;corresponding&nbsp;to&nbsp;1&nbsp;item<br>
-Keys&nbsp;in&nbsp;args_map<br>
--&nbsp;from_line:&nbsp;Start&nbsp;reading&nbsp;file&nbsp;from&nbsp;this&nbsp;line<br>
--&nbsp;to_line:&nbsp;End&nbsp;reading&nbsp;file&nbsp;at&nbsp;this&nbsp;line<br>
--&nbsp;file_type&nbsp;=&nbsp;['gz']<br>
+<td width="100%"><dl><dt><a name="-file2list"><strong>file2list</strong></a>(file_name, **kwargs)</dt><dd><tt>Read&nbsp;a&nbsp;file&nbsp;into&nbsp;list&nbsp;which&nbsp;each&nbsp;line&nbsp;corresponding&nbsp;to&nbsp;1&nbsp;element&nbsp;in&nbsp;list<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;of&nbsp;input&nbsp;filename<br>
+:param&nbsp;kwargs:&nbsp;Keys&nbsp;in&nbsp;kwargs<br>
+-&nbsp;from_line:&nbsp;Start&nbsp;writing&nbsp;file&nbsp;from&nbsp;this&nbsp;line&nbsp;onwards&nbsp;(inclusive).<br>
+-&nbsp;to_line:&nbsp;End&nbsp;reading&nbsp;file&nbsp;at&nbsp;this&nbsp;line&nbsp;(inclusive)<br>
+-&nbsp;is_gzipped:&nbsp;Possible&nbsp;values:&nbsp;Boolean&nbsp;True&nbsp;or&nbsp;False<br>
+:return&nbsp;List&nbsp;containing&nbsp;all&nbsp;lines&nbsp;between&nbsp;from_line&nbsp;to&nbsp;to_line</tt></dd></dl>
+ <dl><dt><a name="-file2stdout"><strong>file2stdout</strong></a>(file_name, **kwargs)</dt><dd><tt>Writes&nbsp;file&nbsp;to&nbsp;stdout<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;of&nbsp;input&nbsp;filename<br>
+:param&nbsp;kwargs:&nbsp;Keys&nbsp;in&nbsp;kwargs<br>
+-&nbsp;from_line:&nbsp;Start&nbsp;writing&nbsp;file&nbsp;from&nbsp;this&nbsp;line&nbsp;onwards&nbsp;(inclusive).<br>
+-&nbsp;to_line:&nbsp;End&nbsp;reading&nbsp;file&nbsp;at&nbsp;this&nbsp;line&nbsp;(inclusive)<br>
+-&nbsp;is_gzipped:&nbsp;Possible&nbsp;values:&nbsp;Boolean&nbsp;True&nbsp;or&nbsp;False</tt></dd></dl>
+ <dl><dt><a name="-file_exists"><strong>file_exists</strong></a>(file_name, **kwargs)</dt><dd><tt>:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;filename<br>
+:param&nbsp;kwargs:&nbsp;N/A<br>
+:return:&nbsp;Returns&nbsp;boolean&nbsp;true&nbsp;if&nbsp;file&nbsp;exists&nbsp;else&nbsp;false</tt></dd></dl>
+ <dl><dt><a name="-get_dir_in_dir"><strong>get_dir_in_dir</strong></a>(path, **kwargs)</dt><dd><tt>Returns&nbsp;a&nbsp;list&nbsp;(with&nbsp;extension,&nbsp;without&nbsp;full&nbsp;path)&nbsp;of&nbsp;all&nbsp;directories<br>
+in&nbsp;folder&nbsp;path<br>
+&nbsp;<br>
+:param&nbsp;path:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;directory<br>
+:param&nbsp;kwargs:&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-get_files_in_dir"><strong>get_files_in_dir</strong></a>(path, **kwargs)</dt><dd><tt>Returns&nbsp;a&nbsp;list&nbsp;(with&nbsp;extension,&nbsp;without&nbsp;full&nbsp;path)&nbsp;of&nbsp;all&nbsp;files<br>
+in&nbsp;folder&nbsp;path<br>
+&nbsp;<br>
+:param&nbsp;path:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;directory<br>
+:param&nbsp;kwargs:&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-is_file_zero_bytes"><strong>is_file_zero_bytes</strong></a>(file_name, **kwargs)</dt><dd><tt>Returns&nbsp;true&nbsp;if&nbsp;file&nbsp;is&nbsp;zero&nbsp;bytes<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Returns&nbsp;true&nbsp;if&nbsp;file&nbsp;is&nbsp;zero&nbsp;bytes</tt></dd></dl>
+ <dl><dt><a name="-list2file"><strong>list2file</strong></a>(list_to_output, file_name, **kwargs)</dt><dd><tt>Write&nbsp;content&nbsp;of&nbsp;list&nbsp;to&nbsp;a&nbsp;file.&nbsp;1&nbsp;line&nbsp;per&nbsp;list&nbsp;item<br>
+&nbsp;<br>
+:param&nbsp;list_to_output:<br>
+:param&nbsp;filename:&nbsp;Absolute&nbsp;path&nbsp;of&nbsp;the&nbsp;filename&nbsp;to&nbsp;which&nbsp;list&nbsp;contents<br>
+need&nbsp;to&nbsp;be&nbsp;copied<br>
+:param&nbsp;kwargs:&nbsp;Keys&nbsp;in&nbsp;kwargs<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;mode&nbsp;=&nbsp;['w','a']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;is_gzipped:&nbsp;Possible&nbsp;values:&nbsp;Boolean&nbsp;True&nbsp;or&nbsp;False<br>
+:return:&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-number_of_lines"><strong>number_of_lines</strong></a>(file_name, **kwargs)</dt><dd><tt>Returns&nbsp;the&nbsp;number&nbsp;of&nbsp;lines&nbsp;in&nbsp;a&nbsp;file<br>
 :param&nbsp;file_name:<br>
-:param&nbsp;args_map:<br>
-:return:</tt></dd></dl>
- <dl><dt><a name="-file2stdout"><strong>file2stdout</strong></a>(file_name, **args_map)</dt><dd><tt>Read&nbsp;a&nbsp;file&nbsp;into&nbsp;list&nbsp;which&nbsp;each&nbsp;corresponding&nbsp;to&nbsp;1&nbsp;item<br>
-Keys&nbsp;in&nbsp;args_map<br>
--&nbsp;from_line:&nbsp;Start&nbsp;reading&nbsp;file&nbsp;from&nbsp;this&nbsp;line<br>
--&nbsp;to_line:&nbsp;End&nbsp;reading&nbsp;file&nbsp;at&nbsp;this&nbsp;line<br>
--&nbsp;file_type&nbsp;=&nbsp;['gz']<br>
-:param&nbsp;file_name:<br>
-:param&nbsp;args_map:<br>
-:return:</tt></dd></dl>
- <dl><dt><a name="-file_exists"><strong>file_exists</strong></a>(file_name, **args_map)</dt></dl>
- <dl><dt><a name="-get_files_in_dir"><strong>get_files_in_dir</strong></a>(path, **args_map)</dt></dl>
- <dl><dt><a name="-is_file_zero_bytes"><strong>is_file_zero_bytes</strong></a>(file_name, **args_map)</dt></dl>
- <dl><dt><a name="-list2file"><strong>list2file</strong></a>(data, file_name, **args_map)</dt><dd><tt>Write&nbsp;content&nbsp;of&nbsp;list&nbsp;to&nbsp;a&nbsp;file<br>
-Keys&nbsp;in&nbsp;args_maps<br>
--&nbsp;mode&nbsp;=&nbsp;['w','a']<br>
--&nbsp;file_type&nbsp;=&nbsp;['gz']<br>
-:param&nbsp;data:<br>
-:param&nbsp;filename:<br>
-:param&nbsp;args_maps:<br>
-:return:</tt></dd></dl>
- <dl><dt><a name="-number_of_lines"><strong>number_of_lines</strong></a>(file_name, **args_map)</dt><dd><tt>Returns&nbsp;the&nbsp;number&nbsp;of&nbsp;lines&nbsp;in&nbsp;a&nbsp;file<br>
-Keys&nbsp;in&nbsp;args_maps<br>
+:param&nbsp;kwargs:&nbsp;Keys&nbsp;in&nbsp;kwargs<br>
 -&nbsp;stop_after_n_lines:&nbsp;Stop&nbsp;reading&nbsp;file&nbsp;after&nbsp;this&nbsp;line<br>
-:param&nbsp;file_name:&nbsp;File&nbsp;name&nbsp;with&nbsp;absolute&nbsp;path<br>
 :return:&nbsp;Returns&nbsp;number&nbsp;of&nbsp;lines&nbsp;in&nbsp;the&nbsp;file</tt></dd></dl>
- <dl><dt><a name="-silent_remove"><strong>silent_remove</strong></a>(file_name)</dt></dl>
- <dl><dt><a name="-size_in_bytes"><strong>size_in_bytes</strong></a>(file_name, **args_map)</dt></dl>
- <dl><dt><a name="-size_in_gb"><strong>size_in_gb</strong></a>(file_name, **args_map)</dt></dl>
- <dl><dt><a name="-size_in_kb"><strong>size_in_kb</strong></a>(file_name, **args_map)</dt></dl>
- <dl><dt><a name="-size_in_mb"><strong>size_in_mb</strong></a>(file_name, **args_map)</dt></dl>
- <dl><dt><a name="-size_in_tb"><strong>size_in_tb</strong></a>(file_name, **args_map)</dt></dl>
- <dl><dt><a name="-str2file"><strong>str2file</strong></a>(data, file_name, **args_map)</dt><dd><tt>Writes&nbsp;a&nbsp;string&nbsp;to&nbsp;file<br>
-Keys&nbsp;in&nbsp;args_maps<br>
--&nbsp;mode&nbsp;=&nbsp;['w','a']<br>
--&nbsp;file_type&nbsp;=&nbsp;['gz']<br>
-:param&nbsp;data:<br>
-:param&nbsp;file_name:<br>
-:param&nbsp;args_map:<br>
-:return:</tt></dd></dl>
+ <dl><dt><a name="-silent_remove"><strong>silent_remove</strong></a>(file_name)</dt><dd><tt>Remove&nbsp;file&nbsp;from&nbsp;disk&nbsp;if&nbsp;exists.&nbsp;If&nbsp;the&nbsp;file&nbsp;does&nbsp;not&nbsp;exits&nbsp;then&nbsp;just&nbsp;exit<br>
+without&nbsp;throwing&nbsp;any&nbsp;exceptions<br>
+&nbsp;<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;filename<br>
+:return:&nbsp;Returns&nbsp;"None"</tt></dd></dl>
+ <dl><dt><a name="-size_adjust_unit"><strong>size_adjust_unit</strong></a>(file_name, **kwargs)</dt><dd><tt>Auto&nbsp;adjusts&nbsp;the&nbsp;unit&nbsp;of&nbsp;file&nbsp;size&nbsp;to&nbsp;kb,&nbsp;mb,&nbsp;gb,&nbsp;tb&nbsp;and&nbsp;pb.<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Returns&nbsp;a&nbsp;tuple&nbsp;with&nbsp;2&nbsp;elements.&nbsp;1st&nbsp;element&nbsp;in&nbsp;number&nbsp;and&nbsp;2nd<br>
+element&nbsp;is&nbsp;the&nbsp;unit</tt></dd></dl>
+ <dl><dt><a name="-size_in_bytes"><strong>size_in_bytes</strong></a>(file_name, **kwargs)</dt><dd><tt>Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;bytes<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;bytes</tt></dd></dl>
+ <dl><dt><a name="-size_in_gb"><strong>size_in_gb</strong></a>(file_name, **kwargs)</dt><dd><tt>Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;gb<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;gb</tt></dd></dl>
+ <dl><dt><a name="-size_in_kb"><strong>size_in_kb</strong></a>(file_name, **kwargs)</dt><dd><tt>Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;kb<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;kb</tt></dd></dl>
+ <dl><dt><a name="-size_in_mb"><strong>size_in_mb</strong></a>(file_name, **kwargs)</dt><dd><tt>Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;mb<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;mb</tt></dd></dl>
+ <dl><dt><a name="-size_in_pb"><strong>size_in_pb</strong></a>(file_name, **kwargs)</dt><dd><tt>Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;tb<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;tb</tt></dd></dl>
+ <dl><dt><a name="-size_in_tb"><strong>size_in_tb</strong></a>(file_name, **kwargs)</dt><dd><tt>Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;tb<br>
+:param&nbsp;file_name:&nbsp;Absolute&nbsp;path&nbsp;to&nbsp;file<br>
+:param&nbsp;kwargs:&nbsp;None<br>
+:return:&nbsp;Return&nbsp;size&nbsp;of&nbsp;file&nbsp;in&nbsp;tb</tt></dd></dl>
+ <dl><dt><a name="-str2file"><strong>str2file</strong></a>(data, file_name, **kwargs)</dt><dd><tt>Write&nbsp;string&nbsp;data&nbsp;to&nbsp;a&nbsp;file.<br>
+&nbsp;<br>
+:param&nbsp;data:&nbsp;String&nbsp;data&nbsp;that&nbsp;needs&nbsp;to&nbsp;written&nbsp;to&nbsp;file<br>
+:param&nbsp;filename:&nbsp;Absolute&nbsp;path&nbsp;of&nbsp;the&nbsp;filename&nbsp;to&nbsp;which&nbsp;string<br>
+need&nbsp;to&nbsp;be&nbsp;copied<br>
+:param&nbsp;kwargs:&nbsp;Keys&nbsp;in&nbsp;kwargs<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;mode&nbsp;=&nbsp;['w','a']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;is_gzipped:&nbsp;Possible&nbsp;values:&nbsp;Boolean&nbsp;True&nbsp;or&nbsp;False<br>
+:return:&nbsp;None</tt></dd></dl>
  <dl><dt><a name="-test_file2list"><strong>test_file2list</strong></a>()</dt></dl>
  <dl><dt><a name="-test_file_exists"><strong>test_file_exists</strong></a>()</dt><dd><tt>#&nbsp;-----------------------------------------------------------------------------<br>
 #&nbsp;-----------------------------------------------------------------&nbsp;UNIT&nbsp;TESTS<br>

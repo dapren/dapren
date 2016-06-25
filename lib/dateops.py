@@ -185,6 +185,9 @@ def get_month_number(date, padded_or_unpadded):
 
 
 def get_year(date):
+    """
+    Returns 4 digit year of the date
+    """
     return date.strftime('%Y')
 
 

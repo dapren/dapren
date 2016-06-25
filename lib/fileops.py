@@ -1,3 +1,6 @@
+"""
+This module contains most commonly used file operations
+"""
 from __future__ import print_function
 from __future__ import division
 import os
@@ -6,200 +9,177 @@ import gzip
 import constants
 from constants import logger
 
-def file_exists(file_name, **args_map):
+
+def file_exists(file_name, **kwargs):
+    """
+    :param file_name: Absolute path to filename
+    :param kwargs: N/A
+    :return: Returns boolean true if file exists else false
+    """
     return os.path.isfile(file_name)
 
 
 def silent_remove(file_name):
+    """
+    Remove file from disk if exists. If the file does not exits then just exit
+    without throwing any exceptions
+
+    :param file_name: Absolute path to filename
+    :return: Returns "None"
+    """
     try:
         os.remove(file_name)
     except OSError:
         pass
 
 
-def file2stdout(file_name, **args_map):
+def file2stdout(file_name, **kwargs):
     """
-    Read a file into list which each corresponding to 1 item
-    Keys in args_map
-    - from_line: Start reading file from this line
-    - to_line: End reading file at this line
-    - file_type = ['gz']
-    :param file_name:
-    :param args_map:
-    :return:
+    Writes file to stdout
+    :param file_name: Absolute path of input filename
+    :param kwargs: Keys in kwargs
+    - from_line: Start writing file from this line onwards (inclusive).
+    - to_line: End reading file at this line (inclusive)
+    - is_gzipped: Possible values: Boolean True or False
     """
 
     # Process argument map of the method
-    __from_line = 1
-    if args_map.has_key('from_line'):
-        __from_line = args_map.get('from_line')
-
-    __to_line = 100000000  # Max 100 million lines can be read
-    if args_map.has_key('to_line'):
-        __to_line = args_map.get('to_line')
-
-    __file_type = "txt"
-    if file_name.endswith(".gz"):
-        __file_type = "gz"
-
-    if args_map.has_key('file_type'):
-        __file_type = args_map.get('file_type')
-
+    __from_line = kwargs.get(constants.str_from_line, 1)
+    __to_line = kwargs.get(constants.str_to_line, 10000000000000000L)
+    __is_gzipped = kwargs.get(constants.is_gzipped, False)
 
     # Method logic
     line_number = 0
-    if __file_type == 'gz':
+    if __is_gzipped:
         with gzip.open(file_name, 'rb') as f:
             for line in f:
                 line_number += 1
                 if __from_line <= line_number <= __to_line:
-                    print(line.strip("\n"))
+                    print(line.strip(constants.char_newline))
+                elif line_number > __to_line:
+                    break
     else:
         with open(file_name, 'r') as f:
             for line in f:
                 line_number += 1
                 if __from_line <= line_number <= __to_line:
-                    print(line.strip("\n"))
+                    print(line.strip(constants.char_newline))
+                elif line_number > __to_line:
+                    break
 
 
-def file2list(file_name, **args_map):
+def file2list(file_name, **kwargs):
     """
-    Read a file into list which each corresponding to 1 item
-    Keys in args_map
-    - from_line: Start reading file from this line
-    - to_line: End reading file at this line
-    - file_type = ['gz']
-    :param file_name:
-    :param args_map:
-    :return:
+    Read a file into list which each line corresponding to 1 element in list
+    :param file_name: Absolute path of input filename
+    :param kwargs: Keys in kwargs
+    - from_line: Start writing file from this line onwards (inclusive).
+    - to_line: End reading file at this line (inclusive)
+    - is_gzipped: Possible values: Boolean True or False
+    :return List containing all lines between from_line to to_line
     """
 
     # Process argument map of the method
-    __from_line = 1
-    if args_map.has_key('from_line'):
-        __from_line = args_map.get('from_line')
-
-    __to_line = 100000000  # Max 100 million lines can be read
-    if args_map.has_key('to_line'):
-        __to_line = args_map.get('to_line')
-
-    __file_type = "txt"
-    if file_name.endswith(".gz"):
-        __file_type = "gz"
-
-    if args_map.has_key('file_type'):
-        __file_type = args_map.get('file_type')
-
+    __from_line = kwargs.get(constants.str_from_line, 1)
+    __to_line = kwargs.get(constants.str_to_line, 10000000000000000L)
+    __is_gzipped = kwargs.get(constants.str_is_gzipped, None)
 
     # Method logic
     file_data = []
     line_number = 0
-    if __file_type == 'gz':
+    if __is_gzipped:
         with gzip.open(file_name, 'rb') as f:
             for line in f:
                 line_number += 1
                 if __from_line <= line_number <= __to_line:
                     file_data.append(line.strip("\n"))
+                elif line_number > __to_line:
+                    break
     else:
         with open(file_name, 'r') as f:
             for line in f:
                 line_number += 1
                 if __from_line <= line_number <= __to_line:
                     file_data.append(line.strip("\n"))
+                elif line_number > __to_line:
+                    break
 
     return file_data
 
 
-def list2file(data, file_name, **args_map):
+def list2file(list_to_output, file_name, **kwargs):
     """
-    Write content of list to a file
-    Keys in args_maps
-    - mode = ['w','a']
-    - file_type = ['gz']
-    :param data:
-    :param filename:
-    :param args_maps:
-    :return:
-    """
-    # Process argument map of the method
-    __mode = 'w'
-    if args_map.has_key('mode'):
-        __mode = args_map.get('mode')
+    Write content of list to a file. 1 line per list item
 
-    __file_type = "txt"
-    if file_name.endswith(".gz"):
-        __file_type = "gz"
-
-    if args_map.has_key('file_type'):
-        __file_type = args_map.get('file_type')
-
-    # Cannot support append mode in gzip files. Exits in that case
-    if __mode == 'a' and __file_type == "gz":
-        raise IOError("Gzip files cannot be written in append mode")
-
-
-    # Implement method logic
-    if __file_type == 'gz':
-        with gzip.open(file_name, 'wb') as f:
-            for line in data:
-                f.write(str(line) + "\n")
-    else:
-        with open(file_name, __mode) as f:
-            for line in data:
-                f.write(str(line) + "\n")
-
-
-def str2file(data, file_name, **args_map):
-    """
-    Writes a string to file
-    Keys in args_maps
-    - mode = ['w','a']
-    - file_type = ['gz']
-    :param data:
-    :param file_name:
-    :param args_map:
-    :return:
+    :param list_to_output:
+    :param filename: Absolute path of the filename to which list contents
+    need to be copied
+    :param kwargs: Keys in kwargs
+        - mode = ['w','a']
+        - is_gzipped: Possible values: Boolean True or False
+    :return: None
     """
 
     # Process argument map of the method
-    __mode = 'w'
-    if args_map.has_key('mode'):
-        __mode = args_map.get('mode')
-
-    __file_type = "txt"
-    if file_name.endswith(".gz"):
-        __file_type = "gz"
-
-    if args_map.has_key('file_type'):
-        __file_type = args_map.get('file_type')
-
+    __mode = kwargs.get(constants.str_mode, constants.str_w)
+    __is_gzipped = kwargs.get(constants.str_is_gzipped, None)
 
     # Cannot support append mode in gzip files. Exits in that case
-    if __mode == 'a' and __file_type == "gz":
+    if __mode == 'a' and __is_gzipped:
         raise IOError("Gzip files cannot be written in append mode")
 
     # Implement method logic
-    if __file_type == 'gz':
-        with gzip.open(file_name, 'wb') as f:
-            f.write(data + "\n")
+    if __is_gzipped:
+        with gzip.open(file_name, constants.str_wb) as f:
+            for line in list_to_output:
+                f.write(str(line) + constants.char_newline)
     else:
         with open(file_name, __mode) as f:
-            f.write(data + "\n")
+            for line in list_to_output:
+                f.write(str(line) + constants.char_newline)
 
 
-def number_of_lines(file_name, **args_map):
+def str2file(data, file_name, **kwargs):
+    """
+    Write string data to a file.
+
+    :param data: String data that needs to written to file
+    :param filename: Absolute path of the filename to which string
+    need to be copied
+    :param kwargs: Keys in kwargs
+        - mode = ['w','a']
+        - is_gzipped: Possible values: Boolean True or False
+    :return: None
+    """
+
+    # Process argument map of the method
+    __mode = kwargs.get(constants.str_mode, constants.str_w)
+    __is_gzipped = kwargs.get(constants.str_is_gzipped, None)
+
+    # Cannot support append mode in gzip files. Exits in that case
+    if __mode == constants.str_a and __is_gzipped:
+        raise IOError("Gzip files cannot be written in append mode")
+
+    # Implement method logic
+    if __is_gzipped:
+        with gzip.open(file_name, constants.str_wb) as f:
+            f.write(data + constants.char_newline)
+    else:
+        with open(file_name, __mode) as f:
+            f.write(data + constants.char_newline)
+
+
+def number_of_lines(file_name, **kwargs):
     """
     Returns the number of lines in a file
-    Keys in args_maps
+    :param file_name:
+    :param kwargs: Keys in kwargs
     - stop_after_n_lines: Stop reading file after this line
-    :param file_name: File name with absolute path
     :return: Returns number of lines in the file
     """
 
     # Process argument map of the method
-    __stop_after_n_lines = -1
-    if args_map.has_key('stop_after_n_lines'):
-        __stop_after_n_lines = args_map.get('stop_after_n_lines')
+    __stop_after_n_lines = kwargs.get('stop_after_n_lines', -1)
 
     # Implement method logic
     line_num = 0
@@ -212,39 +192,136 @@ def number_of_lines(file_name, **args_map):
     return line_num
 
 
-def size_in_bytes(file_name, **args_map):
+def size_in_bytes(file_name, **kwargs):
+    """
+    Return size of file in bytes
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Return size of file in bytes
+    """
     return os.stat(file_name).st_size
 
 
-def size_in_kb(file_name, **args_map):
+def size_in_kb(file_name, **kwargs):
+    """
+    Return size of file in kb
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Return size of file in kb
+    """
     return float(format(size_in_bytes(file_name) / 1024, '.2f'))
 
 
-def size_in_mb(file_name, **args_map):
+def size_in_mb(file_name, **kwargs):
+    """
+    Return size of file in mb
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Return size of file in mb
+    """
     return float(format(size_in_bytes(file_name) / 1048576, '.2f'))
 
 
-def size_in_gb(file_name, **args_map):
+def size_in_gb(file_name, **kwargs):
+    """
+    Return size of file in gb
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Return size of file in gb
+    """
+
     return float(format(size_in_bytes(file_name) / 1073741824, '.2f'))
 
 
-def size_in_tb(file_name, **args_map):
+def size_in_tb(file_name, **kwargs):
+    """
+    Return size of file in tb
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Return size of file in tb
+    """
     return float(format(size_in_bytes(file_name) / 1099511627776, '.2f'))
 
 
-def is_file_zero_bytes(file_name, **args_map):
+def size_in_pb(file_name, **kwargs):
+    """
+    Return size of file in tb
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Return size of file in tb
+    """
+    return float(format(size_in_bytes(file_name) / 1125899906842624, '.2f'))
+
+
+def size_adjust_unit(file_name, **kwargs):
+    """
+    Auto adjusts the unit of file size to kb, mb, gb, tb and pb.
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Returns a tuple with 2 elements. 1st element in number and 2nd
+    element is the unit
+    """
+    if size_in_kb(file_name) < 1:
+        return size_in_bytes(file_name), "bytes"
+
+    elif size_in_mb(file_name) < 1:
+        return size_in_kb(file_name), "kb"
+
+    elif size_in_gb(file_name) < 1:
+        return size_in_mb(file_name), "mb"
+
+    elif size_in_tb(file_name) < 1:
+        return size_in_gb(file_name), "gb"
+
+    elif size_in_pb(file_name) < 1:
+        return size_in_tb(file_name), "tb"
+
+    else:
+        return size_in_tb(file_name), "pb"
+
+
+def is_file_zero_bytes(file_name, **kwargs):
+    """
+    Returns true if file is zero bytes
+    :param file_name: Absolute path to file
+    :param kwargs: None
+    :return: Returns true if file is zero bytes
+    """
     if size_in_bytes(file_name) == 0:
         return True
     else:
         return False
 
-def get_files_in_dir(path, **args_map):
-    # returns a list of names (with extension, without full path) of all files
-    # in folder path
+
+def get_files_in_dir(path, **kwargs):
+    """
+    Returns a list (with extension, without full path) of all files
+    in folder path
+
+    :param path: Absolute path to directory
+    :param kwargs: None
+    """
+
     files = []
-    for name in os.listdir(path):
-        if os.path.isfile(os.path.join(path, name)):
-            files.append(name)
+    for filename in os.listdir(path):
+        if os.path.isfile(os.path.join(path, filename)):
+            files.append(filename)
+    return files
+
+
+def get_dir_in_dir(path, **kwargs):
+    """
+    Returns a list (with extension, without full path) of all directories
+    in folder path
+
+    :param path: Absolute path to directory
+    :param kwargs: None
+    """
+
+    files = []
+    for filename in os.listdir(path):
+        if not os.path.isfile(os.path.join(path, filename)):
+            files.append(filename)
     return files
 
 
@@ -306,7 +383,7 @@ def test_file2list():
 
     actual_data = file2list(
         constants.FILENAME_TEST_GZIPPED_FILE_OPS_LOAD_FILE_IN_LIST,
-        from_line=3, to_line=9)
+        from_line=3, to_line=9, is_gzipped=True)
     expected_data = ['3', '4', '5', '6', '7', '8', '9']
     assert actual_data == expected_data
 

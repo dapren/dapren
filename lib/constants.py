@@ -91,6 +91,19 @@ str_unpadded='unpadded'
 str_Sunday = "Sunday"
 str_Monday = "Monday"
 
+str_from_line = "from_line"
+str_to_line = "to_line"
+str_is_gzipped = "is_gzipped"
+str_gz = "gz"
+str_mode = "mode"
+str_w = "w"
+str_wb = "wb"
+str_a = "a"
+str_r = "r"
+
+char_tab = '\t'
+char_newline = '\n'
+
 ###############################################################################
 # Numbers
 ###############################################################################
