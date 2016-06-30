@@ -1,0 +1,38 @@
+#!/usr/bin/python
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+import HTMLParser
+
+
+def process():
+
+    for line in sys.stdin:
+        html_parser = HTMLParser.HTMLParser()
+        print html_parser.unescape(line.strip("\n"))
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+
+"""
+
+    parser = argparse.ArgumentParser(description='This script does html '
+                                                 'decoding',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+
+
+    args = parser.parse_args()
+
+
+if (__name__ == '__main__'):
+    process_command_line_args()
+    process()
+
+

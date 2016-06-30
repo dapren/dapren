@@ -1,0 +1,72 @@
+#!/usr/bin/python
+from __future__ import print_function
+import sys
+import argparse
+
+from argparse import RawTextHelpFormatter
+
+
+def process(field_delimiter, fields_to_display):
+    field_list = fields_to_display.split(",")
+
+    for line in sys.stdin:
+        line = line.strip("\n")
+        if field_delimiter == "\\t":
+            line_list = line.split("\t")
+        else:
+            line_list = line.split(field_delimiter)
+
+        output_line=""
+        for field_num in field_list:
+
+            field_num = int(field_num)
+
+            if field_num > len(line_list):
+                output_line = output_line + "\t" + ""
+
+            elif field_num == -1:
+                output_line = output_line + "\t" + line_list[field_num]
+
+            elif field_num == 0:
+               output_line = output_line + "\t" + line
+
+            else:
+                output_line = output_line + "\t" + line_list[field_num - 1]
+
+        print (output_line.strip("\t "))
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+- Control-A (^A) can specified as string $'\\x01'
+- Control-B (^B) can be specified as string $'\\x02'
+
+Examples:
+- echo -e "1\\t2\\t3" | xtokens.py "\\t" 3,2,1
+"""
+
+    parser = argparse.ArgumentParser(description='This script replaces the '
+                                                 'field_delimiter with new line '
+                                                 'character',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('field_delimiter',
+                        help='Enter input delimiter')
+
+    parser.add_argument('fields_to_display',
+                        help='Field indexes to display. Indexes '
+                             'start from 1. -1 means the last '
+                             'element. 0 means full line')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.field_delimiter, args.fields_to_display)
+
+

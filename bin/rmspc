@@ -1,0 +1,49 @@
+#!/usr/bin/python
+from __future__ import print_function
+import re
+
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+
+
+def process(replace_string):
+    for line in sys.stdin:
+        line = re.sub("  *", replace_string, line.rstrip('\n'))
+        print(line.strip())
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Examples:
+echo -e "   rmwspc.py    sam " | rmpsc
+"""
+
+    parser = argparse.ArgumentParser(description='This script converts multiple'
+                                                 ' spaces into single space. '
+                                                 'Spaces in the start and end '
+                                                 'of the line are also converted'
+                                                 'to a single space.',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('--all', dest='replace_tab_with_empty_string'
+                        , help='Remove all spaces with no space',
+                        action="store_true")
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    if (args.replace_tab_with_empty_string):
+        process("")
+    else:
+        process(" ")
+
+
+

@@ -1,0 +1,46 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+
+
+def process(suffix_string):
+    for line in sys.stdin:
+        print(line.rstrip('\n') + suffix_string)
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+- Tab (\\t) can specified as string $'\\t'
+- Control-A (^A) can specified as string $'\\x01'
+- Control-B (^B) can be specified as string $'\\x02'
+
+Examples:
+echo -e "Wright\\nWhite" | suffix ",John"
+echo rmwspc.py | suffix "preet"$'\\t'"singh"
+"""
+
+    parser = argparse.ArgumentParser(description='This script will suffix '
+                                                 'every line in the STDIN with '
+                                                 'the suffix_string',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('suffix_string',
+                        help='Suffix String')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.suffix_string)
+
+

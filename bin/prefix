@@ -1,0 +1,46 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+
+
+def process(prefix_string):
+    for line in sys.stdin:
+        print(prefix_string + line.rstrip('\n'))
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+- Tab (\\t) can specified as string $'\\t'
+- Control-A (^A) can specified as string $'\\x01'
+- Control-B (^B) can be specified as string $'\\x02'
+
+Examples:
+echo -e "Wright\\nWhite" | prefix "John "
+echo rmwspc.py | prefix "singh"$'\\t'
+"""
+
+    parser = argparse.ArgumentParser(description='This script will prefix '
+                                                 'every line in the STDIN with '
+                                                 'the prefix_string',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('prefix_string',
+                        help='Prefix String')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.prefix_string)
+
+

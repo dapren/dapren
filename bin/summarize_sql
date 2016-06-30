@@ -1,0 +1,233 @@
+#!/usr/bin/python
+# This script taken in SQL and outputs summary of the SQL
+
+from __future__ import print_function
+import sys
+import argparse
+import re
+from quick13 import fileops
+from argparse import RawTextHelpFormatter
+
+tables_created_in_this_etl = []
+def print_bootstrap_header():
+    header = """<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="refresh" content="9999999"/>
+<title>Summarized SQL</title>
+<link rel="shortcut icon" type="image/ico" href="https://dl.dropboxusercontent.com/u/79480822/assets/favicons/shape2.ico"/>
+<link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/79480822/assets/TableTools-2.1.5/media/css/TableTools.css">
+<link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/79480822/assets/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/79480822/assets/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/79480822/assets/css/jquery-ui.custom.css">
+<link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/79480822/assets/css/jquery.dataTables_themeroller.css">
+<link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/u/79480822/assets/ColReorder-1.0.8/media/css/ColReorder.css">
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <a class="brand" href="#">&nbsp&nbsp;Tables</a>
+    </div>
+</div>
+
+
+
+<div class="container" style="margin-top: 35px">
+"""
+    print (header)
+
+
+def print_bootstrap_footer():
+    print ("</div></body></html>")
+
+
+def process(sql_file):
+
+    output = []
+    prev_word_was_from = False
+    prev_word_was_join = False
+    prev_line_was_newline = True
+    prev_printed_word=""
+    is_sql_query = False
+
+    with open(sql_file,'r') as filestream:
+        for line in filestream:
+            line = line.strip()
+            line = line.lower()
+            line = re.sub(r"#.*", ' ', line) # Remove comments
+            line = re.sub(r"[;)]", ' ', line)
+            line = re.sub(r"\s+", ' ', line)
+
+            #if line.find("hive query:") > -1:
+            #    is_sql_query = True
+            #    output.append("<NEWLINE>")
+
+            #elif line.find("dry run complete") > -1:
+            #    is_sql_query = False
+
+            #if is_sql_query is not True:
+            #    continue
+
+            if line.find("insert into ") > -1 or line.find("create table ") > -1:
+                output.append("<NEWLINE>")
+                t1 = line.split(" ")[2]
+                #line = line.replace("insert into ","o#")
+                #line = line.replace("create table ","o#")
+
+                output.append("o#"+t1)
+                tables_created_in_this_etl.append(t1)
+                prev_printed_word = line
+                continue
+
+            tokens = line.split(" ")
+
+            for token in tokens:
+                if token == "from":
+                    prev_word_was_from = True
+
+                elif token == "join":
+                    prev_word_was_join = True
+
+                elif prev_word_was_from or prev_word_was_join:
+                    if re.search("[a-z0-9]", token) and token != "(select" and token != "(":
+                        if prev_printed_word != token:
+                            output.append("i#"+token)
+                            prev_printed_word = token
+                            prev_line_was_newline = False
+
+                    prev_word_was_from = False
+                    prev_word_was_join = False
+
+    print_output(clean_output_list(output))
+
+
+def print_output(output):
+    print_bootstrap_header()
+
+    print_list(output)
+
+    deduped_output = get_distinct_tables_used_in_etl(list(set(output)))
+    deduped_output.sort()
+
+    print_deduped_list(deduped_output)
+    print_bootstrap_footer()
+
+
+def get_distinct_tables_used_in_etl(input_list):
+
+    mydict={}
+
+    for item in input_list:
+        if item.find("#") == -1:
+            continue
+
+        table_type = item.split("#")[0]
+        table_name = item.split("#")[1]
+
+        if mydict.has_key(table_name):
+            temp = mydict[table_name]
+            if temp == "i":
+                mydict[table_name] = table_type
+        else:
+            mydict[table_name] = table_type
+
+    output_list=[]
+    for k,v in mydict.items():
+        output_list.append(v + "#" + k)
+
+    return  output_list
+
+def print_list(output):
+
+    print ("<font color=orange><h4>Tables used per query</h4></font><tt>** Table names in <b>bold</b> are created in this pipeline **</tt><br><br>")
+    is_first_newline = True
+
+    for item in output:
+        if item == "<NEWLINE>":
+            if is_first_newline:
+                is_first_newline = False
+                continue
+            else:
+                print ("<br>")
+
+        elif item.find("#") > -1:
+            table_type = item.split("#")[0]
+            table_name = item.split("#")[1]
+            display_table_name = table_name
+
+            if table_type == "o":
+                display_table_name = "<b>{display_table_name}</b>".format(display_table_name = display_table_name)
+            else:
+                if table_name in tables_created_in_this_etl:
+                    display_table_name = "&nbsp;&nbsp;&nbsp;&nbsp;<b>{display_table_name}</b>".format(display_table_name = display_table_name)
+                else:
+                    display_table_name = "&nbsp;&nbsp;&nbsp;&nbsp;{display_table_name}".format(display_table_name = display_table_name)
+
+            html = """<div>
+                {display_table_name}
+            </div>""".format(table_name=table_name,
+                                display_table_name = display_table_name)
+
+            print (html)
+
+
+def print_deduped_list(deduped_output):
+    print ("<br>")
+
+    print ("<font color=orange><h4>Deduped list of all tables</h4></font>")
+
+    for item in deduped_output:
+        if item != "<NEWLINE>" and item.find("insert overwrite table") == -1:
+            table_type = item.split("#")[0]
+            table_name = item.split("#")[1]
+            display_table_name = table_name
+
+            if table_type == "o":
+                display_table_name = "<b>{display_table_name}</b>".format(display_table_name = display_table_name)
+            else:
+                display_table_name = "{display_table_name}".format(display_table_name = display_table_name)
+
+            html = """<div>
+            {display_table_name}
+            </div>""".format(table_name=table_name,
+                                display_table_name = display_table_name)
+            print (html)
+
+    print("<br>")
+
+
+def clean_output_list(output_list):
+    # remove consecutive <NEWLINE>
+    new_list = []
+    prev_item=""
+    for item in output_list:
+        if item == "<NEWLINE>" and prev_item == item:
+            continue
+        new_list.append(item)
+        prev_item = item
+
+    return new_list
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+This script reads SQL and returns summary. It only returns table names
+that come after string 'from' or 'join' (case insensitive)
+    """
+
+    parser = argparse.ArgumentParser(description='This script reads text '
+                                                 'containing SQL statements '
+                                                 'from <STDIN> and writes to '
+                                                 '<STDOUT>.',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('sql_file',
+                        help='Path to the sql file generated by ./tester')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.sql_file)

@@ -1,0 +1,39 @@
+#!/usr/bin/python
+from __future__ import print_function
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+import re
+
+
+def process():
+
+    for line in sys.stdin:
+        line = line.strip()
+        if len(line)<1:
+            continue
+
+        print (line)
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+"""
+
+    parser = argparse.ArgumentParser(description='This script ignores '
+                                                 'blank lines, i.e. lines '
+                                                 'that has size = 0',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process()
+
+

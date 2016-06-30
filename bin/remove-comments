@@ -1,0 +1,140 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+import re
+
+
+def process(code_type):
+    quote = 0
+    comment = 0
+    single_line_comment=0
+
+    for line in sys.stdin:
+        single_line_comment=0
+        step = 1
+        i = -1
+
+        while i < len(line) - 1:
+            i += 1
+            ########################################################################
+            # Take care of control characters starting with '\'	    
+            if line[i] == "\\":
+                # We dont care if we are inside a comment
+                if comment:
+                    continue
+    
+                print (line[i], end="")
+                i += 1
+                print (line[i], end="")
+
+           
+            ########################################################################
+            # Handle strings in double quotes 
+            elif line[i] == '"':
+                if comment:
+                    continue
+
+                print (line[i], end="")
+                
+                if not quote:
+                    quote = line[i]
+                elif quote == line[i]:
+                    quote=0
+
+            ########################################################################
+            # Handle string in single quotes
+            elif line[i] == '\'':
+                if comment:
+                    continue
+
+                print (line[i], end="")
+    
+                if not quote:
+                    quote = line[i]
+                elif quote == line[i]:
+                    quote=0
+
+            ########################################################################
+            elif line[i] == '/':
+                if quote or code_type == "bash":
+                    print (line[i], end="")
+                elif line[i+1] == '/' and code_type == "java":
+                    print ("")
+                    break
+                elif line[i+1] == '*' and line[i+2] != '+':
+                    comment = 1
+                    i += 1
+                elif not comment:
+                    print (line[i], end="")
+
+            ########################################################################
+            elif line[i] == '-':
+                if quote:
+                    print (line[i], end="")
+                elif line[i+1] == '-' and code_type == "sql":
+                    print ("")
+                    break
+                elif not comment:
+                    print (line[i], end="")
+
+
+            ########################################################################
+            elif line[i] == '#':
+                if quote:
+                    print (line[i], end="")
+                elif code_type == "bash":
+                    print ("");
+                    break
+                elif not comment:
+                    print (line[i], end="")
+
+            ########################################################################
+            elif line[i] == '*':
+                if quote:
+                    print (line[i], end="")
+                    continue
+                elif comment and line[i+1] == '/':
+                    comment = 0
+                    i += 1
+                    continue
+                elif comment:
+                    continue
+
+                print (line[i], end="")
+    
+            ########################################################################
+            else:
+                if not comment:
+                    print (line[i], end="")
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+"""
+
+    parser = argparse.ArgumentParser(description='This script reads from '
+                                                 'STDIN and'
+                                                 'removes sql or '
+                                                 'Java/C# type comments from '
+                                                 'the '
+                                                 'code and writes output to '
+                                                 'STDOUT ',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('code_type',
+                        help='Specify input code type as "java" or "sql"')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.code_type)
+
+

@@ -1,0 +1,66 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+__author__ = 'singhaman'
+
+import sys
+import argparse
+import re
+from argparse import RawTextHelpFormatter
+
+
+def process(keys_to_extract, kv_pair_sep, key_and_value_sep):
+
+    keys_to_extract_list = keys_to_extract.split(",")
+    kv_map = {}
+    for line in sys.stdin:
+        line = line.strip("\n")
+        kv_pairs = line.split(kv_pair_sep)
+
+
+        for kv_pair in kv_pairs:
+            key_and_value =  kv_pair.split(key_and_value_sep)
+            if key_and_value[0] in keys_to_extract_list:
+                kv_map[key_and_value[0]] = key_and_value[1]
+
+    final_output = []
+    for key in keys_to_extract_list:
+        final_output.append(kv_map[key])
+
+    print ("\t".join(final_output))
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+    """
+
+    parser = argparse.ArgumentParser(description='This script reads a Key/Value '
+                                                 'pair stream from STDIN, '
+                                                 'extracts the "keys_to_extract"'
+                                                 ' and write the value of the '
+                                                 'keys to STDOUT delimited by tab',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument("keys_to_extract",
+                        help="Comma delimited list of keys to extract")
+
+    parser.add_argument("kv_pair_sep",
+                        help="Key/Value pair separator, default is tab",
+                        nargs="?",
+                        default="\t")
+
+    parser.add_argument("key_and_value_sep",
+                        help="Key and value separator, default is =",
+                        nargs="?",
+                        default="=")
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.keys_to_extract, args.kv_pair_sep, args.key_and_value_sep)
+
+

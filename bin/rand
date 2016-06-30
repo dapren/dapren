@@ -1,0 +1,37 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+__author__ = 'singhaman'
+
+import random
+import argparse
+from argparse import RawTextHelpFormatter
+
+
+def process(min, max):
+    print( random.randint(min, max))
+
+def process_command_line_args():
+    global args
+
+    epilog = """"""
+
+    parser = argparse.ArgumentParser(description='This script generates a '
+                                                 'random integer',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('--min', type= int, default=1,
+                        help='Minimum Value')
+
+    parser.add_argument('--max',type= int, default=100000000,
+                        help='Maximum Value')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.min, args.max)
+
+

@@ -1,0 +1,48 @@
+#!/usr/bin/python
+from __future__ import print_function
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+import re
+
+
+def process(lines_to_ignore):
+
+    ignore_line_list = lines_to_ignore.split(",")
+
+    linenum = 0
+    for line in sys.stdin:
+        linenum += 1
+        if str(linenum) in ignore_line_list:
+            continue
+
+        print (line, end="")
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+Example
+    To ignore lines 1 and 10 run command
+        ignore_lines 1,10
+"""
+
+    parser = argparse.ArgumentParser(description='This script ignores '
+                                                 'lines by number',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('lines_to_ignore',
+                        help='Enter comma delimited list of lines to ignore.')
+
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.lines_to_ignore)
+
+

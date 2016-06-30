@@ -1,0 +1,55 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+
+
+def process(output_field_delimiter):
+    prev_line = ""
+    first_line = 0
+
+    for line in sys.stdin:
+        if (first_line):
+            print(prev_line.rstrip('\n'), end=output_field_delimiter)
+
+        first_line = 1
+        prev_line = line
+
+    print (prev_line, end="")
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+- Tab (\\t) can specified as string $'\\t'
+- Control-A (^A) can specified as string $'\\x01'
+- Control-B (^B) can be specified as string $'\\x02'
+
+Examples:
+echo -e "test\\nt1" | ol.py
+"""
+
+    parser = argparse.ArgumentParser(description='This script replaces new '
+                                                 'line character with '
+                                                 'output_field_delimiter '
+                                                 'character',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('output_field_delimiter', nargs='?', default=',',
+                        help='Enter output delimiter (default is ,)')
+
+    args = parser.parse_args()
+
+
+if (__name__ == '__main__'):
+    process_command_line_args()
+    process(args.output_field_delimiter)
+
+

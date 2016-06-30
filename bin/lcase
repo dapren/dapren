@@ -1,0 +1,36 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+
+
+def process():
+    for line in sys.stdin:
+        print(line.rstrip('\n').lower())
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+"""
+
+    parser = argparse.ArgumentParser(description='This script reads from '
+                                                 'STDIN and converts it to '
+                                                 'lower case',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+
+    args = parser.parse_args()
+
+
+if (__name__ == '__main__'):
+    process_command_line_args()
+    process()
+
+

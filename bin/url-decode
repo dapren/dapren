@@ -1,0 +1,38 @@
+#!/usr/bin/python
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+import re
+import urllib
+
+
+def process():
+
+    for line in sys.stdin:
+        print urllib.unquote(line.rstrip('\n'))
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+
+"""
+
+    parser = argparse.ArgumentParser(description='This script does url '
+                                                 'decoding',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process()
+
+

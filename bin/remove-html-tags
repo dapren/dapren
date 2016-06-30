@@ -1,0 +1,40 @@
+#!/usr/bin/python
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+import re
+
+
+def process():
+
+    for line in sys.stdin:
+        print re.sub("<[^>]*>",
+                     ' ',
+                     line.rstrip('\n')).strip()
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+
+"""
+
+    parser = argparse.ArgumentParser(description='This script replaces the '
+                                                 'field_delimiter with new line '
+                                                 'character',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process()
+
+

@@ -1,0 +1,45 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+__author__ = 'singhaman'
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+
+
+def process(enclose_string):
+    for line in sys.stdin:
+        print(enclose_string + line.rstrip('\n') + enclose_string)
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+- Tab (\\t) can specified as string $'\\t'
+- Control-A (^A) can specified as string $'\\x01'
+- Control-B (^B) can be specified as string $'\\x02'
+
+Examples:
+echo -e "Wright\\nWhite" | enclose "'"
+"""
+
+    parser = argparse.ArgumentParser(description='This script will enclose '
+                                                 'each line in STDIN with '
+                                                 'enclose_string',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('enclose_string',
+                        help='Enclose String')
+
+    args = parser.parse_args()
+
+
+if (__name__ == '__main__'):
+    process_command_line_args()
+    process(args.enclose_string)
+
+

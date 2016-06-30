@@ -1,0 +1,31 @@
+#!/usr/bin/python
+__author__ = 'singhaman'
+
+import sys
+import argparse
+import csv
+from argparse import RawTextHelpFormatter
+
+
+def process():
+    for line in csv.reader(sys.stdin):
+        print "\t".join(line)
+
+def process_command_line_args():
+    global args
+
+    epilog = """"""
+
+    parser = argparse.ArgumentParser(description='This script reads from '
+                                                 'stdin and convert csv to tsv',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    args = parser.parse_args()
+
+
+if (__name__ == '__main__'):
+    process_command_line_args()
+    process()
+
+

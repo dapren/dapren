@@ -1,0 +1,62 @@
+#!/usr/bin/python
+from __future__ import print_function
+
+import sys
+import argparse
+from argparse import RawTextHelpFormatter
+import re
+
+
+def process():
+    line_num = 0
+
+    print("{\"aaData\":[")
+
+    for line in sys.stdin:
+        line = line.strip("\n")
+        line_num += 1
+
+        if len(line) < 1:
+            line = " "
+
+        cols = line.split("\t")
+
+        if line_num == 1:
+            print("\t\t[", end="")
+        else:
+            print("\t\t,[", end="")
+
+        colnum = 0
+        for col in cols:
+            col = re.sub("\r", "", col)
+            col = col.replace(chr(92), chr(92) + chr(92))
+            col = re.sub('"', '\\"', col)
+            colnum += 1
+
+            if colnum == 1:
+                print("\"{0}\"".format(col), end="")
+            else:
+                print(",\"{0}\"".format(col), end="")
+
+        print("]")
+
+    print("\t]\n}")
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """ """
+
+    parser = argparse.ArgumentParser(description='This script reads tsv file '
+                                                 'from STDIN and outputs '
+                                                 'bootstrap page',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process()

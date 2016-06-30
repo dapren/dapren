@@ -1,0 +1,80 @@
+#!/usr/bin/python
+from __future__ import print_function
+import sys
+import argparse
+
+from argparse import RawTextHelpFormatter
+
+
+def process(field_delimiter, fields_to_use):
+    field_list = fields_to_use.split(",")
+
+    tracking_cols = "{nothing yet. we will get then later}"
+
+    first_line = True
+
+    for line in sys.stdin:
+
+        line = line.strip("\n")
+        if field_delimiter == "\\t":
+            line_list = line.split("\t")
+        else:
+            line_list = line.split(field_delimiter)
+
+        if first_line:
+            tracking_cols = get_list_items_as_string(line_list, field_list)
+
+
+        new_tracking_cols = get_list_items_as_string(line_list, field_list)
+
+        if not first_line and new_tracking_cols != tracking_cols:
+            print("\n" + line)
+            tracking_cols = new_tracking_cols
+        else:
+            print(line)
+
+        first_line = False
+
+def get_list_items_as_string(list, items):
+    return_string = ""
+
+    for i in items:
+        return_string = return_string + "{@#@}" + (list[int(i) - 1])
+
+    return return_string
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+- Control-A (^A) can specified as string $'\\x01'
+- Control-B (^B) can be specified as string $'\\x02'
+
+Examples:
+- echo -e "1\\n2\\n2\\n3\\n3" | ibl "\\t" 1
+"""
+
+    parser = argparse.ArgumentParser(description='This script inserts an '
+                                                 'extra line when a column '
+                                                 'pattern changes',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('field_delimiter',
+                        help='Enter input delimiter')
+
+    parser.add_argument('fields_to_use',
+                        help='Field indexes to display. Indexes '
+                             'start from 1. -1 means the last '
+                             'element. 0 means full line')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.field_delimiter, args.fields_to_use)
+
+

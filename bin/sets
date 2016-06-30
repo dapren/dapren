@@ -1,0 +1,78 @@
+#!/usr/bin/python
+from __future__ import print_function
+import argparse
+from argparse import RawTextHelpFormatter
+import sys
+
+
+def process(number_element_on_each_line, output_delimiter):
+    if output_delimiter is None:
+        output_delimiter = ","
+
+    line_number = 1
+    output_list = []
+
+    max_line_size = 0
+
+    for line in sys.stdin:
+        line = line.strip('\n')
+
+        if max_line_size < len(line):
+            max_line_size = len(line)
+
+        if line_number % number_element_on_each_line == 0:
+            output_list.append(line)
+            output_list.append("{NEWLINE}")
+        else:
+            output_list.append(line)
+
+        line_number += 1
+
+    write_list(output_list, output_delimiter, max_line_size)
+
+
+def write_list(output_list, output_delimiter, max_line_size):
+    for item in output_list:
+        if item == "{NEWLINE}":
+            print()
+        else:
+            if output_delimiter == "ljust":
+                print(item.ljust(max_line_size + 10, " "), end="")
+
+            elif output_delimiter == "rjust":
+                print(item.rjust(max_line_size + 10, " "), end="")
+
+            else:
+                print(item, end=output_delimiter)
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Example:
+    echo -e "10\\n11\\n12\\n13\\n14\\n15\\n16\\n17\\n18\\n19" | sets 4
+    echo -e "10\\n11\\n12\\n13\\n14\\n15\\n16\\n17\\n18\\n19" | sets 5 "|"
+    echo -e "10\\n11\\n12\\n13\\n14\\n15\\n16\\n17\\n18\\n19" | sets 5 "ljust"
+    echo -e "10\\n11\\n12\\n13\\n14\\n15\\n16\\n17\\n18\\n19" | sets 5 "rjust"
+    """
+
+    parser = argparse.ArgumentParser(description='This script creates sets'
+                                                 'of multiple lines',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('number_element_on_each_line',
+                        help='Enter integer')
+
+    parser.add_argument('output_delimiter', nargs='?',
+                        help='Enter delimiter between set elements. Default '
+                             'is comma OR "ljust" OR "rjust"')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(int(args.number_element_on_each_line), args.output_delimiter)
+

@@ -1,0 +1,77 @@
+#!/usr/bin/python
+from __future__ import print_function
+import sys
+import argparse
+
+from argparse import RawTextHelpFormatter
+
+
+def process(str_to_count, field_delimiter, field_to_search_in):
+    field_list = field_to_search_in.split(",")
+
+    for line in sys.stdin:
+        line = line.strip("\n")
+        if field_delimiter == "\\t":
+            line_list = line.split("\t")
+        else:
+            line_list = line.split(field_delimiter)
+
+        output_line = ""
+        for field_num in field_list:
+
+            field_num = int(field_num)
+
+            if field_num > len(line_list):
+                output_line = line + "\t" \
+                              + "ERROR: Missing field num {0}".format(field_num)
+
+            elif field_num == -1:
+                output_line = line + "\t" + str(line_list[
+                    field_num].count(str_to_count))
+
+            elif field_num == 0:
+                output_line = line + "\t" + str(line.count(str_to_count))
+
+            else:
+                output_line = line + "\t" + str(line_list[
+                    field_num - 1].count(str_to_count))
+
+        print(output_line.strip("\t "))
+
+
+def process_command_line_args():
+    global args
+
+    epilog = """
+Notes:
+- Control-A (^A) can specified as string $'\\x01'
+- Control-B (^B) can be specified as string $'\\x02'
+
+Examples:
+- echo -e "Aman" | strcount "a" "\\t" 1
+"""
+
+    parser = argparse.ArgumentParser(description='This script counts the '
+                                                 'number of sub-strings '
+                                                 'occurrences in a string',
+                                     formatter_class=RawTextHelpFormatter,
+                                     epilog=epilog)
+
+    parser.add_argument('str_to_count',
+                        help='Enter the substring to search for counts')
+
+    parser.add_argument('field_delimiter', nargs='?', default=',',
+                        help='Enter input delimiter')
+
+    parser.add_argument('field_to_search_in', nargs='?', default='0',
+                        help='Field to search the substring in. '
+                             'Default is to search in the whole line')
+
+    args = parser.parse_args()
+
+
+if __name__ == '__main__':
+    process_command_line_args()
+    process(args.str_to_count, args.field_delimiter, args.field_to_search_in)
+
+
