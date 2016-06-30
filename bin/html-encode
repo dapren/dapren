@@ -1,5 +1,4 @@
 #!/usr/bin/python
-__author__ = 'singhaman'
 
 import sys
 import argparse

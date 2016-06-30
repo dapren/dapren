@@ -1,8 +1,5 @@
 #!/usr/bin/python
 from __future__ import print_function
-
-__author__ = 'singhaman'
-
 import sys
 import argparse
 import re
