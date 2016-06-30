@@ -4,18 +4,11 @@ import sys
 import argparse
 from argparse import RawTextHelpFormatter
 import re
-
+import strops
 
 def process(field_delimiter, num_occurrences_to_replace):
-
     for line in sys.stdin:
-        if field_delimiter == '|':
-            field_delimiter = "["+field_delimiter+"]"
-
-        print re.sub(field_delimiter,
-                     '\n',
-                     line.rstrip('\n'),
-                     num_occurrences_to_replace)
+        print strops.bl(line, field_delimiter, num_occurrences_to_replace)
 
 
 def process_command_line_args():
