@@ -83,9 +83,11 @@ FILENAME_TEST_CSV2TSV = __DIR + __FILE
 __FILE = "test_csv2tsv_multiline.csv"
 FILENAME_TEST_CSV2TSV_MULTILINE = __DIR + __FILE
 
-
 __FILE = "test_ibl.txt"
 FILENAME_TEST_IBL = __DIR + __FILE
+
+__FILE = "test_ignore_lines.txt"
+FILENAME_TEST_IGNORE_LINES = __DIR + __FILE
 
 ###############################################################################
 # Strings

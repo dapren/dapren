@@ -496,6 +496,48 @@ def test_ibl():
     assert expected == actual
 
 
+def is_blank_line(line):
+    if len(line) < 1:
+        return True
+    else:
+        return False
+
+
+def test_ignore_blank_lines():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = False
+    actual = is_blank_line("aman")
+    assert expected == actual
+
+    expected = True
+    actual = is_blank_line("")
+    assert expected == actual
+
+
+def ignore_lines(filepointer_or_stdin, lines_to_ignore):
+    ignore_line_list = lines_to_ignore.split(",")
+
+    linenum = 0
+    for line in filepointer_or_stdin:
+        linenum += 1
+        if str(linenum) in ignore_line_list:
+            continue
+
+        yield line
+
+
+def test_ignore_lines():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = ['1\n', '3\n', '4\n', '6']
+    fp = open(constants.FILENAME_TEST_IGNORE_LINES, "r")
+    actual = []
+    for token in ignore_lines(fp, '2,5'):
+        actual.append(token)
+
+    assert str(expected) == str(actual)
+
 
 if __name__ == "__main__":
     # Execute all test methods. All test methods should start with string

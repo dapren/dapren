@@ -3,20 +3,12 @@ from __future__ import print_function
 import sys
 import argparse
 from argparse import RawTextHelpFormatter
-import re
+import strops
 
 
 def process(lines_to_ignore):
-
-    ignore_line_list = lines_to_ignore.split(",")
-
-    linenum = 0
-    for line in sys.stdin:
-        linenum += 1
-        if str(linenum) in ignore_line_list:
-            continue
-
-        print (line, end="")
+    for line in strops.ignore_lines(sys.stdin, lines_to_ignore):
+        print (line, end = "")
 
 
 def process_command_line_args():
