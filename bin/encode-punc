@@ -1,51 +1,16 @@
 #!/usr/bin/python
-
+from __future__ import print_function
 
 import sys
 import argparse
 from argparse import RawTextHelpFormatter
-import re
+import strops
 
 
 def process():
 
     for line in sys.stdin:
-        line = line.strip()
-        line = re.sub('{'                  , 'FLOWERBRACKSTART', line)
-        line = re.sub('}'                  , 'FLOWERBRACKEND'  , line)
-        line = re.sub('FLOWERBRACKSTART'   , '{FLOWERSTART}'   , line)
-        line = re.sub('FLOWERBRACKEND'     , '{FLOWEREND}'     , line)
-        line = re.sub('[|]'                , '{PIPE}'          , line)
-        line = re.sub('~'                  , '{TILDE}'         , line)
-        line = re.sub("'"                  , '{SINGLEQUOTE}'   , line)
-        line = re.sub("\("                 , '{ROUNDSTART}'    , line)
-        line = re.sub('\)'                 , '{ROUNDEND}'      , line)
-        line = re.sub('[*]'                , '{STAR}'          , line)
-        line = re.sub('[+]'                , '{PLUS}'          , line)
-        line = re.sub(','                  , '{COMMA}'         , line)
-        line = re.sub('-'                  , '{HYPHEN}'        , line)
-        line = re.sub('[.]'                , '{DOT}'           , line)
-        line = re.sub('/'                  , '{FRONTSLASH}'    , line)
-        line = re.sub('\['                 , '{SQUARESTART}'   , line)
-        line = re.sub(']'                  , '{SQUAREEND}'     , line)
-        line = re.sub('\\\\'               , '{BACKSLASH}'     , line)
-        line = re.sub('\^'                 , '{CARET}'         , line)
-        line = re.sub('_'                  , '{UNDERSCORE}'    , line)
-        line = re.sub('`'                  , '{BACKTICK}'      , line)
-        line = re.sub('!'                  , '{EXCLAMATION}'   , line)
-        line = re.sub('"'                  , '{DOUBLEQUOTES}'  , line)
-        line = re.sub('#'                  , '{HASH}'          , line)
-        line = re.sub('\$'                 , '{DOLLAR}'        , line)
-        line = re.sub('%'                  , '{PERCENTAGE}'    , line)
-        line = re.sub('&'                  , '{AMPERSAND}'     , line)
-        line = re.sub('@'                  , '{RATE}'          , line)
-        line = re.sub('='                  , '{EQUAL}'         , line)
-        line = re.sub(':'                  , '{COLON}'         , line)
-        line = re.sub(';'                  , '{SEMICOLON}'     , line)
-        line = re.sub('[?]'                , '{QUESTION}'      , line)
-        line = re.sub('<'                  , '{ANGLESTART}'    , line)
-        line = re.sub('>'                  , '{ANGLEEND}'      , line)
-        print line
+        print (strops.encode_punc(line.strip()))
 
 
 def process_command_line_args():

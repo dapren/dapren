@@ -7,7 +7,6 @@ import strops
 
 
 def process():
-
     for line in sys.stdin:
         print (strops.decode_punc(line.strip()))
 

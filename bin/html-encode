@@ -1,21 +1,13 @@
 #!/usr/bin/python
-
+from __future__  import print_function
 import sys
 import argparse
 from argparse import RawTextHelpFormatter
-import cgi
-
-
-def escape_html(text):
-    """escape strings for display in HTML"""
-    return cgi.escape(text, quote=True).\
-           replace(u'\n', u'<br />').\
-           replace(u'\t', u'&emsp;').\
-           replace(u'  ', u' &nbsp;')
+import strops
 
 def process():
     for line in sys.stdin:
-        print escape_html(line.strip("\n"))
+        print (strops.html_encode(line.strip()))
 
 def process_command_line_args():
     global args

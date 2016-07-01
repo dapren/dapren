@@ -1,2 +1,13 @@
 #!/bin/bash
-cat - | sed 's///g'
+if [ $# -ne 1 ];then
+  echo "Usage: `basename $0` <filename>"
+  exit 1
+fi 
+
+if [ -f ${1} ];then
+  cat ${1} | sed 's///g;s/\r//g'  > ${1}.dos2unix
+  mv ${1}.dos2unix ${1}
+  echo "Converted file '${1}' from dos to unix format"
+else
+  echo "[ERROR]: File '${1}' does not exists"
+fi

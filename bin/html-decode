@@ -3,14 +3,13 @@
 import sys
 import argparse
 from argparse import RawTextHelpFormatter
-import HTMLParser
+import strops
 
 
 def process():
 
     for line in sys.stdin:
-        html_parser = HTMLParser.HTMLParser()
-        print html_parser.unescape(line.strip("\n"))
+        print (strops.html_decode(line.strip()))
 
 
 def process_command_line_args():
