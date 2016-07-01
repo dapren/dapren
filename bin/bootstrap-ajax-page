@@ -145,6 +145,12 @@ def process_command_line_args():
 
 if __name__ == '__main__':
     process_command_line_args()
-    process(args.page_title, args.sort, args.header_text,
-            args.table_caption, args.nav_links, str(args.data_file),
-            args.favicon,args.rows_per_page, args.note)
+    process(args.page_title,
+            args.sort,
+            args.header_text,
+            args.table_caption,
+            args.nav_links,
+            str(args.data_file),
+            args.favicon,
+            args.rows_per_page,
+            args.note)
