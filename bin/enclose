@@ -4,11 +4,12 @@ from __future__ import print_function
 import sys
 import argparse
 from argparse import RawTextHelpFormatter
+import strops
 
 
 def process(enclose_string):
     for line in sys.stdin:
-        print(enclose_string + line.rstrip('\n') + enclose_string)
+        return strops.enclose(line, enclose_string)
 
 
 def process_command_line_args():
@@ -36,7 +37,7 @@ echo -e "Wright\\nWhite" | enclose "'"
     args = parser.parse_args()
 
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
     process_command_line_args()
     process(args.enclose_string)
 
