@@ -77,6 +77,16 @@ FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST = __DIR + __FILE
 __FILE = "test_gzipped_file_ops_load_file_in_list.txt.gz"
 FILENAME_TEST_GZIPPED_FILE_OPS_LOAD_FILE_IN_LIST = __DIR + __FILE
 
+__FILE = "test_csv2tsv.csv"
+FILENAME_TEST_CSV2TSV = __DIR + __FILE
+
+__FILE = "test_csv2tsv_multiline.csv"
+FILENAME_TEST_CSV2TSV_MULTILINE = __DIR + __FILE
+
+
+__FILE = "test_ibl.txt"
+FILENAME_TEST_IBL = __DIR + __FILE
+
 ###############################################################################
 # Strings
 ###############################################################################
