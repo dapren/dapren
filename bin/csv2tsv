@@ -6,7 +6,8 @@ from argparse import RawTextHelpFormatter
 
 
 def process():
-    print (strops.csv2tsv(sys.stdin))
+    for line in strops.csv2tsv(sys.stdin):
+        print (line)
 
 
 def process_command_line_args():
@@ -22,8 +23,8 @@ def process_command_line_args():
     args = parser.parse_args()
 
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
     process_command_line_args()
-    process(sys.stdin)
+    process()
 
 

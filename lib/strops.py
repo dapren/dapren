@@ -50,20 +50,24 @@ def csv2tsv(filepointer_or_stdin):
     :return:
     """
     for line in csv.reader(filepointer_or_stdin):
-        return "\t".join(line)
+        yield "\t".join(line)
 
 
 def test_csv2tsv():
     logger.info("Testing " + inspect.stack()[0][3])
 
-    expected = "R1C1\tthis, my friend is R2C2\tAnd this is R3C3"
+    expected = ['R1C1\tthis, my friend is R2C2\tAnd this is R3C3']
     fp = open(constants.FILENAME_TEST_CSV2TSV, "r")
-    actual = csv2tsv(fp)
-    assert expected == actual
+    actual = []
+    for token in csv2tsv(fp):
+        actual.append(token)
+    assert str(expected) == str(actual)
 
-    expected = "a\tb\tc\nnewline"
+    expected = ['a\tb\tc\nnewline']
     fp = open(constants.FILENAME_TEST_CSV2TSV_MULTILINE, "r")
-    actual = csv2tsv(fp)
+    actual = []
+    for token in csv2tsv(fp):
+        actual.append(token)
     assert expected == actual
 
 
