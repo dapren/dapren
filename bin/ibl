@@ -2,46 +2,17 @@
 from __future__ import print_function
 import sys
 import argparse
+import strops
 
 from argparse import RawTextHelpFormatter
 
 
 def process(field_delimiter, fields_to_use):
-    field_list = fields_to_use.split(",")
 
-    tracking_cols = "{nothing yet. we will get then later}"
+    res = strops.ibl(sys.stdin, field_delimiter, fields_to_use)
 
-    first_line = True
-
-    for line in sys.stdin:
-
-        line = line.strip("\n")
-        if field_delimiter == "\\t":
-            line_list = line.split("\t")
-        else:
-            line_list = line.split(field_delimiter)
-
-        if first_line:
-            tracking_cols = get_list_items_as_string(line_list, field_list)
-
-
-        new_tracking_cols = get_list_items_as_string(line_list, field_list)
-
-        if not first_line and new_tracking_cols != tracking_cols:
-            print("\n" + line)
-            tracking_cols = new_tracking_cols
-        else:
-            print(line)
-
-        first_line = False
-
-def get_list_items_as_string(list, items):
-    return_string = ""
-
-    for i in items:
-        return_string = return_string + "{@#@}" + (list[int(i) - 1])
-
-    return return_string
+    for line in res:
+        print (line)
 
 
 def process_command_line_args():
