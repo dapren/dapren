@@ -466,16 +466,12 @@ def ibl(filepointer_or_stdin, field_delimiter, fields_to_use):
         new_tracking_cols = __get_list_items_as_string(line_list, field_list)
 
         if not first_line and new_tracking_cols != tracking_cols:
-            ouput.append("\n")
-            ouput.append(line)
-
+            yield("\n" + line)
             tracking_cols = new_tracking_cols
         else:
-            ouput.append(line)
+            yield(line)
 
         first_line = False
-
-    return ouput
 
 
 def __get_list_items_as_string(inlist, items):
@@ -490,10 +486,13 @@ def __get_list_items_as_string(inlist, items):
 def test_ibl():
     logger.info("Testing " + inspect.stack()[0][3])
 
-    expected = str(['1', '\n', '2', '2', '\n', '3', '3'])
+    expected = str(['1', '\n2', '2', '\n3', '3'])
     fp = open(constants.FILENAME_TEST_IBL, "r")
-    actual = str(ibl(fp, "\t", '1'))
-    assert expected == actual
+    actual = []
+    for token in ibl(fp, "\t", '1'):
+        actual.append(token)
+
+    assert str(expected) == str(actual)
 
 
 def is_blank_line(line):

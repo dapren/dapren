@@ -9,9 +9,7 @@ from argparse import RawTextHelpFormatter
 
 def process(field_delimiter, fields_to_use):
 
-    res = strops.ibl(sys.stdin, field_delimiter, fields_to_use)
-
-    for line in res:
+    for line in strops.ibl(sys.stdin, field_delimiter, fields_to_use):
         print (line)
 
 
