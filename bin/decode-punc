@@ -9,8 +9,7 @@ import strops
 def process():
 
     for line in sys.stdin:
-        line = line.strip()
-        print (strops.decode_punc(line))
+        print (strops.decode_punc(line.strip()))
 
 
 def process_command_line_args():

@@ -9,7 +9,7 @@ import strops
 
 def process(enclose_string):
     for line in sys.stdin:
-        return strops.enclose(line, enclose_string)
+        print(strops.enclose(line.strip(), enclose_string))
 
 
 def process_command_line_args():
