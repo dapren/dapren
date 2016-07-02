@@ -17,7 +17,7 @@ def process_command_line_args():
 
     epilog = """
 Examples:
-echo -e "   rmwspc.py    sam " | rmpsc
+echo -e "   rmwspc    sam " | rmpsc
 """
 
     parser = argparse.ArgumentParser(description='This script converts multiple'
@@ -37,7 +37,7 @@ echo -e "   rmwspc.py    sam " | rmpsc
 
 if __name__ == '__main__':
     process_command_line_args()
-    if (args.replace_tab_with_empty_string):
+    if args.replace_tab_with_empty_string:
         process("")
     else:
         process(" ")

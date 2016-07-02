@@ -22,7 +22,7 @@ Notes:
 
 Examples:
 echo -e "Wright\\nWhite" | prefix "John "
-echo rmwspc.py | prefix "singh"$'\\t'
+echo rmwspc | prefix "singh"$'\\t'
 """
 
     parser = argparse.ArgumentParser(description='This script will prefix and suffix'
