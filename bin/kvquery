@@ -19,6 +19,7 @@ def process(table, cols):
     print ("CONCAT_WS('|',{0})".format(query_cols), end=" ")
     print (" FROM {0}".format(table))
 
+
 def process_command_line_args():
     global args
 

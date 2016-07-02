@@ -3,144 +3,8 @@ from __future__ import print_function
 
 import sys
 import argparse
-import json
 from argparse import RawTextHelpFormatter
-import re
-
-
-def process():
-    global header_list
-
-    line_num = 0
-    for line in sys.stdin:
-        line_num += 1
-        line = line.strip("\n")
-        line = handle_colons_in_string(line)
-        line = re.sub(r'([0-9A-Za-z_]+):', r'"\1":', line)
-
-        if line_num == 1 and data_has_header_row is True:
-            header_list = line.split("\t")
-            continue
-
-        line_list = []
-        if json_at_col_num is None:
-            line_to_process = escape_special_chars(line)
-
-        else:
-            line_list = line.split("\t")
-            line_to_process = escape_special_chars(
-                line_list[json_at_col_num - 1])
-
-        try:
-            values = json.loads(line_to_process)
-        except ValueError:
-            print("[ERROR]: '{0}' is not json".format(line_to_process),
-                  file=sys.stderr)
-            continue
-
-        stack = []
-        output_line = []
-        process_dict(values, stack, output_line)
-        display_output(line_list, output_line)
-
-
-def display_output(line_list, output_line):
-    my_line = None
-    if json_at_col_num is None:
-        my_line = "\t".join(sorted(output_line))
-
-    else:
-        full_output_line = []
-        for i in range(len(line_list)):
-            col_value = escape_special_chars(line_list[i])
-            if data_has_header_row is True:
-                full_output_line.append("{0}={1}".format(header_list[i],
-                                                         col_value))
-            else:
-                full_output_line.append("__col{0}={1}".format(i, col_value))
-
-        my_line = "\t".join(full_output_line) + "\t" + "\t".join(sorted(
-            output_line))
-
-    my_line = my_line.replace("{COLON}", ":")
-    my_line = my_line.replace("{DOUBLE_QUOTE}", '"')
-    print (my_line)
-
-
-def handle_colons_in_string(line):
-    is_double_quotes_open=0
-    newline=[]
-
-    for i in range(len(line)):
-        char = line[i]
-
-        if char == '"':
-            if is_double_quotes_open == 0:
-                is_double_quotes_open =1
-            else:
-                is_double_quotes_open = 0
-
-        if is_double_quotes_open:
-            if char == ':':
-                char = "{COLON}"
-
-        newline.append(char)
-
-    return "".join(newline)
-
-
-def escape_special_chars(line):
-    line = line.strip('"')
-    line = line.replace('\\\\"', "{DOUBLE_QUOTE}")
-    line = line.replace(':""', ':"{EMPTY}"')
-    line = line.replace("=", "{EQUAL}")
-    line = line.replace("\t", "{TAB}")
-    return line
-
-
-def process_dict(values, stack, output_line):
-    for key, value in values.items():
-        stack.append(key)
-
-        if value.__class__ is dict:
-            process_dict(value, stack, output_line)
-
-        elif value.__class__ is list:
-            process_list(value, stack, output_line)
-
-        else:
-            process_leaf_value(value, stack, output_line)
-
-        stack.pop()
-
-
-def process_list(values, stack, output_line):
-    cnt = 0
-    for value in values:
-        stack.append("{0}".format(cnt))
-        cnt += 1
-
-        if value.__class__ is dict:
-            process_dict(value, stack, output_line)
-
-        elif value.__class__ is list:
-            process_list(value, stack, output_line)
-
-        else:
-            process_leaf_value(value, stack, output_line)
-
-        stack.pop()
-
-
-def process_leaf_value(value, stack, output_line):
-    if only_keys is True:
-        output_line.append(".".join(stack))
-
-    elif only_values is True:
-        output_line.append(str(value))
-
-    else:
-        output_line.append(".".join(stack) + "=" + str(value))
+import jsonops
 
 
 def process_command_line_args():
@@ -148,8 +12,6 @@ def process_command_line_args():
     global only_values
     global json_at_col_num
     global only_keys
-    global data_has_header_row
-
     epilog = """"""
 
     parser = argparse.ArgumentParser(description='This script '
@@ -166,10 +28,6 @@ def process_command_line_args():
     parser.add_argument('-v', action='store_true', default='False',
                         dest="only_values", help="return only values")
 
-    parser.add_argument('-fh', action='store_true', default='False',
-                        dest="data_has_header_row", help="If first line is "
-                                                         "header line")
-
     parser.add_argument('--json-at-col', dest='json_at_col_num', type=int,
                         help="If file is tab delimited and one of the "
                              "columns is the json string to parse then "
@@ -181,9 +39,9 @@ def process_command_line_args():
     only_keys = args.only_keys
     only_values = args.only_values
     json_at_col_num = args.json_at_col_num
-    data_has_header_row = args.data_has_header_row
 
 
 if __name__ == '__main__':
     process_command_line_args()
-    process()
+    for line in sys.stdin:
+        print (jsonops.json2kv(line, only_keys, only_values, json_at_col_num))
