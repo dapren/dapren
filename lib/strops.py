@@ -542,6 +542,18 @@ def test_ignore_lines():
     assert str(expected) == str(actual)
 
 
+def lcase(str_value):
+    return str_value.lower()
+
+
+def test_lcase():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = "dapren"
+    actual = lcase("DapRen")
+    assert expected == actual
+
+
 if __name__ == "__main__":
     # Execute all test methods. All test methods should start with string
     # "test_"

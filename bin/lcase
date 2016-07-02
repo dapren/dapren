@@ -4,11 +4,12 @@ from __future__ import print_function
 import sys
 import argparse
 from argparse import RawTextHelpFormatter
+import strops
 
 
 def process():
     for line in sys.stdin:
-        print(line.rstrip('\n').lower())
+        print(strops.lcase(line), end="")
 
 
 def process_command_line_args():
@@ -27,7 +28,7 @@ def process_command_line_args():
     args = parser.parse_args()
 
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
     process_command_line_args()
     process()
 
