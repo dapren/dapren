@@ -554,7 +554,7 @@ def test_lcase():
     assert expected == actual
 
 
-def remove_comments(code_in_list, code_type):
+def remove_code_comments(code_in_list, code_type):
     quote = 0
     comment = 0
 
@@ -655,25 +655,35 @@ def remove_comments(code_in_list, code_type):
                     yield (line[i])
 
 
-def test_remove_comments():
+def test_remove_code_comments():
     logger.info("Testing " + inspect.stack()[0][3])
 
     code = """SELECT * FROM Dapren/*this is comment*/-- and so is this"""
     expected = "SELECT * FROM Dapren"
 
     actual = ""
-    for token in remove_comments([code], 'sql'):
+    for token in remove_code_comments([code], 'sql'):
         actual += token
-    print (actual)
     assert expected == actual
 
     code = """SELECT * FROM Dapren/*this is comment*/// and so is this"""
     expected = "SELECT * FROM Dapren"
 
     actual = ""
-    for token in remove_comments([code], 'java'):
+    for token in remove_code_comments([code], 'java'):
         actual += token
-    print (actual)
+    assert expected == actual
+
+
+def remove_html_tags(line):
+    return re.sub(r"<[^>]*>", ' ', line).strip()
+
+
+def test_remove_html_tags():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = "only this"
+    actual = remove_html_tags("<a href=link class=win>only this</a>")
     assert expected == actual
 
 

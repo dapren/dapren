@@ -9,7 +9,7 @@ import strops
 
 
 def process(code_in_list, code_type):
-    for token in strops.remove_comments(code_in_list, code_type):
+    for token in strops.remove_code_comments(code_in_list, code_type):
         print(token, end="")
 
 

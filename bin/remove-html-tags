@@ -3,15 +3,12 @@
 import sys
 import argparse
 from argparse import RawTextHelpFormatter
-import re
+import strops
 
 
 def process():
-
     for line in sys.stdin:
-        print re.sub("<[^>]*>",
-                     ' ',
-                     line.rstrip('\n')).strip()
+        print(strops.remove_html_tags(line.strip()))
 
 
 def process_command_line_args():
