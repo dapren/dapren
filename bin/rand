@@ -6,8 +6,9 @@ import argparse
 from argparse import RawTextHelpFormatter
 
 
-def process(min, max):
-    print( random.randint(min, max))
+def process(minimum, maximum):
+    print(random.randint(minimum, maximum))
+
 
 def process_command_line_args():
     global args

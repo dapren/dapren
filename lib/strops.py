@@ -554,6 +554,130 @@ def test_lcase():
     assert expected == actual
 
 
+def remove_comments(code_in_list, code_type):
+    quote = 0
+    comment = 0
+
+    for line in code_in_list:
+        i = -1
+
+        while i < len(line) - 1:
+            i += 1
+            ########################################################################
+            # Take care of control characters starting with '\'
+            if line[i] == "\\":
+                # We dont care if we are inside a comment
+                if comment:
+                    continue
+
+                yield (line[i])
+                i += 1
+                yield (line[i])
+
+
+            ########################################################################
+            # Handle strings in double quotes
+            elif line[i] == '"':
+                if comment:
+                    continue
+
+                yield (line[i])
+
+                if not quote:
+                    quote = line[i]
+                elif quote == line[i]:
+                    quote = 0
+
+            ########################################################################
+            # Handle string in single quotes
+            elif line[i] == '\'':
+                if comment:
+                    continue
+
+                yield(line[i])
+
+                if not quote:
+                    quote = line[i]
+                elif quote == line[i]:
+                    quote = 0
+
+            ########################################################################
+            elif line[i] == '/':
+                if quote or code_type == "bash":
+                    yield (line[i])
+                elif line[i+1] == '/' and code_type == "java":
+                    yield ("")
+                    break
+                elif line[i+1] == '*' and line[i+2] != '+':
+                    comment = 1
+                    i += 1
+                elif not comment:
+                    yield (line[i])
+
+            ########################################################################
+            elif line[i] == '-':
+                if quote:
+                    yield (line[i])
+                elif line[i+1] == '-' and code_type == "sql":
+                    yield ("")
+                    break
+                elif not comment:
+                    yield (line[i])
+
+
+            ########################################################################
+            elif line[i] == '#':
+                if quote:
+                    yield (line[i])
+                elif code_type == "bash":
+                    yield ("");
+                    break
+                elif not comment:
+                    yield (line[i])
+
+            ########################################################################
+            elif line[i] == '*':
+                if quote:
+                    yield (line[i])
+                    continue
+                elif comment and line[i+1] == '/':
+                    comment = 0
+                    i += 1
+                    continue
+                elif comment:
+                    continue
+
+                yield (line[i])
+
+            ########################################################################
+            else:
+                if not comment:
+                    yield (line[i])
+
+
+def test_remove_comments():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    code = """SELECT * FROM Dapren/*this is comment*/-- and so is this"""
+    expected = "SELECT * FROM Dapren"
+
+    actual = ""
+    for token in remove_comments([code], 'sql'):
+        actual += token
+    print (actual)
+    assert expected == actual
+
+    code = """SELECT * FROM Dapren/*this is comment*/// and so is this"""
+    expected = "SELECT * FROM Dapren"
+
+    actual = ""
+    for token in remove_comments([code], 'java'):
+        actual += token
+    print (actual)
+    assert expected == actual
+
+
+
 if __name__ == "__main__":
     # Execute all test methods. All test methods should start with string
     # "test_"

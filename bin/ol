@@ -11,7 +11,7 @@ def process(output_field_delimiter):
     first_line = 0
 
     for line in sys.stdin:
-        if (first_line):
+        if first_line:
             print(prev_line.rstrip('\n'), end=output_field_delimiter)
 
         first_line = 1
@@ -46,7 +46,7 @@ echo -e "test\\nt1" | ol.py
     args = parser.parse_args()
 
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
     process_command_line_args()
     process(args.output_field_delimiter)
 
