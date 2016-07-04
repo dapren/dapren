@@ -718,9 +718,24 @@ def url_encode(encoded_url_string):
     return urllib.quote(encoded_url_string).replace("%20", "+")
 
 
-def url_decode(decoded_url_string):
-    return urllib.unquote(decoded_url_string)
+def test_url_encode():
+    logger.info("Testing " + inspect.stack()[0][3])
 
+    expected = "ti+will%25now%23it"
+    actual = url_encode("ti will%now#it")
+    assert expected == actual
+
+
+def url_decode(decoded_url_string):
+    return urllib.unquote(decoded_url_string).replace("+", " ")
+
+
+def test_url_decode():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = "ti will%now#it"
+    actual = url_decode("ti+will%25now%23it")
+    assert expected == actual
 
 
 if __name__ == "__main__":
