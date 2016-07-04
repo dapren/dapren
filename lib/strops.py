@@ -7,7 +7,7 @@ from constants import logger
 import csv
 import HTMLParser
 import cgi
-
+import urllib
 
 def bl(line, field_delimiter, num_occurrences_to_replace=0):
     """
@@ -712,6 +712,15 @@ def test_ucase():
     expected = "DAPREN"
     actual = ucase("DapRen")
     assert expected == actual
+
+
+def url_encode(encoded_url_string):
+    return urllib.quote(encoded_url_string).replace("%20", "+")
+
+
+def url_decode(decoded_url_string):
+    return urllib.unquote(decoded_url_string)
+
 
 
 if __name__ == "__main__":
