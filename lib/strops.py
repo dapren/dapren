@@ -738,6 +738,40 @@ def test_url_decode():
     assert expected == actual
 
 
+def xtokens(line, field_delimiter, field_list):
+    if field_delimiter == "\\t":
+        line_list = line.split("\t")
+    else:
+        line_list = line.split(field_delimiter)
+
+    output_line = ""
+    for field_num in field_list:
+
+        field_num = int(field_num)
+
+        if field_num > len(line_list):
+            output_line = output_line + "\t" + ""
+
+        elif field_num == -1:
+            output_line = output_line + "\t" + line_list[field_num]
+
+        elif field_num == 0:
+            output_line = output_line + "\t" + line
+
+        else:
+            output_line = output_line + "\t" + line_list[field_num - 1]
+
+    return output_line.strip("\t ")
+
+
+def test_xtokens():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = "b\tc\ta,b,c"
+    actual = xtokens("a,b,c", ",", [2, -1, 0])
+    assert expected == actual
+
+
 if __name__ == "__main__":
     # Execute all test methods. All test methods should start with string
     # "test_"
