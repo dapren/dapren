@@ -687,6 +687,32 @@ def test_remove_html_tags():
     assert expected == actual
 
 
+def rmwspc(line):
+    replace_string = " "
+
+    line = re.sub("\t", replace_string, line.rstrip('\n'))
+    return re.sub("  *", replace_string, line)
+
+
+def test_rmwspc():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = "this string has no tabs"
+    actual = rmwspc("this\t\t\tstring\thas\tno\ttabs")
+    assert expected == actual
+
+
+def ucase(str_value):
+    return str_value.upper()
+
+
+def test_ucase():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = "DAPREN"
+    actual = ucase("DapRen")
+    assert expected == actual
+
 
 if __name__ == "__main__":
     # Execute all test methods. All test methods should start with string

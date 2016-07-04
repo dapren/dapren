@@ -3,12 +3,13 @@ from __future__ import print_function
 
 import sys
 import argparse
+import strops
 from argparse import RawTextHelpFormatter
 
 
 def process():
     for line in sys.stdin:
-        print(line.rstrip('\n').upper())
+        print(strops.ucase(line), end="")
 
 
 def process_command_line_args():
