@@ -82,7 +82,7 @@ def runbash(cmd, **kwargs):
     file.If not provided then defaults to subprocess.PIPE
 
     :return: Returns object of type 'dict' with key 'return_code' and optionally
-    keys 'stdout'and 'stderr'
+    keys 'stdout'and 'stderr'. The value of these keys is list
     """
     provided_stdout = kwargs.get('stdout', subprocess.PIPE)
     provided_stderr = kwargs.get('stderr', subprocess.PIPE)
