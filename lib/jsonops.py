@@ -6,6 +6,39 @@ from constants import logger
 import inspect
 
 
+def json2map(json_str):
+    json_map = json.loads(json_str)
+    return json_map
+
+
+def test_json_map():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = 'Sawyer'
+    actual = json2map('{"Tom": "Sawyer", "Henry": "Ford"}').get("Tom")
+    assert expected == actual
+
+
+def map2json(input_dict):
+    output = []
+    for k, v in input_dict.items():
+        output.append('"{0}":"{1}"'.format(k, v))
+
+    return "{" + ", ".join(output) + "}"
+
+
+def test_map2json():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected1 = '{"Tom":"Sawyer", "Henry":"Ford"}'
+    expected2 = '{"Henry":"Ford", "Tom":"Sawyer"}'
+    input_dict = dict(Tom="Sawyer", Henry="Ford")
+
+    actual = map2json(input_dict)
+    print (actual)
+    assert expected1 == actual or expected2 == actual
+
+
 def json2kv(json_str,
             only_keys=False,
             only_values=False,
