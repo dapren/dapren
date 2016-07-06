@@ -6,17 +6,24 @@ from constants import logger
 import inspect
 
 
-def json2map(json_str):
+def json2object(json_str):
     json_map = json.loads(json_str)
     return json_map
 
 
-def test_json_map():
+def test_json2object():
     logger.info("Testing " + inspect.stack()[0][3])
 
     expected = 'Sawyer'
-    actual = json2map('{"Tom": "Sawyer", "Henry": "Ford"}').get("Tom")
+    output_dict = json2object('{"Tom": "Sawyer", "Henry": "Ford"}')
+    actual = output_dict.get("Tom")
     assert expected == actual
+    assert isinstance(output_dict, dict)
+
+    expected = [1, 2, 3, 4, 5]
+    actual = json2object('[1,2,3,4,5]')
+    assert expected == actual
+    assert isinstance(actual, list)
 
 
 def map2json(input_dict):
@@ -35,7 +42,6 @@ def test_map2json():
     input_dict = dict(Tom="Sawyer", Henry="Ford")
 
     actual = map2json(input_dict)
-    print (actual)
     assert expected1 == actual or expected2 == actual
 
 
