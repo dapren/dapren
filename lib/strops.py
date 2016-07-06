@@ -510,7 +510,7 @@ def test_ignore_blank_lines():
     logger.info("Testing " + inspect.stack()[0][3])
 
     expected = False
-    actual = is_blank_line("aman")
+    actual = is_blank_line("notblank")
     assert expected == actual
 
     expected = True

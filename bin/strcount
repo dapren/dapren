@@ -48,7 +48,7 @@ Notes:
 - Control-B (^B) can be specified as string $'\\x02'
 
 Examples:
-- echo -e "Aman" | strcount "a" "\\t" 1
+- echo -e "Tower" | strcount "a" "\\t" 1
 """
 
     parser = argparse.ArgumentParser(description='This script counts the '

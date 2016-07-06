@@ -17,7 +17,7 @@ def process_command_line_args():
 
     epilog = """
 Examples:
-echo -e "\\taman\\t\\t\\t\\tsam\\t" | rmwpsc
+echo -e "\\tsheep\\t\\t\\t\\tsam\\t" | rmwpsc
 """
 
     parser = argparse.ArgumentParser(description='This script converts all '
