@@ -6,6 +6,8 @@ import inspect
 import uuid
 import fileops
 import bashops
+import strops
+
 
 def file2sqlite(
         input_data_filename=None,
@@ -16,7 +18,7 @@ def file2sqlite(
         create_new_table_to_load_if_missing=False,
         is_first_row_header=True,
         **kwargs
-        ):
+    ):
     pass
 
 
@@ -29,12 +31,12 @@ def sqlite_execute_ddl(
         create_new_db_filename_if_missing=False,
         query=None,
         **kwargs
-        ):
+    ):
 
     __validate_sqlite_execute_ddl(
         db_filename,
         query
-        )
+    )
 
     if create_new_db_filename_if_missing is False \
             and not os.path.exists(db_filename):
@@ -47,7 +49,11 @@ def sqlite_execute_ddl(
 
     # Run the query
     with sqlite3.connect(db_filename) as conn:
+        logger.info("About to execute: {}".format(strops.make_log_ready(query)))
+
         conn.executescript(query)
+
+        logger.info("Executed: {}".format(strops.make_log_ready(query)))
 
 
 def __validate_sqlite_execute_ddl(
@@ -108,7 +114,7 @@ def test_sqlite_execute_ddl():
             create_new_db_filename_if_missing=True,
             query="""
             CREATE TABLE person(firstname string, lastname string, age int);
-            INSERT INTO person VALUES ("Dapren", "Python", 1)
+            INSERT INTO person VALUES ("Dapren", "Python", 1);
             """)
 
         bashcmd = """

@@ -107,6 +107,9 @@ str_unpadded='unpadded'
 str_Sunday = "Sunday"
 str_Monday = "Monday"
 
+str_NEWLINE = "::NEWWLLINE::"
+str_TAB = "::TABB::"
+
 str_from_line = "from_line"
 str_to_line = "to_line"
 str_is_gzipped = "is_gzipped"

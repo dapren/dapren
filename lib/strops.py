@@ -499,6 +499,26 @@ def test_ibl():
     assert str(expected) == str(actual)
 
 
+def make_log_ready(line):
+    """
+    This method replaces new lines with string '::NEWWLLINE::' and tabs with
+    string '::TABB::' so that it can be written into a log file without
+    breaking its formatting
+    :param str:
+    :return:
+    """
+    return line.replace("\n", constants.str_NEWLINE).replace("\t",
+                                                             constants.str_TAB)
+
+
+def test_make_log_ready():
+    logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = "1::NEWWLLINE::2::TABB::3"
+    actual = make_log_ready("1\n2\t3")
+    assert expected == actual
+
+
 def is_blank_line(line):
     if len(line) < 1:
         return True
