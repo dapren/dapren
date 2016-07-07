@@ -30,70 +30,32 @@ def extract_data_to_file():
 ###############################################################################
 def execute(
         db_filename=None,
-        query=None
+        query=None,
+        header_row=True
         ):
-
-    __validate_args_execute(
-        db_filename=db_filename,
-        query=query)
 
     with sqlite3.connect(db_filename) as conn:
-        conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        cursor.execute("""
-        SELECT * FROM person
-        """)
+        cursor.execute(query)
 
+        col_names = []
         for colinfo in cursor.description:
-            print colinfo
-        #for row in cursor.fetchall():
-        #    row['age']
+            col_names.append(colinfo[0])
 
+        if header_row:
+            yield constants.char_tab.join(col_names)
 
-def __validate_args_execute(
-        db_filename,
-        query
-        ):
-    """
-    This method runs all validation tests on all arguments for function
-    execute
-    :param db_filename:
-    :param query:
-    :return:
-    """
-    if db_filename is None:
-        err_message = "Parameter 'db_filename' is required"
-        raise ValueError(err_message)
-
-    if query is None:
-        err_message = "Parameter 'query' is required"
-        raise ValueError(err_message)
-
-    if not os.path.exists(db_filename):
-        err_msg = """
-        File '{db_filename}' not found. Please check the name and
-        try again.
-        """.format(db_filename=db_filename)
-        raise IOError(err_msg)
+        for row in cursor.fetchall():
+            # Some fields can be non strings, convert all fields to string
+            yield constants.char_tab.join(map(str, row))
 
 
 def test_execute():
     dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     ############################################################################
-    dapren_logger.info("Test that non existent file throws error")
-    db_filename = "{}.db".format(str(uuid.uuid4()))
-    try:
-        execute(
-            db_filename=db_filename,
-            query="select 1")
-    except IOError:
-        pass    # If IOError is thrown then unit test passes
-    else:
-        assert True is False
-
-    ############################################################################
     dapren_logger.info("Test that select command works")
+
     # Load test data
     db_filename = "{}/{}.db".format(constants.DAPREN_TMP_DIR, str(uuid.uuid4()))
     queries = fileops.file2list(constants.FILENAME_TEST_SQLITE_BASIC_SELECT)
@@ -103,12 +65,19 @@ def test_execute():
         query="\n".join(queries)
     )
 
-    # Check loaded data
-    execute(
+    # Check that data is loaded correctly
+    expected = ['firstname\tlastname\tage',
+                'Tom\tSawyer\t56',
+                'John\tDash\t36',
+                'Tiger\tDyson\t54']
+    actual = []
+    for result in execute(
         db_filename=db_filename,
-        query="SELECT * FROM PERSON"
-    )
+        query="SELECT * FROM PERSON",
+    ):
+        actual.append(result)
 
+    assert str(actual) == str(expected)
 
 
 ###############################################################################
