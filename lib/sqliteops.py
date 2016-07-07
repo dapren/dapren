@@ -23,8 +23,117 @@ def load_data_from_file(
 
 
 ###############################################################################
-def extract_data_to_file():
-    pass
+def extract_data_to_file(
+    db_filename=None,
+    query=None,
+    header_row=True,
+    return_output_as_dict=False,  # If False, we return output as dict
+    output_file_name=None,
+    append_to_file=False,
+    overwrite_file=False,
+    output_delimiter=constants.char_tab,
+    key_value_delimiter=constants.char_equal,
+    key_value_pair_delimiter=constants.char_tab
+    ):
+
+    if not append_to_file \
+            and os.path.exists(output_file_name)\
+            and not overwrite_file:
+        err_msg="""
+        File {} already exists. Either provide another file name or s`et flag
+        'append_to_file' or 'overwrite_file' to True
+        """.format(output_file_name)
+        raise IOError(err_msg)
+
+    file_write_mode = "w"
+    if append_to_file:
+        file_write_mode = "a"
+
+    already_seen_first_line = False
+    with open(output_file_name, file_write_mode) as fw:
+        if return_output_as_dict:
+
+            for output_dict in execute(
+                    db_filename=db_filename,
+                    query=query,
+                    return_output_as_dict=return_output_as_dict,
+                    header_row=header_row):
+
+                output_list = []
+                for k, v in output_dict.items():
+                    output_list.append("{}{}{}".format(k,
+                                                       key_value_delimiter,
+                                                       v))
+
+                if already_seen_first_line is False:
+                    fw.write(key_value_pair_delimiter.join(output_list))
+                    already_seen_first_line = True
+                else:
+                    fw.write(constants.char_newline)
+                    fw.write(key_value_pair_delimiter.join(output_list))
+        else:
+            for output_list in execute(
+                    db_filename=db_filename,
+                    query=query,
+                    return_output_as_dict=return_output_as_dict,
+                    header_row=header_row):
+
+                if already_seen_first_line is False:
+                    fw.write(output_delimiter.join(map(str, output_list)))
+                    already_seen_first_line = True
+                else:
+                    fw.write(constants.char_newline)
+                    fw.write(output_delimiter.join(map(str, output_list)))
+
+
+def test_extract_data_to_file():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+
+    ############################################################################
+    dapren_logger.info("Test dict output to a file")
+    db_filename = __create_test_db_basic()
+    output_file_name = "{}.txt".format(guid())
+
+    extract_data_to_file(
+        db_filename=db_filename,
+        query="SELECT * FROM person",
+        return_output_as_dict=True,  # If False, we return output as dict
+        output_file_name=output_file_name,
+        append_to_file=False,
+        overwrite_file=False,
+        key_value_pair_delimiter='&')
+
+    expected = ['lastname=Dash&age=36&firstname=John',
+                'lastname=Dyson&age=54&firstname=Tiger',
+                'lastname=Sawyer&age=56&firstname=Tom']
+
+    actual = sorted(fileops.file2list(output_file_name))
+    fileops.silent_remove(db_filename)
+    fileops.silent_remove(output_file_name)
+
+    assert actual == expected
+
+    ############################################################################
+    dapren_logger.info("Test list output to a file")
+    db_filename = __create_test_db_basic()
+    output_file_name = "{}.txt".format(guid())
+
+    extract_data_to_file(
+        db_filename=db_filename,
+        query="SELECT * FROM person",
+        output_file_name=output_file_name,
+        append_to_file=False,
+        overwrite_file=False,
+        header_row=False,
+        output_delimiter=",")
+
+    expected = ['John,Dash,36', 'Tiger,Dyson,54', 'Tom,Sawyer,56']
+    actual = sorted(fileops.file2list(output_file_name))
+    fileops.silent_remove(db_filename)
+    fileops.silent_remove(output_file_name)
+
+    assert actual == expected
+
 
 
 ###############################################################################
@@ -60,6 +169,7 @@ def execute(
             else:
                 yield row
 
+
 def test_execute():
     dapren_logger.info("Testing " + inspect.stack()[0][3])
 
@@ -94,13 +204,7 @@ def test_execute():
     dapren_logger.info("Test that select command works and returns dict")
 
     # Load test data
-    db_filename = "{}/{}.db".format(constants.DAPREN_TMP_DIR, guid())
-    queries = fileops.file2list(constants.FILENAME_TEST_SQLITE_BASIC_SELECT)
-    execute_script(
-        db_filename=db_filename,
-        create_new_db_filename_if_missing=True,
-        query="\n".join(queries)
-    )
+    db_filename = __create_test_db_basic()
 
     # Check that data is loaded correctly
     expected = [u'John', u'Tiger', u'Tom']
@@ -116,6 +220,15 @@ def test_execute():
     fileops.silent_remove(db_filename)
 
 
+def __create_test_db_basic():
+    db_filename = "{}/{}.db".format(constants.DAPREN_TMP_DIR, guid())
+    queries = fileops.file2list(constants.FILENAME_TEST_SQLITE_BASIC_SELECT)
+    execute_script(
+        db_filename=db_filename,
+        create_new_db_filename_if_missing=True,
+        query="\n".join(queries)
+    )
+    return db_filename
 
 ###############################################################################
 def execute_script(
