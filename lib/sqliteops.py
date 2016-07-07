@@ -7,19 +7,120 @@ from utilops import guid
 import fileops
 import bashops
 import strops
+import csv
+
 
 ###############################################################################
 def load_data_from_file(
-        input_data_filename=None,
-        input_delimiter=constants.char_tab,
         db_filename=None,
         db_table_to_load=None,
-        create_new_db_filename_if_missing=False,
-        create_new_table_to_load_if_missing=False,
+        data_filename=None,
+        delimiter=constants.char_tab,
         is_first_row_header=True,
         **kwargs
     ):
+
+    if db_filename is None:
+        err_msg = "Parameter 'db_filename' is required"
+        raise ValueError(err_msg)
+
+    if data_filename is None:
+        err_msg = "Parameter 'data_filename' is required"
+        raise ValueError(err_msg)
+
+    if db_table_to_load is None:
+        err_msg = "Parameter 'db_table_to_load' is required"
+        raise ValueError(err_msg)
+
+
+    if delimiter == constants.char_comma:
+        __load_from_csv()
+    else:
+        __load_from_non_csv()
+
+
+def __generate_insert_statement(db_table_to_load):
+    SQL = """
+    INSERT INTO {} ({}) VALUES ({})
+    """
+
+
+def __load_from_csv(table):
     pass
+
+
+def __load_from_non_csv():
+    pass
+
+
+###############################################################################
+def get_table_list(
+        db_filename=None,
+        **kwargs
+    ):
+
+    if db_filename is None:
+        err_msg = "Parameter 'db_filename' is required"
+        raise ValueError(err_msg)
+
+    query = """SELECT name FROM sqlite_master WHERE type='table'"""
+
+    output_table_list = []
+    for qr in execute(
+            db_filename=db_filename,
+            query=query,
+            header_row=False):
+
+        output_table_list.append(qr[0])
+
+    return output_table_list
+
+
+def test_get_table_list():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+    db_filename = __create_test_db_basic()
+
+    expected = [u'Person', u'Product']
+    actual = get_table_list(db_filename)
+    fileops.silent_remove(db_filename)
+    assert expected == actual
+
+###############################################################################
+def get_column_list(
+        db_filename=None,
+        table=None,
+        **kwargs
+    ):
+
+    if db_filename is None:
+        err_msg = "Parameter 'db_filename' is required"
+        raise ValueError(err_msg)
+
+    if table is None:
+        err_msg = "Parameter 'table' is required"
+        raise ValueError(err_msg)
+
+    query = """PRAGMA table_info({})""".format(table)
+
+    output_column_list = []
+    for qr in execute(
+            db_filename=db_filename,
+            query=query,
+            header_row=False):
+
+        output_column_list.append(qr[1])
+
+    return output_column_list
+
+
+def test_get_column_list():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+    db_filename = __create_test_db_basic()
+
+    expected = [u'firstname', u'lastname', u'age']
+    actual = get_column_list(db_filename, "Person")
+    fileops.silent_remove(db_filename)
+    assert expected == actual
 
 
 ###############################################################################
@@ -33,7 +134,8 @@ def extract_data_to_file(
     overwrite_file=False,
     output_delimiter=constants.char_tab,
     key_value_delimiter=constants.char_equal,
-    key_value_pair_delimiter=constants.char_tab
+    key_value_pair_delimiter=constants.char_tab,
+    **kwargs
     ):
 
     if db_filename is None:
@@ -231,7 +333,8 @@ def execute(
         db_filename=None,
         query=None,
         header_row=True,
-        return_output_as_dict=False  # If False, we return output as dict
+        return_output_as_dict=False,  # If False, we return output as dict
+        **kwargs
         ):
 
     if db_filename is None:

@@ -126,6 +126,7 @@ str___main__ = "__main__"
 char_tab = '\t'
 char_newline = '\n'
 char_equal = '='
+char_comma = ','
 
 
 
