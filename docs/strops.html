@@ -1,0 +1,93 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module strops</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>strops</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dapren/Dropbox (Personal)/private/dapren/lib/strops.py">/Users/dapren/Dropbox (Personal)/private/dapren/lib/strops.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="HTMLParser.html">HTMLParser</a><br>
+<a href="cgi.html">cgi</a><br>
+</td><td width="25%" valign=top><a href="constants.html">constants</a><br>
+<a href="csv.html">csv</a><br>
+</td><td width="25%" valign=top><a href="inspect.html">inspect</a><br>
+<a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-bl"><strong>bl</strong></a>(line, field_delimiter, num_occurrences_to_replace<font color="#909090">=0</font>)</dt><dd><tt>This&nbsp;script&nbsp;replaces&nbsp;the&nbsp;'field_delimiter'&nbsp;with&nbsp;new&nbsp;line&nbsp;character<br>
+:param&nbsp;line:<br>
+:param&nbsp;field_delimiter:<br>
+:param&nbsp;num_occurrences_to_replace:<br>
+:return:</tt></dd></dl>
+ <dl><dt><a name="-csv2tsv"><strong>csv2tsv</strong></a>(filepointer_or_stdin)</dt><dd><tt>This&nbsp;method&nbsp;reads&nbsp;a&nbsp;file&nbsp;pointer&nbsp;or&nbsp;sys.stdin&nbsp;containing&nbsp;comma&nbsp;delimited<br>
+data&nbsp;and&nbsp;output&nbsp;tab&nbsp;delimited&nbsp;data<br>
+:param&nbsp;filepointer_or_stdin:<br>
+:return:</tt></dd></dl>
+ <dl><dt><a name="-decode_punc"><strong>decode_punc</strong></a>(line)</dt></dl>
+ <dl><dt><a name="-enclose"><strong>enclose</strong></a>(line, enclose_string)</dt></dl>
+ <dl><dt><a name="-encode_punc"><strong>encode_punc</strong></a>(line)</dt></dl>
+ <dl><dt><a name="-html_decode"><strong>html_decode</strong></a>(line)</dt></dl>
+ <dl><dt><a name="-html_encode"><strong>html_encode</strong></a>(line)</dt></dl>
+ <dl><dt><a name="-ibl"><strong>ibl</strong></a>(filepointer_or_stdin, field_delimiter, fields_to_use)</dt></dl>
+ <dl><dt><a name="-ignore_lines"><strong>ignore_lines</strong></a>(filepointer_or_stdin, lines_to_ignore)</dt></dl>
+ <dl><dt><a name="-is_blank_line"><strong>is_blank_line</strong></a>(line)</dt></dl>
+ <dl><dt><a name="-lcase"><strong>lcase</strong></a>(str_value)</dt></dl>
+ <dl><dt><a name="-make_log_ready"><strong>make_log_ready</strong></a>(line)</dt><dd><tt>This&nbsp;method&nbsp;replaces&nbsp;new&nbsp;lines&nbsp;with&nbsp;string&nbsp;'::NEWWLLINE::'&nbsp;and&nbsp;tabs&nbsp;with<br>
+string&nbsp;'::TABB::'&nbsp;so&nbsp;that&nbsp;it&nbsp;can&nbsp;be&nbsp;written&nbsp;into&nbsp;a&nbsp;log&nbsp;file&nbsp;without<br>
+breaking&nbsp;its&nbsp;formatting<br>
+:param&nbsp;str:<br>
+:return:</tt></dd></dl>
+ <dl><dt><a name="-remove_code_comments"><strong>remove_code_comments</strong></a>(code_in_list, code_type)</dt></dl>
+ <dl><dt><a name="-remove_html_tags"><strong>remove_html_tags</strong></a>(line)</dt></dl>
+ <dl><dt><a name="-rmwspc"><strong>rmwspc</strong></a>(line)</dt></dl>
+ <dl><dt><a name="-test_bl"><strong>test_bl</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_csv2tsv"><strong>test_csv2tsv</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_decode_punc"><strong>test_decode_punc</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_encode_punc"><strong>test_encode_punc</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_exclose"><strong>test_exclose</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_html_decode"><strong>test_html_decode</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_html_encode"><strong>test_html_encode</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_ibl"><strong>test_ibl</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_ignore_blank_lines"><strong>test_ignore_blank_lines</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_ignore_lines"><strong>test_ignore_lines</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_lcase"><strong>test_lcase</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_make_log_ready"><strong>test_make_log_ready</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_remove_code_comments"><strong>test_remove_code_comments</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_remove_html_tags"><strong>test_remove_html_tags</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_rmwspc"><strong>test_rmwspc</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_ucase"><strong>test_ucase</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_url_decode"><strong>test_url_decode</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_url_encode"><strong>test_url_encode</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_xtokens"><strong>test_xtokens</strong></a>()</dt></dl>
+ <dl><dt><a name="-ucase"><strong>ucase</strong></a>(str_value)</dt></dl>
+ <dl><dt><a name="-url_decode"><strong>url_decode</strong></a>(decoded_url_string)</dt></dl>
+ <dl><dt><a name="-url_encode"><strong>url_encode</strong></a>(encoded_url_string)</dt></dl>
+ <dl><dt><a name="-xtokens"><strong>xtokens</strong></a>(line, field_delimiter, field_list)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>dapren_logger</strong> = &lt;logging.RootLogger object&gt;<br>
+<strong>print_function</strong> = _Feature((2, 6, 0, 'alpha', 2), (3, 0, 0, 'alpha', 0), 65536)</td></tr></table>
+</body></html>

@@ -36,6 +36,18 @@ def extract_data_to_file(
     key_value_pair_delimiter=constants.char_tab
     ):
 
+    if db_filename is None:
+        err_msg = "Parameter 'db_filename' is required"
+        raise ValueError(err_msg)
+
+    if query is None:
+        err_msg = "Parameter 'query' is required"
+        raise ValueError(err_msg)
+
+    if output_file_name is None:
+        err_msg = "Parameter 'output_file_name' is required"
+        raise ValueError(err_msg)
+
     if not append_to_file \
             and os.path.exists(output_file_name)\
             and not overwrite_file:
@@ -66,6 +78,8 @@ def extract_data_to_file(
                                                        v))
 
                 if already_seen_first_line is False:
+                    if append_to_file:
+                        fw.write(constants.char_newline)
                     fw.write(key_value_pair_delimiter.join(output_list))
                     already_seen_first_line = True
                 else:
@@ -79,6 +93,9 @@ def extract_data_to_file(
                     header_row=header_row):
 
                 if already_seen_first_line is False:
+                    if append_to_file:
+                        fw.write(constants.char_newline)
+
                     fw.write(output_delimiter.join(map(str, output_list)))
                     already_seen_first_line = True
                 else:
@@ -134,6 +151,79 @@ def test_extract_data_to_file():
 
     assert actual == expected
 
+    ############################################################################
+    dapren_logger.info("Test 'append_to_file' flag")
+    db_filename = __create_test_db_basic()
+    output_file_name = "{}.txt".format(guid())
+
+    extract_data_to_file(
+        db_filename=db_filename,
+        query="SELECT * FROM person",
+        return_output_as_dict=True,  # If False, we return output as dict
+        output_file_name=output_file_name,
+        append_to_file=False,
+        overwrite_file=False,
+        key_value_pair_delimiter='&')
+
+    extract_data_to_file(
+        db_filename=db_filename,
+        query="SELECT * FROM person",
+        return_output_as_dict=True,  # If False, we return output as dict
+        output_file_name=output_file_name,
+        append_to_file=True,
+        overwrite_file=False,
+        key_value_pair_delimiter='&')
+
+    expected = ['lastname=Dash&age=36&firstname=John',
+                'lastname=Dash&age=36&firstname=John',
+                'lastname=Dyson&age=54&firstname=Tiger',
+                'lastname=Dyson&age=54&firstname=Tiger',
+                'lastname=Sawyer&age=56&firstname=Tom',
+                'lastname=Sawyer&age=56&firstname=Tom']
+
+    actual = sorted(fileops.file2list(output_file_name))
+    fileops.silent_remove(db_filename)
+    fileops.silent_remove(output_file_name)
+
+    assert actual == expected
+
+    ############################################################################
+    dapren_logger.info("Test 'overwrite_file' and 'append_to_file' flag")
+    db_filename = __create_test_db_basic()
+    output_file_name = "{}.txt".format(guid())
+
+    extract_data_to_file(
+        db_filename=db_filename,
+        query="SELECT * FROM person",
+        return_output_as_dict=False,  # If False, we return output as dict
+        output_file_name=output_file_name,
+        append_to_file=False,
+        overwrite_file=False,
+        key_value_pair_delimiter='&')
+
+    extract_data_to_file(
+        db_filename=db_filename,
+        query="SELECT * FROM person",
+        return_output_as_dict=False,  # If False, we return output as dict
+        output_file_name=output_file_name,
+        append_to_file=True,
+        overwrite_file=True,
+        key_value_pair_delimiter='&')
+
+    expected = ['John\tDash\t36',
+                'John\tDash\t36',
+                'Tiger\tDyson\t54',
+                'Tiger\tDyson\t54',
+                'Tom\tSawyer\t56',
+                'Tom\tSawyer\t56',
+                'firstname\tlastname\tage',
+                'firstname\tlastname\tage']
+
+    actual = sorted(fileops.file2list(output_file_name))
+    fileops.silent_remove(db_filename)
+    fileops.silent_remove(output_file_name)
+
+    assert actual == expected
 
 
 ###############################################################################
@@ -143,6 +233,14 @@ def execute(
         header_row=True,
         return_output_as_dict=False  # If False, we return output as dict
         ):
+
+    if db_filename is None:
+        err_msg = "Parameter 'db_filename' is required"
+        raise ValueError(err_msg)
+
+    if query is None:
+        err_msg = "Parameter 'query' is required"
+        raise ValueError(err_msg)
 
     with sqlite3.connect(db_filename) as conn:
         if return_output_as_dict:
@@ -230,6 +328,7 @@ def __create_test_db_basic():
     )
     return db_filename
 
+
 ###############################################################################
 def execute_script(
         db_filename=None,
@@ -259,31 +358,8 @@ def execute_script(
     :return: Does not returns anything. If the script fails then it result in an
     exception
     """
-    __validate_args_execute_script(
-        db_filename=db_filename,
-        query=query,
-        create_new_db_filename_if_missing=create_new_db_filename_if_missing
-    )
 
-    # Run the query
-    with sqlite3.connect(db_filename) as conn:
-        dapren_logger.info("About to execute: {}".format(strops.make_log_ready(query)))
-        conn.executescript(query)
-        dapren_logger.info("Executed: {}".format(strops.make_log_ready(query)))
-
-
-def __validate_args_execute_script(
-        db_filename,
-        create_new_db_filename_if_missing,
-        query
-        ):
-    """
-    This method runs all validation tests on all arguments for function
-    execute_script
-    :param db_filename:
-    :param query:
-    :return:
-    """
+    # ###################################################### Validate arguments
     if db_filename is None:
         err_message = "Parameter 'db_filename' is required"
         raise ValueError(err_message)
@@ -300,6 +376,13 @@ def __validate_args_execute_script(
         method with flag 'create_new_db_filename_if_missing=True'
         """.format(db_filename=db_filename)
         raise IOError(err_msg)
+
+    # ############################################################ Run the query
+    with sqlite3.connect(db_filename) as conn:
+        dapren_logger.info("About to execute: {}".format(
+            strops.make_log_ready(query)))
+        conn.executescript(query)
+        dapren_logger.info("Executed: {}".format(strops.make_log_ready(query)))
 
 
 def test_execute_script():

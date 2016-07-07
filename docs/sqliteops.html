@@ -1,0 +1,69 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module sqliteops</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>sqliteops</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dapren/Dropbox (Personal)/private/dapren/lib/sqliteops.py">/Users/dapren/Dropbox (Personal)/private/dapren/lib/sqliteops.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="bashops.html">bashops</a><br>
+<a href="constants.html">constants</a><br>
+</td><td width="25%" valign=top><a href="fileops.html">fileops</a><br>
+<a href="inspect.html">inspect</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="sqlite3.html">sqlite3</a><br>
+</td><td width="25%" valign=top><a href="strops.html">strops</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-execute"><strong>execute</strong></a>(db_filename<font color="#909090">=None</font>, query<font color="#909090">=None</font>, header_row<font color="#909090">=True</font>, return_output_as_dict<font color="#909090">=False</font>)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-execute_script"><strong>execute_script</strong></a>(db_filename<font color="#909090">=None</font>, create_new_db_filename_if_missing<font color="#909090">=False</font>, query<font color="#909090">=None</font>, **kwargs)</dt><dd><tt>This&nbsp;method&nbsp;is&nbsp;intented&nbsp;to&nbsp;be&nbsp;called&nbsp;when&nbsp;you&nbsp;are&nbsp;running&nbsp;multiple&nbsp;sql<br>
+scripts&nbsp;(like&nbsp;'create&nbsp;table'&nbsp;statement&nbsp;followed&nbsp;by&nbsp;'insert&nbsp;table'&nbsp;statement)<br>
+and&nbsp;you&nbsp;just&nbsp;care&nbsp;whether&nbsp;the&nbsp;script&nbsp;ran&nbsp;successfully&nbsp;or&nbsp;not.&nbsp;You&nbsp;do&nbsp;not<br>
+care&nbsp;about&nbsp;the&nbsp;output&nbsp;rows&nbsp;('select'&nbsp;statements&nbsp;return&nbsp;output&nbsp;hence&nbsp;they<br>
+should&nbsp;NOT&nbsp;be&nbsp;run&nbsp;using&nbsp;this&nbsp;method.&nbsp;Instead&nbsp;they&nbsp;should&nbsp;be&nbsp;run&nbsp;using<br>
+method&nbsp;'execute'<br>
+&nbsp;<br>
+:param&nbsp;db_filename:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;sqlite&nbsp;db&nbsp;file.&nbsp;Preferrably&nbsp;with<br>
+extention&nbsp;'.db'<br>
+&nbsp;<br>
+:param&nbsp;create_new_db_filename_if_missing:&nbsp;If&nbsp;the&nbsp;db_filename&nbsp;provided&nbsp;is<br>
+an&nbsp;missing&nbsp;and&nbsp;value&nbsp;of&nbsp;this&nbsp;field&nbsp;is&nbsp;set&nbsp;to&nbsp;True&nbsp;then&nbsp;new&nbsp;file&nbsp;will&nbsp;be<br>
+created&nbsp;else&nbsp;an&nbsp;error&nbsp;will&nbsp;be&nbsp;thrown<br>
+&nbsp;<br>
+:param&nbsp;query:&nbsp;The&nbsp;query&nbsp;to&nbsp;be&nbsp;executed,&nbsp;delimited&nbsp;by&nbsp;semicolons<br>
+&nbsp;<br>
+:param&nbsp;kwargs:&nbsp;Not&nbsp;used&nbsp;right&nbsp;now<br>
+&nbsp;<br>
+:return:&nbsp;Does&nbsp;not&nbsp;returns&nbsp;anything.&nbsp;If&nbsp;the&nbsp;script&nbsp;fails&nbsp;then&nbsp;it&nbsp;result&nbsp;in&nbsp;an<br>
+exception</tt></dd></dl>
+ <dl><dt><a name="-extract_data_to_file"><strong>extract_data_to_file</strong></a>(db_filename<font color="#909090">=None</font>, query<font color="#909090">=None</font>, header_row<font color="#909090">=True</font>, return_output_as_dict<font color="#909090">=False</font>, output_file_name<font color="#909090">=None</font>, append_to_file<font color="#909090">=False</font>, overwrite_file<font color="#909090">=False</font>, output_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>, key_value_delimiter<font color="#909090">='='</font>, key_value_pair_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-load_data_from_file"><strong>load_data_from_file</strong></a>(input_data_filename<font color="#909090">=None</font>, input_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>, db_filename<font color="#909090">=None</font>, db_table_to_load<font color="#909090">=None</font>, create_new_db_filename_if_missing<font color="#909090">=False</font>, create_new_table_to_load_if_missing<font color="#909090">=False</font>, is_first_row_header<font color="#909090">=True</font>, **kwargs)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-test_execute"><strong>test_execute</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_execute_script"><strong>test_execute_script</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_extract_data_to_file"><strong>test_extract_data_to_file</strong></a>()</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>dapren_logger</strong> = &lt;logging.RootLogger object&gt;</td></tr></table>
+</body></html>
