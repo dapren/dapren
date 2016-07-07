@@ -2,36 +2,16 @@ from __future__ import print_function
 from constants import dapren_logger
 import constants
 import inspect
-"""
-This python code kinda implements the toString() of data structures
-"""
+import uuid
+import dateops
 
 
-################################################################################
-def str_possible_values(argument_name, list_of_values):
-    """
-    This is a convieneance method that can be used to display informational
-    message above the possible values of an argument
+def guid():
+    return "{}-{}".format(dateops.date2str(dateops.today(), '%Y%m%d%H'),
+                          str(uuid.uuid4()))
 
-    :param argument_name:
-    :param list_of_values:
-    :return:
-    """
-    output_str="Possible value of argument '{}' are".format(argument_name)
-    for value in list_of_values:
-        output_str += "\n\t- {} ({})".format(value, type(value))
-
-    return output_str
-
-
-def test_str_possible_values():
-    dapren_logger.info("Testing " + inspect.stack()[0][3])
-    expected="""Possible value of argument 'WeekendDay' are
-	- Sun (<type 'str'>)
-	- Sat (<type 'str'>)"""
-
-    actual = str_possible_values("WeekendDay", ['Sun','Sat'])
-    assert expected == actual
+def test_guid():
+    print (guid())
 
 
 # -----------------------------------------------------------------------------

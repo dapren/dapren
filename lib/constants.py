@@ -125,12 +125,32 @@ str_r = "r"
 str___main__ = "__main__"
 char_tab = '\t'
 char_newline = '\n'
+char_equal = '='
+
 
 
 
 ###############################################################################
 # Numbers
 ###############################################################################
+
+
+################################################################################
+def str_possible_values(argument_name, list_of_values):
+    """
+    This is a convieneance method that can be used to display informational
+    message above the possible values of an argument
+
+    :param argument_name:
+    :param list_of_values:
+    :return:
+    """
+    output_str="Possible value of argument '{}' are".format(argument_name)
+    for value in list_of_values:
+        output_str += "\n\t- {} ({})".format(value, type(value))
+
+    return output_str
+
 
 # -----------------------------------------------------------------------------
 # ----------------------------------------------------------------------- MAIN

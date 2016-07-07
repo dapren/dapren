@@ -3,7 +3,7 @@ import constants
 import os
 from constants import dapren_logger
 import inspect
-import uuid
+from utilops import guid
 import fileops
 import bashops
 import strops
@@ -31,33 +31,43 @@ def extract_data_to_file():
 def execute(
         db_filename=None,
         query=None,
-        header_row=True
+        header_row=True,
+        return_output_as_dict=False  # If False, we return output as dict
         ):
 
     with sqlite3.connect(db_filename) as conn:
+        if return_output_as_dict:
+            conn.row_factory = sqlite3.Row
+
         cursor = conn.cursor()
         cursor.execute(query)
 
+        # If output is being returned as dict then no need of header row
         col_names = []
         for colinfo in cursor.description:
             col_names.append(colinfo[0])
 
-        if header_row:
-            yield constants.char_tab.join(col_names)
+        if not return_output_as_dict and header_row:
+            yield tuple(col_names)
 
         for row in cursor.fetchall():
-            # Some fields can be non strings, convert all fields to string
-            yield constants.char_tab.join(map(str, row))
+            if return_output_as_dict:
 
+                output_dict = {}
+                for index, value in enumerate(col_names):
+                    output_dict[value] = row[index]
+                yield output_dict
+            else:
+                yield row
 
 def test_execute():
     dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     ############################################################################
-    dapren_logger.info("Test that select command works")
+    dapren_logger.info("Test that select command works and returns list")
 
     # Load test data
-    db_filename = "{}/{}.db".format(constants.DAPREN_TMP_DIR, str(uuid.uuid4()))
+    db_filename = "{}/{}.db".format(constants.DAPREN_TMP_DIR, guid())
     queries = fileops.file2list(constants.FILENAME_TEST_SQLITE_BASIC_SELECT)
     execute_script(
         db_filename=db_filename,
@@ -66,10 +76,10 @@ def test_execute():
     )
 
     # Check that data is loaded correctly
-    expected = ['firstname\tlastname\tage',
-                'Tom\tSawyer\t56',
-                'John\tDash\t36',
-                'Tiger\tDyson\t54']
+    expected = [('firstname', 'lastname', 'age'),
+                (u'Tom', u'Sawyer', 56),
+                (u'John', u'Dash', 36),
+                (u'Tiger', u'Dyson', 54)]
     actual = []
     for result in execute(
         db_filename=db_filename,
@@ -78,6 +88,33 @@ def test_execute():
         actual.append(result)
 
     assert str(actual) == str(expected)
+    fileops.silent_remove(db_filename)
+
+    ############################################################################
+    dapren_logger.info("Test that select command works and returns dict")
+
+    # Load test data
+    db_filename = "{}/{}.db".format(constants.DAPREN_TMP_DIR, guid())
+    queries = fileops.file2list(constants.FILENAME_TEST_SQLITE_BASIC_SELECT)
+    execute_script(
+        db_filename=db_filename,
+        create_new_db_filename_if_missing=True,
+        query="\n".join(queries)
+    )
+
+    # Check that data is loaded correctly
+    expected = [u'John', u'Tiger', u'Tom']
+    actual = []
+    for result in execute(
+        db_filename=db_filename,
+        query="SELECT * FROM PERSON",
+        return_output_as_dict=True
+    ):
+        actual.append(result['firstname'])
+    actual.sort()
+    assert str(actual) == str(expected)
+    fileops.silent_remove(db_filename)
+
 
 
 ###############################################################################
@@ -157,7 +194,7 @@ def test_execute_script():
 
     ############################################################################
     dapren_logger.info("Test that non existent file throws error w/o correct flags")
-    db_filename = "{}.db".format(str(uuid.uuid4()))
+    db_filename = "{}.db".format(guid)
     try:
         execute_script(
             db_filename=db_filename,
@@ -166,11 +203,11 @@ def test_execute_script():
         pass    # If IOError is thrown then unit test passes
     else:
         assert True is False
-
+    fileops.silent_remove(db_filename)
     ############################################################################
     dapren_logger.info("Test that non existent file does not throws error with  "
                 "correct flags")
-    db_filename = "{}.db".format(str(uuid.uuid4()))
+    db_filename = "{}.db".format(guid())
     try:
         execute_script(
             db_filename=db_filename,
@@ -179,16 +216,16 @@ def test_execute_script():
 
         assert True is True
 
-        fileops.silent_remove(db_filename)
     except IOError:
         assert True is False    # If IOError is thrown then unit test passes
+    fileops.silent_remove(db_filename)
 
     ############################################################################
     dapren_logger.info("Test that valid DDL goes thru fine")
 
     db_filename = "{0}/{1}.db".format(
         constants.DAPREN_TMP_DIR,
-        str(uuid.uuid4())
+        guid()
         )
     try:
         execute_script(
@@ -207,16 +244,16 @@ def test_execute_script():
         bash_stdout = bashops.runbash(bashcmd)['stdout']
         actual = bash_stdout[0]
         assert expected == actual
-        fileops.silent_remove(db_filename)
+
     except sqlite3.OperationalError:
         assert True is False    # If IOError is thrown then unit test has failed
-
+    fileops.silent_remove(db_filename)
     ############################################################################
     dapren_logger.info("Test that invalid DDL fails")
 
     db_filename = "{0}/{1}.db".format(
         constants.DAPREN_TMP_DIR,
-        str(uuid.uuid4())
+        guid()
         )
     try:
         execute_script(
@@ -235,10 +272,10 @@ def test_execute_script():
         bash_stdout = bashops.runbash(bashcmd)['stdout']
         actual = bash_stdout[0]
         assert expected == actual
-        fileops.silent_remove(db_filename)
         assert True is False    # This line will never be reached
     except sqlite3.OperationalError:
         assert True is True    # If error is thrown then unit test passed
+    fileops.silent_remove(db_filename)
 
 # -----------------------------------------------------------------------------
 # ----------------------------------------------------------------------- MAIN
