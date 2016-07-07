@@ -50,7 +50,6 @@ def execute(
         #    row['age']
 
 
-
 def __validate_args_execute(
         db_filename,
         query
