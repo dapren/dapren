@@ -7,7 +7,7 @@ import os
 import inspect
 import gzip
 import constants
-from constants import logger
+from constants import dapren_logger
 
 
 def file_exists(file_name, **kwargs):
@@ -329,19 +329,19 @@ def get_dir_in_dir(path, **kwargs):
 # ----------------------------------------------------------------- UNIT TESTS
 # -----------------------------------------------------------------------------
 def test_file_exists():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     assert file_exists(constants.FILENAME_TEST_FILE_OPS_1) == True
     assert file_exists('some_file_that_does_not_exists') == False
 
 
 def test_silent_remove():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
     silent_remove("{I_AM_SURE-THIS_FILE_DOES-NOT_EXISTS}")
 
 
 def test_is_file_zero_bytes():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     assert is_file_zero_bytes(
         constants.FILENAME_TEST_FILE_OPS_ZERO_BYTE_FILE) == True
@@ -349,10 +349,10 @@ def test_is_file_zero_bytes():
 
 
 def test_number_of_lines():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
-    logger.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1))
-    logger.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1,
+    dapren_logger.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1))
+    dapren_logger.debug(number_of_lines(constants.FILENAME_TEST_FILE_OPS_1,
                                   stop_after_n_lines=101))
 
     assert number_of_lines(constants.FILENAME_TEST_FILE_OPS_1) == 6264
@@ -361,11 +361,11 @@ def test_number_of_lines():
 
 
 def test_size_of_file():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
-    logger.debug(size_in_bytes(constants.FILENAME_TEST_FILE_OPS_1))
-    logger.debug(size_in_kb(constants.FILENAME_TEST_FILE_OPS_1))
-    logger.debug(size_in_mb(constants.FILENAME_TEST_FILE_OPS_1))
+    dapren_logger.debug(size_in_bytes(constants.FILENAME_TEST_FILE_OPS_1))
+    dapren_logger.debug(size_in_kb(constants.FILENAME_TEST_FILE_OPS_1))
+    dapren_logger.debug(size_in_mb(constants.FILENAME_TEST_FILE_OPS_1))
 
     assert size_in_bytes(
         constants.FILENAME_TEST_FILE_OPS_1) == 428432
@@ -374,7 +374,7 @@ def test_size_of_file():
 
 
 def test_file2list():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     actual_data = file2list(
         constants.FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST)
@@ -402,7 +402,7 @@ def test_file2list():
 
 
 def test_list2file():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     # Test mode = w (default mode)
     data = ['1', '2', '3', '4']
@@ -461,8 +461,9 @@ def test_list2file():
     assert expected_data == actual_data
     os.remove(file_name)
 
+
 def test_str2file():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     # Test for mode = 'w'
     data = '1234'
@@ -534,4 +535,4 @@ if __name__ == constants.str___main__:
         if name.startswith("test_"):
             eval(name)()
 
-    logger.info("All tests run fine")
+    dapren_logger.info("All tests run fine")

@@ -5,7 +5,7 @@ This module contains most commonly used date operations
 from datetime import datetime, timedelta
 import inspect
 import constants
-from constants import logger
+from constants import dapren_logger
 from constants import str_possible_values
 
 
@@ -392,7 +392,7 @@ def subtract_seconds(date1, n_seconds):
 # -----------------------------------------------------------------------------
 
 def test_seconds_elapsed():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date1 = str2date('2015-06-29', '%Y-%m-%d')
     date2 = str2date('2015-07-01', '%Y-%m-%d')
@@ -403,7 +403,7 @@ def test_seconds_elapsed():
 
 
 def test_subtract_seconds():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = str2date('2015-06-29', '%Y-%m-%d')
     output_date = subtract_seconds(input_date, 5*24*60*60)
@@ -411,7 +411,7 @@ def test_subtract_seconds():
 
 
 def test_add_seconds():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = str2date('2015-06-29', '%Y-%m-%d')
     output_date = add_seconds(input_date, 5*24*60*60)
@@ -419,7 +419,7 @@ def test_add_seconds():
 
 
 def test_str2date_date2str():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     input_date = '2015-06-13 05:05:06'
     converted_date = str2date(input_date, '%Y-%m-%d %H:%M:%S')
@@ -438,7 +438,7 @@ def test_str2date_date2str():
 
 
 def test_def_epoch2datetime():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     actual = epoch2datetime(1424900481)
     expected = str2date('2015-02-25 13:41:21', '%Y-%m-%d %H:%M:%S')
@@ -446,7 +446,7 @@ def test_def_epoch2datetime():
 
 
 def test_utc2pst():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     utc_date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     pst_date = utc2localtime(utc_date)
@@ -455,7 +455,7 @@ def test_utc2pst():
 
 
 def test_pst2utc():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     pst_date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     utc_date = localtime2utc(pst_date)
@@ -464,7 +464,7 @@ def test_pst2utc():
 
 
 def test_get_weekday_name():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = 'Sun'
@@ -473,7 +473,7 @@ def test_get_weekday_name():
 
 
 def test_get_weekday_number():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = '0'
@@ -482,7 +482,7 @@ def test_get_weekday_number():
 
 
 def test_get_day_of_month():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = '01'
@@ -495,7 +495,7 @@ def test_get_day_of_month():
 
 
 def test_get_weekday_name():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = 'Sun'
@@ -504,7 +504,7 @@ def test_get_weekday_name():
 
 
 def test_get_weekday_number():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = '0'
@@ -513,7 +513,7 @@ def test_get_weekday_number():
 
 
 def test_get_month_name():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = 'Mar'
@@ -526,7 +526,7 @@ def test_get_month_name():
 
 
 def test_get_month_number():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = '03'
@@ -539,7 +539,7 @@ def test_get_month_number():
 
 
 def test_get_year():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = '2015'
@@ -548,7 +548,7 @@ def test_get_year():
 
 
 def test_get_hour():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:00:00', '%Y-%m-%d %H:%M:%S')
     expected = '09'
@@ -561,7 +561,7 @@ def test_get_hour():
 
 
 def test_get_minute():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:09:07', '%Y-%m-%d %H:%M:%S')
     expected = '09'
@@ -574,7 +574,7 @@ def test_get_minute():
 
 
 def test_get_second():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:09:07', '%Y-%m-%d %H:%M:%S')
     expected = '07'
@@ -587,7 +587,7 @@ def test_get_second():
 
 
 def test_get_microsecond():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:09:07.009777', '%Y-%m-%d %H:%M:%S.%f')
     expected = '009777'
@@ -600,7 +600,7 @@ def test_get_microsecond():
 
 
 def test_get_day_of_year():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2015-03-01 09:09:07.009777', '%Y-%m-%d %H:%M:%S.%f')
     expected = '060'
@@ -613,7 +613,7 @@ def test_get_day_of_year():
 
 
 def test_get_week_of_year():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     date = str2date('2001-01-01 09:09:07.009777', '%Y-%m-%d %H:%M:%S.%f')
     expected = '0'
@@ -637,4 +637,4 @@ if __name__ == constants.str___main__:
         if name.startswith("test_"):
             eval(name)()
 
-    logger.info("All tests run fine")
+    dapren_logger.info("All tests run fine")

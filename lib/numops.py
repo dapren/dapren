@@ -1,7 +1,7 @@
 from __future__ import print_function
 import constants
 import inspect
-from constants import logger
+from constants import dapren_logger
 
 def stringify_number(number, **args_map):
     """
@@ -87,7 +87,7 @@ def commafy_number(number, **args_map):
 # ----------------------------------------------------------------- UNIT TESTS
 # -----------------------------------------------------------------------------
 def test_stringify_number():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     assert stringify_number(123445678439, ignore_decimal=False) == '123.45B'
     assert stringify_number(0) == '0'
@@ -103,7 +103,7 @@ def test_stringify_number():
 
 
 def test_commafy_number():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     assert commafy_number(12345634) == '12,345,634'
     assert commafy_number(547856789.23) == '547,856,789.23'
@@ -129,4 +129,4 @@ if __name__ == constants.str___main__:
         if name.startswith("test_"):
             eval(name)()
 
-    logger.info("All tests run fine")
+    dapren_logger.info("All tests run fine")

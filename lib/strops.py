@@ -3,7 +3,7 @@ import re
 import constants
 from datetime import datetime, timedelta
 import inspect
-from constants import logger
+from constants import dapren_logger
 import csv
 import HTMLParser
 import cgi
@@ -29,7 +29,7 @@ def bl(line, field_delimiter, num_occurrences_to_replace=0):
 
 
 def test_bl():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     line = "Be happy always"
     expected = "Be\nhappy\nalways"
@@ -54,7 +54,7 @@ def csv2tsv(filepointer_or_stdin):
 
 
 def test_csv2tsv():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = ['R1C1\tthis, my friend is R2C2\tAnd this is R3C3']
     fp = open(constants.FILENAME_TEST_CSV2TSV, "r")
@@ -108,7 +108,7 @@ def decode_punc(line):
 
 
 def test_decode_punc():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "{"
     actual = decode_punc("{FLOWERSTART}")
@@ -278,7 +278,7 @@ def encode_punc(line):
 
 
 def test_encode_punc():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "{FLOWERSTART}"
     actual = encode_punc("{")
@@ -414,7 +414,7 @@ def enclose(line, enclose_string):
 
 
 def test_exclose():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "#redmond#"
     actual = enclose("redmond", "#")
@@ -427,7 +427,7 @@ def html_decode(line):
 
 
 def test_html_decode():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "<a>link</a>"
     actual = html_decode("&lt;a&gt;link&lt;/a&gt;")
@@ -441,7 +441,7 @@ def html_encode(line):
 
 
 def test_html_encode():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "&lt;a&gt;link&lt;/a&gt;"
     actual = html_encode("<a>link</a>")
@@ -488,7 +488,7 @@ def __get_list_items_as_string(inlist, items):
 
 
 def test_ibl():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = str(['1', '\n2', '2', '\n3', '3'])
     fp = open(constants.FILENAME_TEST_IBL, "r")
@@ -512,7 +512,7 @@ def make_log_ready(line):
 
 
 def test_make_log_ready():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "1::NEWWLLINE::2::TABB::3"
     actual = make_log_ready("1\n2\t3")
@@ -527,7 +527,7 @@ def is_blank_line(line):
 
 
 def test_ignore_blank_lines():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = False
     actual = is_blank_line("notblank")
@@ -551,7 +551,7 @@ def ignore_lines(filepointer_or_stdin, lines_to_ignore):
 
 
 def test_ignore_lines():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = ['1\n', '3\n', '4\n', '6']
     fp = open(constants.FILENAME_TEST_IGNORE_LINES, "r")
@@ -567,7 +567,7 @@ def lcase(str_value):
 
 
 def test_lcase():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "dapren"
     actual = lcase("DapRen")
@@ -676,7 +676,7 @@ def remove_code_comments(code_in_list, code_type):
 
 
 def test_remove_code_comments():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     code = """SELECT * FROM Dapren/*this is comment*/-- and so is this"""
     expected = "SELECT * FROM Dapren"
@@ -700,7 +700,7 @@ def remove_html_tags(line):
 
 
 def test_remove_html_tags():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "only this"
     actual = remove_html_tags("<a href=link class=win>only this</a>")
@@ -715,7 +715,7 @@ def rmwspc(line):
 
 
 def test_rmwspc():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "this string has no tabs"
     actual = rmwspc("this\t\t\tstring\thas\tno\ttabs")
@@ -727,7 +727,7 @@ def ucase(str_value):
 
 
 def test_ucase():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "DAPREN"
     actual = ucase("DapRen")
@@ -739,7 +739,7 @@ def url_encode(encoded_url_string):
 
 
 def test_url_encode():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "ti+will%25now%23it"
     actual = url_encode("ti will%now#it")
@@ -751,7 +751,7 @@ def url_decode(decoded_url_string):
 
 
 def test_url_decode():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "ti will%now#it"
     actual = url_decode("ti+will%25now%23it")
@@ -785,7 +785,7 @@ def xtokens(line, field_delimiter, field_list):
 
 
 def test_xtokens():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = "b\tc\ta,b,c"
     actual = xtokens("a,b,c", ",", [2, -1, 0])
@@ -799,4 +799,4 @@ if __name__ == "__main__":
         if name.startswith("test_"):
             eval(name)()
 
-    logger.info("All tests run fine")
+    dapren_logger.info("All tests run fine")

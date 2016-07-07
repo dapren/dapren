@@ -2,7 +2,7 @@ from __future__ import print_function
 import json
 import sys
 import re
-from constants import logger
+from constants import dapren_logger
 import inspect
 
 
@@ -12,7 +12,7 @@ def json2object(json_str):
 
 
 def test_json2object():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = 'Sawyer'
     output_dict = json2object('{"Tom": "Sawyer", "Henry": "Ford"}')
@@ -35,7 +35,7 @@ def map2json(input_dict):
 
 
 def test_map2json():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected1 = '{"Tom":"Sawyer", "Henry":"Ford"}'
     expected2 = '{"Henry":"Ford", "Tom":"Sawyer"}'
@@ -77,7 +77,7 @@ def json2kv(json_str,
 
 
 def test_json2kv():
-    logger.info("Testing " + inspect.stack()[0][3])
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
 
     expected = 'a=1\tb.0=1\tb.1=2\tb.2=3\tb.3=4\tb.4.c=10'
     actual = json2kv('{"a":1, "b":[1,2,3,4,{"c":10}]}')
@@ -200,4 +200,4 @@ if __name__ == "__main__":
         if name.startswith("test_"):
             eval(name)()
 
-    logger.info("All tests run fine")
+    dapren_logger.info("All tests run fine")

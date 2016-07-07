@@ -46,16 +46,16 @@ logFormatter = logging.Formatter(
     "\t"
     "%(""message)s"
 )
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+dapren_logger = logging.getLogger()
+dapren_logger.setLevel(logging.INFO)
 
 fileHandler = logging.FileHandler("{0}/{1}".format(log_path, log_filename))
 fileHandler.setFormatter(logFormatter)
-logger.addHandler(fileHandler)
+dapren_logger.addHandler(fileHandler)
 
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(logFormatter)
-logger.addHandler(consoleHandler)
+dapren_logger.addHandler(consoleHandler)
 
 
 ###############################################################################
@@ -63,35 +63,37 @@ logger.addHandler(consoleHandler)
 ###############################################################################
 MODULE_NAME = "unit_tests"
 
-__DIR = DAPREN_RESOURCE_DIR + "/" + MODULE_NAME + "/"
+__UNIT_TEST_RES_DIR = DAPREN_RESOURCE_DIR + "/" + MODULE_NAME + "/"
 
 __FILE = "test_file_ops_1.txt"
-FILENAME_TEST_FILE_OPS_1 = __DIR + __FILE
+FILENAME_TEST_FILE_OPS_1 = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_file_ops_zero_byte_file.txt"
-FILENAME_TEST_FILE_OPS_ZERO_BYTE_FILE = __DIR + __FILE
+FILENAME_TEST_FILE_OPS_ZERO_BYTE_FILE = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_file_ops_load_file_in_list.txt"
-FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST = __DIR + __FILE
+FILENAME_TEST_FILE_OPS_LOAD_FILE_IN_LIST = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_gzipped_file_ops_load_file_in_list.txt.gz"
-FILENAME_TEST_GZIPPED_FILE_OPS_LOAD_FILE_IN_LIST = __DIR + __FILE
+FILENAME_TEST_GZIPPED_FILE_OPS_LOAD_FILE_IN_LIST = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_csv2tsv.csv"
-FILENAME_TEST_CSV2TSV = __DIR + __FILE
+FILENAME_TEST_CSV2TSV = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_csv2tsv_multiline.csv"
-FILENAME_TEST_CSV2TSV_MULTILINE = __DIR + __FILE
+FILENAME_TEST_CSV2TSV_MULTILINE = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_ibl.txt"
-FILENAME_TEST_IBL = __DIR + __FILE
+FILENAME_TEST_IBL = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_ignore_lines.txt"
-FILENAME_TEST_IGNORE_LINES = __DIR + __FILE
+FILENAME_TEST_IGNORE_LINES = __UNIT_TEST_RES_DIR + __FILE
 
 __FILE = "test_blank_file.txt"
-FILENAME_TEST_BLANK_FILE = __DIR + __FILE
+FILENAME_TEST_BLANK_FILE = __UNIT_TEST_RES_DIR + __FILE
 
+__FILE = "test_sqlite_basic_select.sql"
+FILENAME_TEST_SQLITE_BASIC_SELECT = __UNIT_TEST_RES_DIR + __FILE
 
 ###############################################################################
 # Strings
@@ -130,21 +132,9 @@ char_newline = '\n'
 # Numbers
 ###############################################################################
 
-###############################################################################
-# List
-###############################################################################
-def str_possible_values(argument_name, list_of_values):
-    output_str="Possible value of argument '{}' are".format(argument_name)
-    for value in list_of_values:
-        output_str += "\n\t- {} ({})".format(value, type(value))
-
-    return output_str
-
-###############################################################################
-# Dict
-###############################################################################
-
-
+# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------- MAIN
+# -----------------------------------------------------------------------------
 if __name__ == str___main__:
     for name in dir():
         evaluated_value = eval(name)

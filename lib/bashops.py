@@ -64,7 +64,7 @@ for line in fp:
 
 """
 from __future__ import print_function
-from constants import logger
+from constants import dapren_logger
 import subprocess
 import constants
 
@@ -139,4 +139,4 @@ if __name__ == constants.str___main__:
     if runbash(cmd="ls")['return_code'] != 0:
         raise RuntimeError("Bash cmds are not executing")
 
-    logger.info("All tests run fine")
+    dapren_logger.info("All tests run fine")
