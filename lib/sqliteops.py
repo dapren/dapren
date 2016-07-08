@@ -32,25 +32,70 @@ def load_data_from_file(
         err_msg = "Parameter 'db_table_to_load' is required"
         raise ValueError(err_msg)
 
+    insert_query = __generate_insert_statement(
+        db_filename=db_filename,
+        db_table_to_load=db_table_to_load)
 
     if delimiter == constants.char_comma:
-        __load_from_csv()
+        __load_from_csv(
+            db_filename=db_filename,
+            data_filename=data_filename,
+            insert_query=insert_query)
     else:
-        __load_from_non_csv()
+        __load_from_non_csv(
+            db_filename=db_filename,
+            data_filename=data_filename,
+            insert_query=insert_query)
 
 
-def __generate_insert_statement(db_table_to_load):
-    SQL = """
-    INSERT INTO {} ({}) VALUES ({})
-    """
+def test_load_data_from_file():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+
+    dapren_logger.info("Testing loading of csv file")
+    db_filename = __create_test_db_basic()
+    load_data_from_file(
+        db_filename=db_filename,
+        db_table_to_load="Person",
+        delimiter=constants.char_comma,
+        data_filename=constants.FILENAME_TEST_SQLITE_TABLE_LOAD_IN_CSV,
+        )
 
 
-def __load_from_csv(table):
+def __load_from_csv(db_filename, data_filename, insert_query):
+    with open(data_filename,"r") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+
+        with sqlite3.connect(db_filename) as conn:
+            cursor = conn.cursor()
+            cursor.executemany(insert_query, csv_reader)
+
+
+def __load_from_non_csv(db_filename, data_filename, insert_query):
     pass
 
 
-def __load_from_non_csv():
-    pass
+
+
+def __generate_insert_statement(db_filename, db_table_to_load):
+    column_list = get_column_list(db_filename=db_filename,
+                                  table=db_table_to_load)
+    query = """INSERT INTO {} ({}) VALUES ({})""".format(
+        db_table_to_load,
+        ", ".join(column_list),
+        ", ".join(map(lambda x: ":" + x, column_list)))
+
+    return query
+
+
+def test___generate_insert_statement():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+
+    db_filename = __create_test_db_basic()
+    expected = "INSERT INTO Person (firstname, lastname, age) VALUES (" \
+               ":firstname, :lastname, :age)"
+    actual = __generate_insert_statement(db_filename, "Person")
+    fileops.silent_remove(db_filename)
+    assert expected == actual
 
 
 ###############################################################################

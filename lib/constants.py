@@ -95,6 +95,8 @@ FILENAME_TEST_BLANK_FILE = __UNIT_TEST_RES_DIR + __FILE
 __FILE = "test_sqlite_basic_select.sql"
 FILENAME_TEST_SQLITE_BASIC_SELECT = __UNIT_TEST_RES_DIR + __FILE
 
+__FILE = "test_sqlite_table_load_in_csv.txt"
+FILENAME_TEST_SQLITE_TABLE_LOAD_IN_CSV = __UNIT_TEST_RES_DIR + __FILE
 ###############################################################################
 # Strings
 ###############################################################################
