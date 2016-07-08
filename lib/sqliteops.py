@@ -7,7 +7,6 @@ from utilops import guid
 import fileops
 import bashops
 import strops
-import csv
 
 
 ###############################################################################
@@ -15,10 +14,8 @@ def load_data_from_file(
         db_filename=None,
         db_table_to_load=None,
         data_filename=None,
-        delimiter=constants.char_tab,
-        is_first_row_header=True,
-        **kwargs
-    ):
+        is_first_row_header=False,
+        **kwargs):
 
     if db_filename is None:
         err_msg = "Parameter 'db_filename' is required"
@@ -36,53 +33,82 @@ def load_data_from_file(
         db_filename=db_filename,
         db_table_to_load=db_table_to_load)
 
-    if delimiter == constants.char_comma:
-        __load_from_csv(
-            db_filename=db_filename,
-            data_filename=data_filename,
-            insert_query=insert_query)
-    else:
-        __load_from_non_csv(
-            db_filename=db_filename,
-            data_filename=data_filename,
-            insert_query=insert_query)
+    data = []
+    is_first_line = True
+    for line in fileops.file2list(data_filename):
+        if is_first_row_header and is_first_line:
+            is_first_line = False
+            continue
+
+        data.append(line.split(constants.char_tab))
+
+    with sqlite3.connect(db_filename) as conn:
+        cursor = conn.cursor()
+        cursor.executemany(insert_query, data)
 
 
 def test_load_data_from_file():
     dapren_logger.info("Testing " + inspect.stack()[0][3])
 
-    dapren_logger.info("Testing loading of csv file")
-    db_filename = __create_test_db_basic()
+    ############################################################################
+    dapren_logger.info("Testing loading of tsv file with no header")
+    db_filename = create_test_db_basic()
     load_data_from_file(
         db_filename=db_filename,
         db_table_to_load="Person",
-        delimiter=constants.char_comma,
-        data_filename=constants.FILENAME_TEST_SQLITE_TABLE_LOAD_IN_CSV,
+        data_filename=constants.FILENAME_TEST_SQLITE_TABLE_LOAD_IN_TSV,
         )
 
+    actual = []
+    for line in execute(
+        db_filename=db_filename,
+        query="select firstname,age from person"):
 
-def __load_from_csv(db_filename, data_filename, insert_query):
-    with open(data_filename,"r") as csv_file:
-        csv_reader = csv.DictReader(csv_file)
+        actual.append(line)
 
-        with sqlite3.connect(db_filename) as conn:
-            cursor = conn.cursor()
-            cursor.executemany(insert_query, csv_reader)
+    expected = [(u'Amit', 36),
+                (u'John', 36),
+                (u'Sanjay', 43),
+                (u'Tiger', 54),
+                (u'Tom', 56),
+                ('firstname', 'age')]
+    fileops.silent_remove(db_filename)
+    assert expected == sorted(actual)
 
+    ############################################################################
+    dapren_logger.info("Testing loading of tsv file with header")
+    db_filename = create_test_db_basic()
+    load_data_from_file(
+        db_filename=db_filename,
+        db_table_to_load="Person",
+        data_filename=constants.FILENAME_TEST_SQLITE_TABLE_LOAD_IN_TSV,
+        is_first_row_header=True
+        )
 
-def __load_from_non_csv(db_filename, data_filename, insert_query):
-    pass
+    actual = []
+    for line in execute(
+        db_filename=db_filename,
+        query="select firstname,age from person"):
 
+        actual.append(line)
 
+    expected = [(u'John', 36),
+                (u'Sanjay', 43),
+                (u'Tiger', 54),
+                (u'Tom', 56),
+                ('firstname', 'age')]
+    fileops.silent_remove(db_filename)
+    assert expected == sorted(actual)
 
 
 def __generate_insert_statement(db_filename, db_table_to_load):
     column_list = get_column_list(db_filename=db_filename,
                                   table=db_table_to_load)
+
     query = """INSERT INTO {} ({}) VALUES ({})""".format(
         db_table_to_load,
         ", ".join(column_list),
-        ", ".join(map(lambda x: ":" + x, column_list)))
+        ",".join(list("?" * len(column_list))))
 
     return query
 
@@ -90,9 +116,9 @@ def __generate_insert_statement(db_filename, db_table_to_load):
 def test___generate_insert_statement():
     dapren_logger.info("Testing " + inspect.stack()[0][3])
 
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
     expected = "INSERT INTO Person (firstname, lastname, age) VALUES (" \
-               ":firstname, :lastname, :age)"
+               "?,?,?)"
     actual = __generate_insert_statement(db_filename, "Person")
     fileops.silent_remove(db_filename)
     assert expected == actual
@@ -123,7 +149,7 @@ def get_table_list(
 
 def test_get_table_list():
     dapren_logger.info("Testing " + inspect.stack()[0][3])
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
 
     expected = [u'Person', u'Product']
     actual = get_table_list(db_filename)
@@ -160,7 +186,7 @@ def get_column_list(
 
 def test_get_column_list():
     dapren_logger.info("Testing " + inspect.stack()[0][3])
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
 
     expected = [u'firstname', u'lastname', u'age']
     actual = get_column_list(db_filename, "Person")
@@ -255,7 +281,7 @@ def test_extract_data_to_file():
 
     ############################################################################
     dapren_logger.info("Test dict output to a file")
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
     output_file_name = "{}.txt".format(guid())
 
     extract_data_to_file(
@@ -279,7 +305,7 @@ def test_extract_data_to_file():
 
     ############################################################################
     dapren_logger.info("Test list output to a file")
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
     output_file_name = "{}.txt".format(guid())
 
     extract_data_to_file(
@@ -300,7 +326,7 @@ def test_extract_data_to_file():
 
     ############################################################################
     dapren_logger.info("Test 'append_to_file' flag")
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
     output_file_name = "{}.txt".format(guid())
 
     extract_data_to_file(
@@ -336,7 +362,7 @@ def test_extract_data_to_file():
 
     ############################################################################
     dapren_logger.info("Test 'overwrite_file' and 'append_to_file' flag")
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
     output_file_name = "{}.txt".format(guid())
 
     extract_data_to_file(
@@ -450,7 +476,7 @@ def test_execute():
     dapren_logger.info("Test that select command works and returns dict")
 
     # Load test data
-    db_filename = __create_test_db_basic()
+    db_filename = create_test_db_basic()
 
     # Check that data is loaded correctly
     expected = [u'John', u'Tiger', u'Tom']
@@ -466,7 +492,7 @@ def test_execute():
     fileops.silent_remove(db_filename)
 
 
-def __create_test_db_basic():
+def create_test_db_basic():
     db_filename = "{}/{}.db".format(constants.DAPREN_TMP_DIR, guid())
     queries = fileops.file2list(constants.FILENAME_TEST_SQLITE_BASIC_SELECT)
     execute_script(

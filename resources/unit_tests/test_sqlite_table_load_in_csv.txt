@@ -1,2 +1,0 @@
-"Amit","Gupta",36
-"Sanjay",Narang,43
