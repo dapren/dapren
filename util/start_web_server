@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ${DAPREN_HOME}/web
+port=8000
+echo "Webserver will be available at: http://localhost:${port}/"
+python -m CGIHTTPServer ${port}
