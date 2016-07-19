@@ -26,8 +26,11 @@ function setup_shell_variables(){
 
 
 function install_required_python_packages(){
-	echo "[INFO] Running command 'pip install flask'"
+	echo "[INFO] Running command 'pip install flask'. This is required for web development."
 	pip install flask 
+	
+	echo "[INFO] Running command 'pip install flask'. This is required for connection to Redshift."
+	pip install pgsql
 }
 
 ###############################################################################
