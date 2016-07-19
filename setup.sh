@@ -24,6 +24,15 @@ function setup_shell_variables(){
   cp ${HOME}/.bashrc_dapren_copy ${HOME}/.bashrc
 }
 
+
+function install_required_python_packages(){
+	echo "[INFO] Running command 'pip install flask'"
+	pip install flask 
+}
+
 ###############################################################################
 ########################################################################## Main
 setup_shell_variables
+install_required_python_packages
+
+
