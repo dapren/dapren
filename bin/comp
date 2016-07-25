@@ -1,0 +1,265 @@
+#!/opt/local/bin/ruby
+
+# THIS SCRIPT DOES A FULL OUTER JOIN BETWEEN 2 FILES
+# IT ASSUMES THAT BOTH FILES HAS JUST 1 ROW AND UNIQUE LINES
+# PUT FOLLOWING LINE IN YOUR .bashrc
+#      alias comp="ruby ~/bin/comp"
+# EXAMPLE
+#     comp file1 file2
+#####################################################################
+GRAY_COLOR="\033[37m"
+RED_COLOR="\033[31m"
+NORMAL_COLOR="\033[0m"
+YES="yes"
+NO="no"
+
+def print_usage(message)
+    puts RED_COLOR + "WRONG USAGE: " + message + NORMAL_COLOR
+    puts "Usage: comp <file1> <file2> [--sort | --lbl] [--ignore-space] [--diff | --common]"
+	puts " --sort         : Sort the files before comparing "
+    puts " --diff         : Only show lines that don't match"
+    puts " --common       : Only show lines that are common in both files"
+    puts " --ignore-space : Ignore more than one space and staring and trailing spaces"
+    puts " --lbl          : Compare line by line like WinDiff"
+    exit 1
+end
+
+############################################################################
+def display_line(total_lines_output,max_line_length,linenum,key1,key2)
+    arr_key1=Array.new
+    arr_key2=Array.new
+
+    key1.scan(/.{1,50}/).each do |line|
+        arr_key1.push(line)
+    end
+
+    key2.scan(/.{1,50}/).each do |line|
+        arr_key2.push(line)
+    end
+
+    if (arr_key2.size > arr_key1.size)
+        arr_disp=arr_key2.zip(arr_key1)
+        (0...arr_disp.size).to_a.each do |i|
+            if (arr_disp[i][1].to_s == arr_disp[i][0].to_s)
+                    puts " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,arr_disp[i][1].to_s,arr_disp[i][0].to_s]
+            else
+                puts RED_COLOR + " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,arr_disp[i][1].to_s,arr_disp[i][0].to_s] + NORMAL_COLOR
+            end
+        end
+    else
+        arr_disp=arr_key1.zip(arr_key2)
+        (0...arr_disp.size).to_a.each do |i|
+            if (arr_disp[i][1].to_s == arr_disp[i][0].to_s)
+                puts " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,arr_disp[i][0].to_s,arr_disp[i][1].to_s]
+            else
+                puts RED_COLOR + " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,arr_disp[i][0].to_s,arr_disp[i][1].to_s] + NORMAL_COLOR
+            end
+        end
+    end
+end
+############################################################################
+if (ARGV.size < 2)
+    print_usage "Atleast 2 arguments are required"
+end
+
+should_sort=NO
+if (ARGV.index("--sort") != nil)
+    should_sort=YES
+end
+
+show_diff_only=NO
+if (ARGV.index("--diff") != nil)
+    show_diff_only=YES
+end
+
+show_common_lines_only=NO
+if (ARGV.index("--common") != nil)
+    show_common_lines_only=YES
+end
+
+ignore_space=NO
+if (ARGV.index("--ignore-space") != nil)
+    ignore_space=YES
+end
+
+line_by_line=NO
+if (ARGV.index("--lbl") != nil)
+    line_by_line=YES
+end
+
+
+if (show_common_lines_only == YES && show_diff_only == YES)
+    print_usage "Use either -diff option or --common option"
+end
+############################################################################
+
+hm_uniq_lines = Hash.new
+arr_uniq_lines = Array.new
+after_this_display_header=40
+max_line_length=60
+
+##############################################################################
+# Read first file
+file1 = File.new(ARGV[0],"r");
+arr1=Array.new;
+
+while (line=file1.gets)
+    if (ignore_space == YES)
+        line = line.to_s.chomp.gsub("\t","|").strip.gsub(/\s+/, "")
+    else
+		line = line.to_s.chomp.gsub("\t","|")
+    end
+
+	arr1.push(line)
+    hm_uniq_lines[line] = 1 # Also push this line in a hashmap to maintain unique lines in both files
+
+	if (arr_uniq_lines.index(line) == nil )
+		arr_uniq_lines.push(line);
+	end
+end
+file1.close();
+
+
+#############################################################################
+# Read second file
+file2 = File.new(ARGV[1],"r");
+arr2 = Array.new;
+
+while (line=file2.gets)
+    if (ignore_space == YES)
+        line = line.to_s.chomp.gsub("\t","|").strip.gsub(/\s+/, "")
+    else
+		line = line.to_s.chomp.gsub("\t","|")
+    end
+
+	arr2.push(line)
+    hm_uniq_lines[line] = 1 # Also push this line in a hashmap to maintain unique lines in both files
+
+	if (arr_uniq_lines.index(line) == nil )
+		arr_uniq_lines.push(line);
+	end
+end
+file2.close;
+
+############################################################################
+total_lines_output=((arr1.size > arr2.size) ? arr1.size : arr2.size).to_s.size
+
+hyphen_line="-"*total_lines_output + "--+" + "-"*max_line_length+"--+-" + "-"*max_line_length+"-"
+dotted_line="."*total_lines_output + "..+" + "."*max_line_length+"..+." + "."*max_line_length+"."
+header_row=" "*total_lines_output+"  |" +" %-#{max_line_length}s | %s"%[ARGV[0],ARGV[1]]
+puts "#{hyphen_line}\n#{header_row}\n#{hyphen_line}"
+
+############################################################################
+
+NULL=" - "
+if (line_by_line == YES)
+	############################################################################
+	## Compare line to line like windiff
+
+	big_array_size=(arr2.size > arr1.size) ? arr2.size : arr1.size
+	small_array_size=(arr2.size <= arr1.size) ? arr2.size : arr1.size
+
+	linenum=0
+	displayed_lines=0
+
+	(0...small_array_size).to_a.each do |i|
+		linenum = linenum + 1
+		match=NO
+
+		if (arr1[i] == arr2[i])
+			match=YES
+		end
+
+		if (match == YES)
+			if (show_diff_only == NO)
+				displayed_lines = displayed_lines + 1
+				display_line(total_lines_output,max_line_length,linenum,arr1[i],arr2[i])
+				#puts " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,arr1[i],arr2[i]]
+			end
+		else
+			if (show_common_lines_only == NO)
+				displayed_lines = displayed_lines + 1
+				display_line(total_lines_output,max_line_length,linenum,arr1[i],arr2[i])
+				#puts RED_COLOR + " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,arr1[i],arr2[i]] + NORMAL_COLOR
+			end
+		end
+
+		if (displayed_lines % after_this_display_header == 0 && displayed_lines > 0 )
+			puts "#{hyphen_line}\n#{header_row}\n#{hyphen_line}"
+		end
+
+	end
+
+	# Any extra lines in the bigger file are diffs
+	if (show_common_lines_only == NO)
+		if (arr1.size == big_array_size)
+			(small_array_size...big_array_size).to_a.each do |i|
+			linenum = linenum + 1
+			displayed_lines = displayed_lines + 1
+			display_line(total_lines_output,max_line_length,linenum,arr1[i],NULL)
+			#puts RED_COLOR + " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,arr1[i],NULL] + NORMAL_COLOR
+			end
+		else
+			(small_array_size...big_array_size).to_a.each do |i|
+			linenum = linenum + 1
+			displayed_lines = displayed_lines + 1
+			display_line(total_lines_output,max_line_length,linenum,NULL,arr2[i])
+			#puts RED_COLOR + " %#{total_lines_output}s | %-#{max_line_length}s | %s"%[linenum,NULL,arr2[i]] + NORMAL_COLOR
+			end
+		end
+	end
+else
+	############################################################################
+	# Compare : no need to compare line to line
+	linenum=0
+	displayed_lines=0
+
+	arr_key=Array.new
+	if (should_sort == YES)
+		arr_key=hm_uniq_lines.keys.sort
+	else
+		arr_key=arr_uniq_lines
+	end
+
+	arr_key.each do |key|
+		linenum = linenum + 1
+		key = key.to_s
+		found_in_arr1=NO
+		found_in_arr2=NO
+
+		if (arr1.include?(key) == true)
+			found_in_arr1=YES
+		end
+
+		if (arr2.include? key)
+			found_in_arr2=YES
+		end
+
+		if (found_in_arr1 == YES) && (found_in_arr2 == YES)
+			if (show_diff_only == NO)
+				displayed_lines = displayed_lines + 1
+				display_line(total_lines_output,max_line_length,linenum,key,key)
+			end
+		elsif (found_in_arr1 == YES) && (found_in_arr2 == NO)
+			if (show_common_lines_only==NO)
+				displayed_lines = displayed_lines + 1
+				display_line(total_lines_output,max_line_length,linenum,key,NULL)
+			end
+		elsif (found_in_arr1 == NO) && (found_in_arr2 == YES)
+			if (show_common_lines_only==NO)
+				displayed_lines = displayed_lines + 1
+				display_line(total_lines_output,max_line_length,linenum,NULL,key)
+			end
+		else
+			puts "CODE IS IS INVALID STATE. THIS LINE SHOULD NEVER BE DISPLAYED TO USER"
+		end
+
+		if (displayed_lines % after_this_display_header == 0 && displayed_lines > 0 )
+			puts "#{hyphen_line}\n#{header_row}\n#{hyphen_line}"
+		end
+	end
+end
+
+##############################################################################
+# Footer
+puts "-"*total_lines_output + "--" + "-"*max_line_length+"----" + "-"*max_line_length+"-"

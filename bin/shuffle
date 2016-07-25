@@ -1,0 +1,24 @@
+#!/bin/bash
+###############################################################################
+script=`basename $0`
+source ~/projects/setenv.sh
+###############################################################################
+
+usage(){
+echo -e "${dotted_line}
+ USAGE: `basename $0`
+${dotted_line}
+ This script reads from STDIN and randomly shuffle the lines and writes to STDOUT
+${dotted_line}
+ EXAMPLE: Run the following command few times to see this command in action
+	  echo -e '1\\\n2\\\n3\\\n4\\\n5\\\n6\\\n7\\\n8\\\n9' | `basename $0`"
+exit 1
+}
+
+if [ $# -eq 1 ] ;then
+    if [ "${1}" == "help" ] || [ "${1}" == "--help" ];then
+	usage
+    fi
+fi
+
+cat - | /usr/bin/perl -MList::Util -e 'print List::Util::shuffle <>'

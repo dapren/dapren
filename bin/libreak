@@ -1,0 +1,62 @@
+#!/opt/local/bin/ruby
+# This script helps breaks data as following
+# INPUT: File a following lines of data
+#         INPUT
+#         ureiowruioew 201,01,231,2451,2056,2767,245435
+#
+#	  OUTPUT  
+#         ureiowruioew 201
+#         ureiowruioew 01
+#         ureiowruioew 231
+#         ureiowruioew 2451
+#         ureiowruioew 2056
+#         ureiowruioew 2767
+#         ureiowruioew 245435
+
+if (ARGV.size < 2)
+    puts "Usage: listbreak <input_delimiter> <col_break_by_comma_delimited> [<output_delimiter(default is tab)> <break_string_delim (default is comma)>]"
+    exit
+end    
+
+input_delimiter=ARGV[0]
+arr_col_break=Array.new
+arr_col_break_by=Array.new   
+
+# Since array index start with 0 hence handle that
+ARGV[1].split(",").each do |col_num|
+    arr_col_break_by.push(col_num.to_i - 1);
+end
+
+(ARGV.size > 2) ? output_delimiter=ARGV[2] : output_delimiter="\t"
+(ARGV.size > 3) ? break_string_delimiter=ARGV[3] : break_string_delimiter=","
+
+###################################################################################################
+if (output_delimiter == '\t')
+    output_delimiter="\t"
+end
+if (break_string_delimiter == '\t')
+    break_string_delimiter="\t"
+end
+###################################################################################################
+
+hm_output=Hash.new
+STDIN.read.split("\n").each do |line|
+    arr_line=line.split(/[#{input_delimiter}]/)
+
+    left_arr_line=Array.new
+    right_arr_line=Array.new
+
+    for i in 0...arr_line.size 
+        if (arr_col_break_by.index(i))
+            left_arr_line.push(arr_line[i])
+	else
+	    right_arr_line.push(arr_line[i])
+	end
+    end
+
+    key=left_arr_line.join(output_delimiter)
+    for i in 0...right_arr_line.size
+        puts "#{key}#{output_delimiter}#{right_arr_line[i]}"
+    end
+end
+

@@ -1,0 +1,69 @@
+#!/usr/bin/perl
+$numArgs = $#ARGV + 1;
+$dotted_line=".................................................................................................";
+
+sub usage(){
+print "$dotted_line
+ USAGE: schematize <keys_to_extract, can be a comma delimited list of keys> 
+                  [<Key/Value Pair Separator. Default is tab>]
+		  [<Key and Value Pair separator. Default is '=' >]
+$dotted_line
+ This script reads a Key/Value pair stream from STDIN, extracts the 'keys_to_extract' and write 
+ the value of the keys to STDOUT delimited by tab
+$dotted_line
+ EXAMPLE: echo K1=V1,K2=V2,K3=V3 | schematize K1,K2 , =
+";
+exit 1;
+}
+
+if (($numArgs lt "1") | ( $numArgs eq "1" & $ARGV[0] =~ /^[-]*help$/)) {
+    usage();
+}
+
+$kv_pair_sep="\t";
+$k_and_v_sep="=";
+
+@kk=split(/,/,$ARGV[0]);
+
+for $kk1(@kk){
+	$hmk{$kk1}="-";
+}
+$keys=",".$ARGV[0].",";
+
+if ($numArgs ge "2"){
+    $kv_pair_sep = $ARGV[1];
+}
+
+if ($numArgs ge "3"){
+        $k_and_v_sep = $ARGV[2];
+
+}
+
+while ($line=<STDIN>){
+	chomp($line);
+	@all_KV=split(/[$kv_pair_sep]/,$line);
+
+	%hm=%hmk;
+	for $kv (@all_KV){
+		$kv =~ s/^ //;
+		$kv =~ s/ $//;
+		($K,$V)=split(/[$k_and_v_sep]/,$kv);
+		if (length($V) <1){
+			$V="---";
+		}
+	
+		if ($keys =~ /,$K,/){
+			$hm{$K}=$V;
+		}
+	}
+	$i=0;
+       for $mk (@kk){
+			if ($i < 1){		
+	                        print "$hm{$mk}";
+			}else{
+				print "\t$hm{$mk}";
+			}
+		$i=$i+1;
+       }
+	print "\n";
+}

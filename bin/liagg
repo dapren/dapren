@@ -1,0 +1,105 @@
+#!/opt/local/bin/ruby
+# This script helps aggregate data as following
+# INPUT: File a following lines of data
+#         ureiowruioew 201
+#         ureiowruioew 01
+#         ureiowruioew 231
+#         ureiowruioew 2451
+#         ureiowruioew 2056
+#         ureiowruioew 2767
+#         ureiowruioew 245435
+#
+#         RUN: cat a | listagg " " "2"
+#
+#         # OUTPUT:
+#         ureiowruioew 201,01,231,2451,2056,2767,245435
+
+def usage()
+    dotted_line=".................................................................................................";
+
+puts "#{dotted_line}
+ USAGE: listagg  <input_column_delimiter>
+                 <col_condense_by>
+		 <col_list_to_condense>
+		 [<output_column_delimiter>]
+		 [<condense_string_delim>]
+		 [<condense_string_set_delim>]
+#{dotted_line}
+ - 'input_column_delimiter' is the field delimiter of the input records.
+ - 'col_condense_by' is the index of the columns you want to condense by. Index starts from 1
+ - 'output_column_delimiter' defaults to tab
+ - 'condense_string_delim' defaults to ,
+ - 'condense_string_set_delim' default to |
+#{dotted_line}
+ This script reads a delimited stream for data from STDIN and behaves like Oracle's listagg function. 
+ It writes to STDOUT. See the examples to understand the behavior
+#{dotted_line}
+ EXAMPLE: echo -e \"20120613,Aman,13\\n20120313,Tintin,14\\n20120613,Tikka,13\" | listagg \",\" \"1\" \"2\"
+ EXAMPLE: echo -e \"20120613,Aman,13\\n20120313,Tintin,14\\n20120613,Tikka,13\" | listagg \",\" \"3\" \"1\"
+ EXAMPLE: echo -e \"20120613,Aman,13\\n20120313,Tintin,14\\n20120613,Tikka,13\" | listagg \",\" \"1,3\" \"2\" \"|\" \"-\" \"#\"
+ EXAMPLE: echo -e \"20120613,Aman,13\\n20120313,Tintin,14\\n20120613,Tikka,13\" | listagg \",\" \"1,3\" \"2\"
+";
+    exit
+end
+
+if (ARGV.size < 2)
+    usage;
+end    
+
+input_delimiter=ARGV[0]
+arr_col_condense=Array.new
+arr_col_condense_by=Array.new   
+
+# Since array index start with 0 hence handle that
+ARGV[1].split(",").each do |col_num|
+    arr_col_condense_by.push(col_num.to_i - 1);
+end
+
+# Since array index start with 0 hence handle that
+ARGV[2].split(",").each do |col_num|
+    arr_col_condense.push(col_num.to_i - 1);
+end
+
+(ARGV.size > 3) ? output_delimiter=ARGV[3] : output_delimiter="\t"
+(ARGV.size > 4) ? condense_string_delimiter=ARGV[4] : condense_string_delimiter=","
+(ARGV.size > 5) ? condense_string_set_delimiter=ARGV[5] : condense_string_set_delimiter="|"
+
+###################################################################################################
+if (output_delimiter == '\t')
+    output_delimiter="\t"
+end
+if (condense_string_delimiter == '\t')
+    condense_string_delimiter="\t"
+end
+if (condense_string_set_delimiter == '\t')
+    condense_string_set_delimiter="\t"
+end
+###################################################################################################
+
+hm_output=Hash.new
+STDIN.read.split("\n").each do |line|
+    arr_line=line.split(/[#{input_delimiter}]/)
+
+    left_arr_line=Array.new
+    right_arr_line=Array.new
+
+    for i in 0...arr_line.size 
+        if (arr_col_condense.index(i))
+            right_arr_line.push(arr_line[i])
+        elsif (arr_col_condense_by.index(i))
+            left_arr_line.push(arr_line[i])
+        end
+    end
+    key=left_arr_line.join(output_delimiter)
+    value=right_arr_line.join("#{condense_string_set_delimiter}")
+
+    if (hm_output.has_key?(key))
+        hm_output[key]=hm_output[key] + "#{condense_string_delimiter}" + value
+    else
+        hm_output[key]=value
+    end
+end
+
+hm_output.each do |key,value|
+    puts "#{key}#{output_delimiter}#{value}"
+end

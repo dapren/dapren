@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+use Getopt::Long;
+use POSIX qw(strftime);
+
+my $numArgs = $#ARGV + 1;
+my $dotted_line=".................................................................................................";
+my $kvps="\x01";
+my $kavs="\x02";
+my $ifs="\t";
+my $keys="ZZZ_NOT_PROVIDED_YET_ZZZ";
+
+####################################################################################################
+###################### MAIN ########################################################################
+####################################################################################################
+if (($numArgs lt "2") | ( $numArgs eq "1" & $ARGV[0] =~ /^[-]*help$/)) {
+    usage();
+}
+
+parse_options();
+
+if ($keys eq "ZZZ_NOT_PROVIDED_YET_ZZZ"){
+    usage();
+} 
+
+my @keys_arr=split(/,/,$keys);
+my $total_keys=scalar(@keys_arr);
+
+my $linenum=0;
+while ($line=<STDIN>){
+	$linenum = $linenum + 1;
+	chomp($line);
+	my @line_arr=split(/[$ifs]/,$line,-1);
+	my $total_cols=scalar(@line_arr);
+
+	if ($total_keys != $total_cols){
+	    print STDERR "ERROR: Line $linenum : Number of provided keys($total_keys) do not match number of columns ($total_cols)";
+	    next;
+	}
+	
+	my $i=0;
+	for my $token (@keys_arr){
+	    if (length($line_arr[$i])>0){
+		if ($i < 1){
+		    print "$keys_arr[$i]".$kavs.$line_arr[$i];
+		}else{
+		    print $kvps."$keys_arr[$i]"."$kavs".$line_arr[$i];
+		}
+		$i=$i+1;
+	    }
+        }
+	print "\n";
+}
+
+####################################################################################################
+###################### SUBROUTINES #################################################################
+####################################################################################################
+# Usage --------------------------------------------------------------------
+sub usage(){
+print "$dotted_line
+ USAGE: kvfy --keys <keys_to_extract, can be a comma delimited list of keys> 
+             [--kvps <Key/Value Pair Separator of output data. Default is Control-B>]
+             [--kavs <Key and Value Separator of output data. Default is Control-A>]
+             [--ifs  <Input field separator>. Default is tab]
+$dotted_line
+ This script reads a delimited stream from STDIN, converts it into key value pairs and writes
+ to STDOUT
+ Control-A can be specified as '\\x01'
+ Control-B can be specified as '\\x02'
+";
+exit 1;
+}
+
+# Parse command line options --------------------------------------------------------------------
+sub parse_options(){
+	GetOptions (\%options, 
+		    'keys=s',
+		    "kvps=s",
+		    'kavs=s',
+		    "ifs=s"
+		);
+
+	if (defined($options{"keys"})){
+	    $keys=$options{"keys"};
+	}
+
+	if (defined($options{"kvps"})){
+	    $kvps=$options{"kvps"};
+	}
+
+	if (defined($options{"kavs"})){
+	    $kavs=$options{"kavs"};
+	}
+
+	if (defined($options{"ifs"})){
+	    $ifs=$options{"ifs"};
+	}    
+
+}
