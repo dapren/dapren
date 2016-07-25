@@ -1,0 +1,148 @@
+#!/usr/bin/perl
+use strict;
+
+if ($#ARGV+1 != 1){
+    usage();
+    exit 1;
+}
+
+my $mode="--bash";
+
+if ($ARGV[0] eq "--java"){
+    $mode="--java";
+
+}elsif($ARGV[0] eq "--sql"){
+    $mode="--sql";
+}
+
+my $line="";
+my $quote = 0;
+my $comment = 0;
+my $single_line_comment=0;
+
+WHILE_LOOP: while (<STDIN>){
+    $line=$_;
+
+    my @chars=split(//,$line);
+    $single_line_comment == 0;
+    FOR_LOOP: for (my $i=0;$i<@chars; $i++){
+	 
+	    ########################################################################
+	    # Take care of control characters starting with '\'	    
+	 	if ($chars[$i] eq "\\"){
+			# We dont care if we are inside a comment
+			if ($comment) {
+			    next FOR_LOOP;
+			}
+
+			print "$chars[$i]";
+			$i=$i+1;
+			print "$chars[$i]";		
+	    } 
+	   
+	    ########################################################################
+	    # Handle strings in double quotes 
+	    elsif ($chars[$i] eq '"')   {
+			if ($comment){
+			    next FOR_LOOP;
+			}
+			print "$chars[$i]";
+			
+			if (!$quote){
+			    $quote = $chars[$i];
+			}elsif ($quote == $chars[$i]){
+			    $quote=0;
+			}
+	    }
+	    ########################################################################
+	    # Handle string in single quotes
+	    elsif ($chars[$i] eq '\'')  {
+			if ($comment){
+			    next FOR_LOOP;
+			}
+			print "$chars[$i]";
+
+			if (!$quote){
+			    $quote = $chars[$i];
+			}elsif ($quote == $chars[$i]){
+			    $quote=0;
+			}
+		}
+	    
+	    ########################################################################
+	    elsif ($chars[$i] eq '/')   {
+			if ($quote || $mode eq "--bash"){
+			    print "$chars[$i]";
+			} elsif ($chars[$i+1] eq '/' && $mode eq "--java"){
+			    print "\n";
+			    next WHILE_LOOP;
+			} elsif ($chars[$i+1] eq '*' && $chars[$i+2] ne '+') {
+			    $comment = 1;
+			    $i = $i+1;
+			} elsif (!$comment){
+			    print "$chars[$i]";
+			}
+	    }
+
+	    ######################################################################## 
+	    elsif ($chars[$i] eq '-')   {
+			if ($quote){
+			    print "$chars[$i]";
+			} elsif ($chars[$i+1] eq '-' && $mode eq "--sql"){
+			    print "\n";
+			    next WHILE_LOOP;
+			} elsif (!$comment){
+			    print "$chars[$i]";
+			}
+	    }
+
+	    ######################################################################## 
+	    elsif ($chars[$i] eq '#')   {
+			if ($quote){
+			    print "$chars[$i]";
+			} elsif ($mode eq "--bash"){
+			    print "\n";
+			    next WHILE_LOOP;
+			} elsif (!$comment){
+			    print "$chars[$i]";
+			}
+	    }
+
+	    ########################################################################
+	    elsif ($chars[$i] eq '*')   {
+			if ($quote){
+			    print "$chars[$i]";
+			    next FOR_LOOP;
+			} elsif ($comment && $chars[$i+1] eq '/'){
+			    $comment = 0;
+			    $i = $i + 1;
+			    #print "\n";
+			    next FOR_LOOP;
+			} elsif ($comment){
+			    next FOR_LOOP;
+			}
+
+			print "$chars[$i]";		
+	    }
+
+	    ########################################################################
+	    else {
+			if (!$comment){
+			    print $chars[$i];
+			}
+	    }
+    }
+}
+
+sub usage(){
+print ".........................................................................
+ USAGE: stripcmt <--bash|--sql|--java>
+................................................................................
+ This tool read from STDIN and remove block and line comments from the code. 
+ It runs in '--sql' and '--java' mode. 
+ In '--sql' mode, it will remove block comments within /* */ and single line 
+ comment for starting with '--'.
+ In '--java' mode, it will remove block comments within /* */ and single 
+ line comments starting with '//'
+";
+}
