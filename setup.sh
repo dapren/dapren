@@ -23,6 +23,7 @@ function setup_shell_variables(){
   echo "alias gcm='git add *; git commit -m '" >> ${HOME}/.bashrc_dapren_copy
   echo "alias gpom='git push origin master'" >> ${HOME}/.bashrc_dapren_copy
   echo "alias gb='git branch; git status'" >> ${HOME}/.bashrc_dapren_copy
+  echo "alias gst='git branch; git status'" >> ${HOME}/.bashrc_dapren_copy
 
   cp ${HOME}/.bashrc_dapren_copy ${HOME}/.bashrc
 }
