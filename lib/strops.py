@@ -792,6 +792,92 @@ def test_xtokens():
     assert expected == actual
 
 
+def extract_tags_from_html(html, tag_name):
+    all_tags = []
+    output_list = []
+
+    words = html.replace('>','> ').replace('<',' <').split()
+    tag_open = False
+
+    for word in words:
+        lcase_word = word.lower()
+
+        if lcase_word.startswith('<'+tag_name):
+            tag_open = True
+
+        elif lcase_word == '</'+tag_name+'>':
+            tag_open = False
+            output_list.append(lcase_word)
+            all_tags.append(" ".join(output_list))
+            output_list = []
+
+        if tag_open:
+            output_list.append(word)
+
+    return all_tags
+
+
+def test_extract_tags_from_html():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+
+    expected = [
+        [
+            ["<td> <a href='http://tradingstockalerts.com/PremiumAlerts/OverValuedOverBought'> Col1 </a> </td>"],
+            ["<td> <a href='http://tradingstockalerts.com/PremiumAlerts/EbbAndFlow'> Col2 </a> </td>"],
+            ["<td> <a href='http://tradingstockalerts.com/PremiumAlerts/Momentum'> Col3 </a> </td>"]
+        ],
+        [
+            ["<td> <a href='http://tradingstockalerts.com/PremiumAlerts/OverValuedOverBought'> Col4 </a> </td>"],
+            ["<td> <a href='http://tradingstockalerts.com/PremiumAlerts/EbbAndFlow'> Col5 </a> </td>"],
+            ["<td> <a href='http://tradingstockalerts.com/PremiumAlerts/Momentum'> Col6 </a> </td>"]
+        ]
+    ]
+
+
+    html="""
+<html>
+<body>
+
+	  <div style='width:200px;margin-left:0px;margin-top:20px;'>
+		<span style='color:#EEDD82;font-size:115%;font-weight:bold;'>Stay tuned...</span>
+		<br><span style='color:#EEDD82;font-size:115%;padding-left:10px;'>more content on the way!</span>
+	  </div>
+
+	  <table border='0' cellpadding='4' cellspacing='0' >
+	   <tr><td><a href='http://tradingstockalerts.com/PremiumAlerts/OverValuedOverBought'>Col1</a></td></tr>
+	    <tr><td><a href='http://tradingstockalerts.com/PremiumAlerts/EbbAndFlow'>Col2</a></td></tr>
+		<tr><td><a href='http://tradingstockalerts.com/PremiumAlerts/Momentum'>Col3</a></td></tr>
+	  </table>
+
+	  <table border='0' cellpadding='4' cellspacing='0' >
+	   <tr><td><a href='http://tradingstockalerts.com/PremiumAlerts/OverValuedOverBought'>Col4</a></td></tr>
+	    <tr><td><a href='http://tradingstockalerts.com/PremiumAlerts/EbbAndFlow'>Col5</a></td></tr>
+		<tr><td><a href='http://tradingstockalerts.com/PremiumAlerts/Momentum'>Col6</a></td></tr>
+	  </table>
+
+</body>
+</html>
+"""
+    table_list = []
+    row_list = []
+    col_list = []
+
+    for table in extract_tags_from_html(html, 'table'):
+        for tr in extract_tags_from_html(table, 'tr'):
+            for td in extract_tags_from_html(tr, 'td'):
+                col_list.append(td)
+
+            row_list.append(col_list)
+            col_list = []
+
+        table_list.append(row_list)
+        row_list = []
+
+    actual = table_list
+    assert expected == actual
+
+
+
 if __name__ == "__main__":
     # Execute all test methods. All test methods should start with string
     # "test_"

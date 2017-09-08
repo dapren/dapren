@@ -27,6 +27,8 @@ def url2str(site):
 
 
 def test_url2str():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+
     output_str_len = len(url2str('http://www.google.com'))
     assert output_str_len > 1000
 
