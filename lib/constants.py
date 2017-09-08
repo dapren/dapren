@@ -13,10 +13,7 @@ import os
 ###############################################################################
 # Initialize important directories
 ###############################################################################
-if "DAPREN_HOME" in os.environ:
-    DAPREN_HOME = os.environ["DAPREN_HOME"]
-else:
-    DAPREN_HOME = ".."
+DAPREN_HOME = "/Users/singhaman/dapren"
 
 DAPREN_RESOURCE_DIR = "{}/resources".format(DAPREN_HOME)
 DAPREN_DATA_DIR = "{}/var/data".format(DAPREN_HOME)

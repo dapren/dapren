@@ -8,6 +8,16 @@ import inspect
 import gzip
 import constants
 from constants import dapren_logger
+from constants import DAPREN_TMP_DIR
+from utilops import guid
+
+
+def get_uniq_tmp_filename():
+    """
+    This function returns the absolute path of a Unique file name. This is useful when u want to quickly write to a file
+    """
+    return DAPREN_TMP_DIR + '/' + guid()
+
 
 
 def file_exists(file_name, **kwargs):
