@@ -127,6 +127,7 @@ def get_revenue(momemtum_tickers):
 
     return momemtum_tickers_revenue
 
+
 if __name__ == '__main__':
     # todo: uncomment next 3 lines
     #momemtum_tickers = get_momemtum_tickers()
