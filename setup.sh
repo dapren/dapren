@@ -20,6 +20,9 @@ function setup_shell_variables(){
   echo "## Setup DAPREN variables" >> ${HOME}/.bashrc_dapren_copy
   echo "export DAPREN_HOME=\"${DAPREN_HOME}\"" >> ${HOME}/.bashrc_dapren_copy
   echo "export PYTHONPATH=\"\${DAPREN_HOME}/lib:\${DAPREN_HOME}/xlib:\${PYTHONPATH}\" " >> ${HOME}/.bashrc_dapren_copy
+  echo "alias gcm='git add *; git commit -m '" >> ${HOME}/.bashrc_dapren_copy
+  echo "alias gpom='git push origin master'" >> ${HOME}/.bashrc_dapren_copy
+  echo "alias gb='git branch; git status'" >> ${HOME}/.bashrc_dapren_copy
 
   cp ${HOME}/.bashrc_dapren_copy ${HOME}/.bashrc
 }
