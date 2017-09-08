@@ -9,7 +9,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>sqliteops</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dapren/Dropbox (Personal)/private/dapren/lib/sqliteops.py">/Users/dapren/Dropbox (Personal)/private/dapren/lib/sqliteops.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/dapren/Dropbox (Personal)/Private/dapren/lib/sqliteops.py">/Users/dapren/Dropbox (Personal)/Private/dapren/lib/sqliteops.py</a></font></td></tr></table>
     <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -32,7 +32,8 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-execute"><strong>execute</strong></a>(db_filename<font color="#909090">=None</font>, query<font color="#909090">=None</font>, header_row<font color="#909090">=True</font>, return_output_as_dict<font color="#909090">=False</font>)</dt><dd><tt>###############################################################################</tt></dd></dl>
+<td width="100%"><dl><dt><a name="-create_test_db_basic"><strong>create_test_db_basic</strong></a>()</dt></dl>
+ <dl><dt><a name="-execute"><strong>execute</strong></a>(db_filename<font color="#909090">=None</font>, query<font color="#909090">=None</font>, header_row<font color="#909090">=True</font>, return_output_as_dict<font color="#909090">=False</font>, **kwargs)</dt><dd><tt>###############################################################################</tt></dd></dl>
  <dl><dt><a name="-execute_script"><strong>execute_script</strong></a>(db_filename<font color="#909090">=None</font>, create_new_db_filename_if_missing<font color="#909090">=False</font>, query<font color="#909090">=None</font>, **kwargs)</dt><dd><tt>This&nbsp;method&nbsp;is&nbsp;intented&nbsp;to&nbsp;be&nbsp;called&nbsp;when&nbsp;you&nbsp;are&nbsp;running&nbsp;multiple&nbsp;sql<br>
 scripts&nbsp;(like&nbsp;'create&nbsp;table'&nbsp;statement&nbsp;followed&nbsp;by&nbsp;'insert&nbsp;table'&nbsp;statement)<br>
 and&nbsp;you&nbsp;just&nbsp;care&nbsp;whether&nbsp;the&nbsp;script&nbsp;ran&nbsp;successfully&nbsp;or&nbsp;not.&nbsp;You&nbsp;do&nbsp;not<br>
@@ -53,11 +54,17 @@ created&nbsp;else&nbsp;an&nbsp;error&nbsp;will&nbsp;be&nbsp;thrown<br>
 &nbsp;<br>
 :return:&nbsp;Does&nbsp;not&nbsp;returns&nbsp;anything.&nbsp;If&nbsp;the&nbsp;script&nbsp;fails&nbsp;then&nbsp;it&nbsp;result&nbsp;in&nbsp;an<br>
 exception</tt></dd></dl>
- <dl><dt><a name="-extract_data_to_file"><strong>extract_data_to_file</strong></a>(db_filename<font color="#909090">=None</font>, query<font color="#909090">=None</font>, header_row<font color="#909090">=True</font>, return_output_as_dict<font color="#909090">=False</font>, output_file_name<font color="#909090">=None</font>, append_to_file<font color="#909090">=False</font>, overwrite_file<font color="#909090">=False</font>, output_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>, key_value_delimiter<font color="#909090">='='</font>, key_value_pair_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>)</dt><dd><tt>###############################################################################</tt></dd></dl>
- <dl><dt><a name="-load_data_from_file"><strong>load_data_from_file</strong></a>(input_data_filename<font color="#909090">=None</font>, input_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>, db_filename<font color="#909090">=None</font>, db_table_to_load<font color="#909090">=None</font>, create_new_db_filename_if_missing<font color="#909090">=False</font>, create_new_table_to_load_if_missing<font color="#909090">=False</font>, is_first_row_header<font color="#909090">=True</font>, **kwargs)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-extract_data_to_file"><strong>extract_data_to_file</strong></a>(db_filename<font color="#909090">=None</font>, query<font color="#909090">=None</font>, header_row<font color="#909090">=True</font>, return_output_as_dict<font color="#909090">=False</font>, output_file_name<font color="#909090">=None</font>, append_to_file<font color="#909090">=False</font>, overwrite_file<font color="#909090">=False</font>, output_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>, key_value_delimiter<font color="#909090">='='</font>, key_value_pair_delimiter<font color="#909090">='<font color="#c040c0">\t</font>'</font>, **kwargs)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-get_column_list"><strong>get_column_list</strong></a>(db_filename<font color="#909090">=None</font>, table<font color="#909090">=None</font>, **kwargs)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-get_table_list"><strong>get_table_list</strong></a>(db_filename<font color="#909090">=None</font>, **kwargs)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-load_data_from_file"><strong>load_data_from_file</strong></a>(db_filename<font color="#909090">=None</font>, db_table_to_load<font color="#909090">=None</font>, data_filename<font color="#909090">=None</font>, is_first_row_header<font color="#909090">=False</font>, **kwargs)</dt><dd><tt>###############################################################################</tt></dd></dl>
+ <dl><dt><a name="-test___generate_insert_statement"><strong>test___generate_insert_statement</strong></a>()</dt></dl>
  <dl><dt><a name="-test_execute"><strong>test_execute</strong></a>()</dt></dl>
  <dl><dt><a name="-test_execute_script"><strong>test_execute_script</strong></a>()</dt></dl>
  <dl><dt><a name="-test_extract_data_to_file"><strong>test_extract_data_to_file</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_column_list"><strong>test_get_column_list</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_get_table_list"><strong>test_get_table_list</strong></a>()</dt></dl>
+ <dl><dt><a name="-test_load_data_from_file"><strong>test_load_data_from_file</strong></a>()</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
