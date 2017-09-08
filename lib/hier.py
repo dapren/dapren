@@ -1,6 +1,9 @@
 from __future__ import print_function
 import sys
 from collections import deque
+import constants
+import inspect
+from constants import dapren_logger
 
 """
 This script reads from stdin a tab delimited stream with 2 fields
@@ -38,12 +41,6 @@ p5	p2	upstream
 p5	p3	upstream
 p5	p4	upstream
 """
-global dep_upstream_map
-dep_upstream_map = {}
-
-global dep_downstream_map
-dep_downstream_map = {}
-
 
 def create_map(input_line):
     process, upstream_process = input_line.split("\t")
@@ -69,6 +66,7 @@ def create_map(input_line):
 
 
 def create_hier(hier_type, dep_map):
+    output_list = []
     for process in dep_map.keys():
         process_list = []
         dep_list = deque(dep_map.get(process))
@@ -84,14 +82,52 @@ def create_hier(hier_type, dep_map):
 
         final_upstream_list = sorted(set(process_list))
         for dep_process in final_upstream_list:
-            print ("{0}\t{1}\t{2}".format(process, dep_process, hier_type))
+            output_list.append("{0}\t{1}\t{2}".format(process, dep_process, hier_type))
 
-for line in sys.stdin:
-    line = line.strip()
-    create_map(line)
-
-create_hier("upstream", dep_upstream_map)
-create_hier("downstream", dep_downstream_map)
+        return output_list
 
 
+def process(data_list):
+    dep_upstream_map = {}
+    dep_downstream_map = {}
 
+    for line in data_list:
+        line = line.strip()
+        create_map(line)
+
+    print (create_hier("upstream", dep_upstream_map))
+    create_hier("downstream", dep_downstream_map)
+
+
+# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------- UNIT TESTS
+# -----------------------------------------------------------------------------
+
+def test_create_hier():
+    dapren_logger.info("Testing " + inspect.stack()[0][3])
+
+    input_data_list=[
+        'p3\tp2',
+        'p2\tp1',
+        'p3\tp1',
+        'p3\tp4',
+        'p5\tp3'
+    ]
+
+    process(input_data_list)
+
+    #assert input_diff == output_diff
+
+
+# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------- MAIN
+# -----------------------------------------------------------------------------
+if __name__ == constants.str___main__:
+
+    # Execute all test methods. All test methods should start with string
+    # "test_"
+    for name in dir():
+        if name.startswith("test_"):
+            eval(name)()
+
+    dapren_logger.info("All tests run fine")
