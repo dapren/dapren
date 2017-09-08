@@ -7,6 +7,10 @@ import dateops
 
 
 def guid():
+    """
+    Returns globally unique guid prefixed by timestamp for easy indexing
+    """
+
     return "{}-{}".format(dateops.date2str(dateops.today(), '%Y%m%d%H'),
                           str(uuid.uuid4()))
 

@@ -793,6 +793,10 @@ def test_xtokens():
 
 
 def extract_tags_from_html(html, tag_name):
+    """
+    This function takes html string as input and name of tag (like table, tr, div etc.) and returns
+    all tag values in a list
+    """
     all_tags = []
     output_list = []
 
