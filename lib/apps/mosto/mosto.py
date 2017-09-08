@@ -8,6 +8,7 @@ from lib.fileops import get_uniq_tmp_filename
 from lib.constants import dapren_logger
 from yahoo_finance import Share
 
+
 def get_momemtum_tickers():
     """
     This function return the top 50 momemtum stock tickers scraped from site
@@ -54,8 +55,8 @@ def get_momemtum_tickers():
     if  len(momemtum_tickers) < 50:
         out_filename = get_uniq_tmp_filename()
         str2file(html, out_filename)
-        msg="""Site {site} has either stopped returning top 50 momemtum stocks or the parsing logic is failing. To see the \
-html returned from this site for this run, see file {out_filename}
+        msg="""Site {site} has either stopped returning top 50 momemtum stocks or the parsing logic is failing. \
+To see the html returned from this site for this run, see file {out_filename}
         """.format(
             site=site,
             out_filename=out_filename
@@ -64,19 +65,33 @@ html returned from this site for this run, see file {out_filename}
 
         raise Exception(msg)
 
+    dapren_logger.info('momemtum_tickers:' + str(momemtum_tickers))
     return momemtum_tickers
 
 
 def get_50d_200d_moving_average():
-    # TODO: Uncomment this line
-    #for momemtum_ticker in get_momemtum_tickers():
-    for momemtum_ticker in ['FB','AXAS', 'TGA', 'PESI']:
-        share = Share(momemtum_ticker)
-        print (momemtum_ticker)
-        print (share.get_price())
-        print (share.get_50day_moving_avg())
-        print (share.get_200day_moving_avg())
+    momemtum_tickers_price_history = {}
 
-        print ("\n")
+    # TODO : Remove this comment
+    """
+    for momemtum_ticker in get_momemtum_tickers():
+        share = Share(momemtum_ticker)
+        price_today = float(share.get_price())
+        price_50day_moving_avg = float(share.get_50day_moving_avg())
+        price_200day_moving_avg = float(share.get_200day_moving_avg())
+
+        momemtum_tickers_price_history[momemtum_ticker] = {
+            'price_today': price_today,
+            'price_50day_moving_avg': price_50day_moving_avg,
+            'price_200day_moving_avg': price_200day_moving_avg
+        }
+    """
+
+    # TODO: REmove this hardcoding
+    momemtum_tickers_price_history = {'ATRI': {'price_50day_moving_avg': 630.26, 'price_today': 670.5, 'price_200day_moving_avg': 557.87},
+                                      'FB': {'price_50day_moving_avg': 169.05, 'price_today': 173.21, 'price_200day_moving_avg': 152.34}}
+
+    dapren_logger.info('momemtum_tickers_price_history:' + str(momemtum_tickers_price_history))
+    return momemtum_tickers_price_history
 
 get_50d_200d_moving_average()
