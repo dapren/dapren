@@ -5,3 +5,4 @@ lib/test.py
 */*/*/*.pyc
 var/*
 var/*/*
+.DS_Store
