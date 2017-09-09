@@ -56,7 +56,6 @@ def unstringify_number(str_number, **args_map):
     Remove comma and "K" in thousands, "M" in Million, "B" in Billions from string and returns as numbers
     """
     str_number = str_number.replace(",",'')
-
     if str_number.strip().upper().find('B') > -1:
        output_number = float(str_number.replace('B','')) * 1000000000
 
