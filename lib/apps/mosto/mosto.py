@@ -323,7 +323,9 @@ def populate_fct_momemtum_stock_daily(db_filename, momemtum_stocks_merged_data_f
     return num_lines_loaded
 
 
-
+# -------------------------------------------------------------------------------------------------
+#                                                             Load fct_buy_daily & fct_sell_daily
+# -------------------------------------------------------------------------------------------------
 def populate_buy_sell_tables(db_filename):
     execute_script(
         db_filename=db_filename,
