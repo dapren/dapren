@@ -50,10 +50,12 @@ def stringify_number(number, **args_map):
 
     return prefix + str(output_number) + suffix
 
+
 def unstringify_number(str_number, **args_map):
     """
     Remove comma and "K" in thousands, "M" in Million, "B" in Billions from string and returns as numbers
     """
+    str_number = str_number.replace(",",'')
 
     if str_number.strip().upper().find('B') > -1:
        output_number = float(str_number.replace('B','')) * 1000000000
@@ -133,7 +135,6 @@ def test_unstringify_number():
     assert unstringify_number('512') == 512
     assert unstringify_number('547.85M') ==  547850000
     assert unstringify_number('-852.65M') == -852650000
-
 
 
 def test_commafy_number():
