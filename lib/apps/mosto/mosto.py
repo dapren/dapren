@@ -200,7 +200,11 @@ def get_revenue(momemtum_stocks):
         col_list = []
 
         site = "http://www.marketwatch.com/investing/stock/{stock}/financials".format(stock=stock)
-        html = url2str(site)
+        try:
+            html = url2str(site)
+        except:
+            dapren_logger.error("{site} cannot be reached".format(site=site))
+
 
         for table in extract_tags_from_html(html, 'table'):
             for tr in extract_tags_from_html(table, 'tr'):
