@@ -35,16 +35,20 @@ def load_data_from_file(
 
     data = []
     is_first_line = True
+    lines = 0
     for line in fileops.file2list(data_filename):
         if is_first_row_header and is_first_line:
             is_first_line = False
             continue
 
         data.append(line.split(constants.char_tab))
+        lines += 1
 
     with sqlite3.connect(db_filename) as conn:
         cursor = conn.cursor()
         cursor.executemany(insert_query, data)
+
+    return lines
 
 
 def test_load_data_from_file():
@@ -155,6 +159,7 @@ def test_get_table_list():
     actual = get_table_list(db_filename)
     fileops.silent_remove(db_filename)
     assert expected == actual
+
 
 ###############################################################################
 def get_column_list(

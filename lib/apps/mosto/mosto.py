@@ -1,16 +1,19 @@
 from __future__ import print_function
 from __future__ import division
+import time
 from lib.urlops import url2str
 from lib.strops import extract_tags_from_html
 from lib.strops import remove_html_tags
 from lib.fileops import str2file
 from lib.fileops import list2file
+from lib.fileops import file2list
 from lib.fileops import get_uniq_tmp_filename
 from lib.constants import dapren_logger
 from lib.constants import DAPREN_DB_DIR
 from yahoo_finance import Share
-import time
 from lib.numops import unstringify_number
+from lib.sqliteops import load_data_from_file
+from lib.sqliteops import execute_script
 from lib.dateops import today
 from lib.dateops import date2str
 
@@ -192,12 +195,24 @@ def merge_and_create_stock_data_file(
     )
     return output_filename
 
+
+def create_db_tables(db_filename):
+    query=" ".join(file2list('mosto.sql'))
+    
+    execute_script(
+        db_filename=db_filename,
+        query=query
+    )
+
 # -------------------------------------------------------------------------------------------------
 #                                                                                             MAIN
 # -------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     ds = date2str(today(), '%Y-%m-%d')
     db_filename = DAPREN_DB_DIR + '/momemtum_stock.db'
+
+
+    create_db_tables(db_filename)
 
     # todo: uncomment next 3 lines
     #momemtum_stocks = get_momemtum_stocks()
@@ -216,6 +231,11 @@ if __name__ == '__main__':
         momemtum_stocks_revenue
     )
 
-    
-    print (momemtum_stocks_merged_data_file)
+    num_lines_loaded = load_data_from_file(
+        db_filename=db_filename,
+        db_table_to_load='fct_momemtum_stock_daily',
+        data_filename=momemtum_stocks_merged_data_file,
+    )
+
+    print (num_lines_loaded)
 
