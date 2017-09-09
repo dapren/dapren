@@ -22,6 +22,7 @@ DAPREN_INTERIM_DIR = "{}/var/interim".format(DAPREN_HOME)
 DAPREN_LOGS_DIR = "{}/var/logs".format(DAPREN_HOME)
 DAPREN_OUTPUT_DIR = "{}/var/output".format(DAPREN_HOME)
 DAPREN_TMP_DIR = "{}/var/tmp".format(DAPREN_HOME)
+DAPREN_LIB_DIR = "{}/lib".format(DAPREN_HOME)
 
 ################################################################################
 # Initialize logging
