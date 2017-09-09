@@ -17,6 +17,7 @@ from yahoo_finance import Share
 from lib.numops import unstringify_number
 from lib.sqliteops import execute_script
 from lib.sqliteops import load_data_from_file
+from lib.sqliteops import execute
 from lib.dateops import today
 from lib.dateops import date2str
 
@@ -341,6 +342,23 @@ def populate_buy_sell_tables(db_filename):
         query=query_what_to_sell
     )
 
+
+# -------------------------------------------------------------------------------------------------
+#                                                             Display what to buy and sell
+# -------------------------------------------------------------------------------------------------
+def display_what_to_buy_and_sell(db_filename):
+    time.sleep(2)
+    for type in ['buy', 'sell']:
+        print("\n----- {type} ------".format(type=type.upper()))
+        for row in execute(db_filename=db_filename,query="select * from fct_{type}_daily where ds = '{ds}'".format(
+                ds=ds,
+                type=type)):
+            for col in row:
+                print(str(col).ljust(25,' '), end="|")
+            print ("")
+
+
+
 # -------------------------------------------------------------------------------------------------
 #                                                                                             MAIN
 # -------------------------------------------------------------------------------------------------
@@ -376,3 +394,4 @@ if __name__ == '__main__':
 
     # Find what to buy and sell
     populate_buy_sell_tables(db_filename)
+    display_what_to_buy_and_sell(db_filename)
