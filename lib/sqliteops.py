@@ -15,6 +15,7 @@ def load_data_from_file(
         db_table_to_load=None,
         data_filename=None,
         is_first_row_header=False,
+        delimiter=constants.char_tab,
         **kwargs):
 
     if db_filename is None:
@@ -41,7 +42,7 @@ def load_data_from_file(
             is_first_line = False
             continue
 
-        data.append(line.split(constants.char_tab))
+        data.append(line.split(delimiter))
         lines += 1
 
     with sqlite3.connect(db_filename) as conn:

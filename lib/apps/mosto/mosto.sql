@@ -11,6 +11,6 @@ CREATE TABLE IF NOT EXISTS fct_momemtum_stock_daily(
 
 CREATE TABLE IF NOT EXISTS dim_momemtum_stocks_i_own(
     momemtum_stock varchar,
-    ds_purchased varchar,
-    purchase_price float
+    purchase_price float,
+    ds_purchased varchar
 );

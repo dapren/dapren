@@ -10,12 +10,39 @@ from lib.fileops import file2list
 from lib.fileops import get_uniq_tmp_filename
 from lib.constants import dapren_logger
 from lib.constants import DAPREN_DB_DIR
+from lib.constants import char_comma
 from yahoo_finance import Share
 from lib.numops import unstringify_number
-from lib.sqliteops import load_data_from_file
 from lib.sqliteops import execute_script
 from lib.dateops import today
 from lib.dateops import date2str
+from lib.sqliteops import load_data_from_file
+from lib.sqliteops import execute
+from lib.strops import make_log_ready
+
+ds = date2str(today(), '%Y-%m-%d')
+
+
+# -------------------------------------------------------------------------------------------------
+#                                                                        Create DB tables
+# -------------------------------------------------------------------------------------------------
+def create_db_tables(db_filename):
+    execute_script(
+        db_filename=db_filename,
+        query=" ".join(file2list('mosto.sql'))
+    )
+
+    execute_script(
+        db_filename=db_filename,
+        query="DELETE FROM dim_momemtum_stocks_i_own"
+    )
+
+    num_lines_loaded = load_data_from_file(
+            db_filename=db_filename,
+            db_table_to_load='dim_momemtum_stocks_i_own',
+            data_filename="momemtum_stocks_i_own.txt",
+            delimiter=char_comma
+        )
 
 # -------------------------------------------------------------------------------------------------
 #                                                                          Get momemtum stock list
@@ -143,6 +170,9 @@ def get_revenue(momemtum_stocks):
     return momemtum_stocks_revenue
 
 
+# -------------------------------------------------------------------------------------------------
+#                                                                    Merge all momemtum stock data
+# -------------------------------------------------------------------------------------------------
 def merge_and_create_stock_data_file(
         ds,
         momemtum_stocks,
@@ -196,19 +226,30 @@ def merge_and_create_stock_data_file(
     return output_filename
 
 
-def create_db_tables(db_filename):
-    query=" ".join(file2list('mosto.sql'))
-    
+# -------------------------------------------------------------------------------------------------
+#                                                                    Load fct_momemtum_stock_daily
+# -------------------------------------------------------------------------------------------------
+def populate_fct_momemtum_stock_daily(db_filename, momemtum_stocks_merged_data_file):
+
+    query = "DELETE FROM fct_momemtum_stock_daily WHERE ds = '{ds}'".format(ds=ds)
+
     execute_script(
         db_filename=db_filename,
         query=query
     )
 
+    num_lines_loaded = load_data_from_file(
+        db_filename=db_filename,
+        db_table_to_load='fct_momemtum_stock_daily',
+        data_filename=momemtum_stocks_merged_data_file,
+    )
+
+    return num_lines_loaded
+
 # -------------------------------------------------------------------------------------------------
 #                                                                                             MAIN
 # -------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    ds = date2str(today(), '%Y-%m-%d')
     db_filename = DAPREN_DB_DIR + '/momemtum_stock.db'
 
 
@@ -231,11 +272,5 @@ if __name__ == '__main__':
         momemtum_stocks_revenue
     )
 
-    num_lines_loaded = load_data_from_file(
-        db_filename=db_filename,
-        db_table_to_load='fct_momemtum_stock_daily',
-        data_filename=momemtum_stocks_merged_data_file,
-    )
-
-    print (num_lines_loaded)
+    print(populate_fct_momemtum_stock_daily(db_filename, momemtum_stocks_merged_data_file))
 
