@@ -21,6 +21,20 @@ from lib.sqliteops import execute
 from lib.dateops import today
 from lib.dateops import date2str
 
+"""
+Get list of momemtum Stocks
+http://tradingstockalerts.com/PremiumAlerts/Momentum
+
+
+Get 50d 200d moving average
+https://github.com/lukaszbanasiak/yahoo-finance
+
+
+Get annual revenue
+http://www.marketwatch.com/investing/stock/PFIS/financials
+https://finance.yahoo.com/quote/TTWO/financials?p=TTWO
+"""
+
 ds = date2str(today(), '%Y-%m-%d')
 app_home_dir = DAPREN_LIB_DIR + '/apps/mosto'
 
