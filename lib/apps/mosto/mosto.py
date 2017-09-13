@@ -99,6 +99,17 @@ WHERE
     );
 """.format(ds=ds)
 
+query_total_return="""
+SELECT
+    (SUM(price_today) - SUM(purchase_price)) / SUM(purchase_price) * 100 AS momemtum_stock_return
+ FROM
+    fct_momemtum_stock_daily A
+ INNER JOIN
+    dim_momemtum_stocks_i_own B
+    ON A.momemtum_stock = B.momemtum_stock
+ WHERE
+    A.ds = '{ds}'
+""".format(ds=ds)
 
 # -------------------------------------------------------------------------------------------------
 #                                                                        Create DB tables
@@ -372,6 +383,12 @@ def display_what_to_buy_and_sell(db_filename):
             print ("")
 
 
+def display_total_return(db_filename):
+    for row in execute(db_filename=db_filename,query=query_total_return):
+            for col in row:
+                print(str(col).ljust(25,' '), end="|")
+            print ("")
+
 
 # -------------------------------------------------------------------------------------------------
 #                                                                                             MAIN
@@ -390,6 +407,7 @@ if __name__ == '__main__':
     momemtum_stocks_daily_50d_200d_price = get_daily_50d_200d_price(momemtum_stocks)
     momemtum_stocks_revenue = get_revenue(momemtum_stocks)
 
+
     # todo : delete next 3 lines
     #momemtum_stocks=['AROW', 'ISBC', 'TIVO', 'EBTC', 'XBKS', 'MDCA', 'WILC', 'LANDP', 'HBANN', 'HDS', 'MARA', 'RESN', 'ANGI', 'PNBK', 'HSGX', 'AGNC', 'GOVNI', 'WLTW', 'CBK', 'DOW', 'LQ', 'ZUMZ', 'AJG', 'PEB', 'SGB', 'XTN', 'SFE', 'AGX', 'DVD', 'HE', 'INBK', 'JXSB', 'DRIP', 'GIFI', 'MFCB', 'OLLI', 'CALA', 'CVRR', 'BV', 'COO', 'MSON', 'OCX', 'SCID', 'WDFC', 'CRIS', 'FOMX', 'FORK', 'FXE', 'FXSG', 'IBND']
     #momemtum_stocks = set(momemtum_stocks + other_momemtum_stock_list)
@@ -406,6 +424,7 @@ if __name__ == '__main__':
     # Load momemtum_stock price and revenue data into db
     populate_fct_momemtum_stock_daily(db_filename, momemtum_stocks_merged_data_file)
 
-    # Find what to buy and sell
+    # Find what to buy and sell and what is the total return
     populate_buy_sell_tables(db_filename)
     display_what_to_buy_and_sell(db_filename)
+    display_total_return(db_filename)
