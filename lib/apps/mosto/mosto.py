@@ -99,9 +99,10 @@ WHERE
     );
 """.format(ds=ds)
 
-query_total_return="""
+query_total_return = """
 SELECT
-    (SUM(price_today) - SUM(purchase_price)) / SUM(purchase_price) * 100 AS momemtum_stock_return
+    '===== TOTAL =====' as momemtum_stock,
+    ROUND((SUM(price_today) - SUM(purchase_price)) / SUM(purchase_price) * 100, 2)  AS momemtum_stock_return
  FROM
     fct_momemtum_stock_daily A
  INNER JOIN
@@ -109,7 +110,34 @@ SELECT
     ON A.momemtum_stock = B.momemtum_stock
  WHERE
     A.ds = '{ds}'
+-----------------
+UNION ALL
+-----------------
+SELECT
+	B.momemtum_stock,
+    ROUND((SUM(price_today) - SUM(purchase_price)) / SUM(purchase_price) * 100, 2) AS momemtum_stock_return
+ FROM
+    fct_momemtum_stock_daily A
+ INNER JOIN
+    dim_momemtum_stocks_i_own B
+    ON A.momemtum_stock = B.momemtum_stock
+ WHERE
+    A.ds = '{ds}'
+GROUP BY
+		B.momemtum_stock
+
 """.format(ds=ds)
+
+
+query_missing_momemtum_stocks = """
+SELECT  *
+FROM
+	fct_buy_daily
+WHERE
+	ds = '{ds}'
+	AND momemtum_stock NOT IN (select  momemtum_stock from dim_momemtum_stocks_i_own)
+""".format(ds=ds)
+
 
 # -------------------------------------------------------------------------------------------------
 #                                                                        Create DB tables
@@ -383,8 +411,22 @@ def display_what_to_buy_and_sell(db_filename):
             print ("")
 
 
+# -------------------------------------------------------------------------------------------------
+#                                                             Display return on my investment
+# -------------------------------------------------------------------------------------------------
 def display_total_return(db_filename):
+    print(" == RETURN ON INVESTMENT ==================================================================================")
     for row in execute(db_filename=db_filename,query=query_total_return):
+            for col in row:
+                print(str(col).ljust(25,' '), end="|")
+            print ("")
+
+# -------------------------------------------------------------------------------------------------
+#                                                             Display momemtum stocks I am missing
+# -------------------------------------------------------------------------------------------------
+def display_missing_momemtum_stocks(db_filename):
+    print("== MOMEMTUM STOCKS YOU DO NOT OWN =========================================================================")
+    for row in execute(db_filename=db_filename,query=query_missing_momemtum_stocks):
             for col in row:
                 print(str(col).ljust(25,' '), end="|")
             print ("")
@@ -397,6 +439,7 @@ if __name__ == '__main__':
     # Create required table structures and load default data
     db_filename = DAPREN_DB_DIR + '/momemtum_stock.db'
     create_db_tables(db_filename)
+
 
     # Manually monitor some stocks for momemtum
     other_momemtum_stock_list = file2list(app_home_dir+'/other_momemtum_stocks_to_watch.txt')
@@ -428,3 +471,4 @@ if __name__ == '__main__':
     populate_buy_sell_tables(db_filename)
     display_what_to_buy_and_sell(db_filename)
     display_total_return(db_filename)
+    display_missing_momemtum_stocks(db_filename)
