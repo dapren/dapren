@@ -13,7 +13,6 @@ from lib.constants import dapren_logger
 from lib.constants import DAPREN_DB_DIR
 from lib.constants import DAPREN_LIB_DIR
 from lib.constants import char_comma
-from yahoo_finance import Share
 from lib.numops import unstringify_number
 from lib.sqliteops import execute_script
 from lib.sqliteops import load_data_from_file
@@ -101,7 +100,7 @@ WHERE
 
 query_total_return = """
 SELECT
-    '===== TOTAL =====' as momemtum_stock,
+    '[TOTAL]' as momemtum_stock,
     ROUND((SUM(price_today) - SUM(purchase_price)) / SUM(purchase_price) * 100, 2)  AS momemtum_stock_return
  FROM
     fct_momemtum_stock_daily A
@@ -218,18 +217,49 @@ To see the html returned from this site for this run, see file {out_filename}
 # -------------------------------------------------------------------------------------------------
 #                                                                        Get momemtum stock price
 # -------------------------------------------------------------------------------------------------
+def get_moving_avg(str, num_items):
+    # Since first line is header, ignore it
+    num_items += 1
+
+    closing_prices = 0
+    linenum = 1
+
+    for line in str.split("\n"):
+		if linenum == 1:
+			linenum += 1
+			continue
+
+		if linenum <= num_items:
+			row = line.split(",")
+			if len(row) == 6:
+				linenum += 1
+				closing_prices = closing_prices + float(row[4])
+			else:
+				dapren_logger.info('Bad record:' + line)
+		else:
+			break
+
+    return closing_prices/max((linenum - 2),1)
+
+
 def get_daily_50d_200d_price(momemtum_stocks):
     momemtum_stocks_daily_50d_200d_price = {}
 
-    for momemtum_stock in momemtum_stocks:
-        dapren_logger.info('Getting price for {momemtum_stock}'.format(momemtum_stock=momemtum_stock))
+    for stock in momemtum_stocks:
+        time.sleep(5)
+        dapren_logger.info('Getting price for {stock}'.format(stock=stock))
 
-        share = Share(momemtum_stock)
-        price_today = float(share.get_price())
-        price_50day_moving_avg = float(share.get_50day_moving_avg())
-        price_200day_moving_avg = float(share.get_200day_moving_avg())
+        site = "https://www.google.com/finance/historical?output=csv&q={stock}".format(stock=stock)
+        try:
+            data_str = url2str(site)
+        except:
+            dapren_logger.error("{site} cannot be reached".format(site=site))
 
-        momemtum_stocks_daily_50d_200d_price[momemtum_stock] = {
+        price_today = get_moving_avg(data_str, 1)
+        price_50day_moving_avg = get_moving_avg(data_str, 50)
+        price_200day_moving_avg = get_moving_avg(data_str, 200)
+
+        momemtum_stocks_daily_50d_200d_price[stock] = {
             'price_today': price_today,
             'price_50day_moving_avg': price_50day_moving_avg,
             'price_200day_moving_avg': price_200day_moving_avg
